@@ -1,19 +1,22 @@
 window.addEventListener('load', function () {
 
     (function togglePopup() {
-        var link = document.querySelector('.header__auth .link');
+        var link = document.querySelector(' #login');
         var popup = document.querySelector('.auth__popup');
         var popupReg = document.querySelector('#reg-popup');
         var overlay = document.querySelector('.overlay');
         var reglink = document.querySelector('#change-popup');
 
-        link.addEventListener('click', function (e) {
+       if(link) {
+           link.addEventListener('click', function (e) {
             e.preventDefault();
 
             if(!popup.classList.contains('active')) popup.classList.add('active');
 
             if(!overlay.classList.contains('active')) overlay.classList.add('active');
         });
+
+       }
 
         reglink.addEventListener('click', function (e) {
             e.preventDefault();
@@ -55,7 +58,7 @@ window.addEventListener('load', function () {
         var popupReg = document.querySelector('#reg-popup');
         var regSubmit = document.querySelector('#reg-form');
         var overlay = document.querySelector('.overlay');
-        var errorArea = document.querySelector('#reg-popup .error-area');
+        var errorArea = document.querySelector('#reg-popup .error-message');
 
         $.ajaxSetup({
             headers: {
@@ -67,6 +70,7 @@ window.addEventListener('load', function () {
         regSubmit.addEventListener('submit', function (e) {
             e.preventDefault();
 
+
             $.ajax({
                 type:'post',
                 url:$(this).attr('action'),
@@ -76,11 +80,8 @@ window.addEventListener('load', function () {
                     popupReg.classList.remove('active');
                     overlay.classList.remove('active');
                 },
-                error: function (msg) {
-
-                    for(let item in msg.responseJSON.errors) {
-                        console.log(item);
-                    }
+                error: function (error) {
+                    errorArea.innerText = 'Логін чи Email вже існує в базі'
                 }
             })
         })
@@ -90,6 +91,7 @@ window.addEventListener('load', function () {
         var popupLogin = document.querySelector('#auth');
         var loginSubmit = document.querySelector('#auth-form');
         var overlay = document.querySelector('.overlay');
+        var errorArea = loginSubmit.querySelector('.error-message');
 
         $.ajaxSetup({
             headers: {
@@ -109,9 +111,10 @@ window.addEventListener('load', function () {
                 success: function (response) {
                     popupLogin.classList.remove('active');
                     overlay.classList.remove('active');
+                    document.location.reload(true);
                 },
                 error: function (error) {
-                    console.log(error);
+                    errorArea.innerText = 'Логін чи Пароль не знайден'
                 }
             });
         })
@@ -122,8 +125,6 @@ window.addEventListener('load', function () {
         var li = document.createElement('li');
         var link = document.createElement('a');
         var img = document.createElement('img');
-
-        console.log(navList);
 
         link.setAttribute('href', '/');
         link.setAttribute('class', 'link link--logo');

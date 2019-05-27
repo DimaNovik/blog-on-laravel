@@ -18,6 +18,7 @@ class AuthController extends Controller
            'name' => 'required',
            'phone' => 'required',
            'email' => 'required|email|unique:users',
+           'login' => 'required|unique:users',
            'password' => 'required',
         ]);
 
@@ -33,20 +34,19 @@ class AuthController extends Controller
     public function login(Request $request) {
 
         $this->validate($request, [
-            'email' => 'required|email',
+            'login' => 'required',
             'password' => 'required',
         ]);
 
-        $result = Auth::attempt([
-            'email' => $request->get('email'),
+
+        if(Auth::attempt([
+            'login' => $request->get('login'),
             'password' => $request->get('password'),
-        ]);
-
-
-
-        return response()->json([
-            'status' => 'ok'
-        ]);
+        ])) {
+            return response()->json([
+                'status' => 'ok'
+            ]);
+        }
     }
 
     public function logout() {

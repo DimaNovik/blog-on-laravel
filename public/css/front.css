@@ -615,6 +615,11 @@ a.underline:hover {
     text-decoration: underline
 }
 
+.header__auth .link-cabinet {
+    color: #fff;
+    text-decoration: underline
+}
+
 .header__nav_bg {
     background-color: #3a53a5
 }
@@ -1252,4 +1257,10 @@ pagination
     }
 
 
+}
+
+.error-message {
+    display: block;
+    color: #e56c69;
+    margin-bottom: 15px;
 }

@@ -102,16 +102,19 @@
                     </span>
                     </div>
                     <div class="header__auth">
+                    <a href="http://facebook.com" target="_blank" class="icon">
+                        <img src="/images/fb-icon.png" alt="Користувач">
+                    </a>
                     <span class="icon">
                         <img src="/svg/user.svg" alt="Користувач">
                     </span>
 
                         @if(Auth::check())
-                            <a href="/pages/cabinet" class="link">Особистий кабінет</a>
+                            <a href="/pages/cabinet" class="link-cabinet">Особистий кабінет</a>
                             &nbsp;&nbsp;
-                            <a href="/pages/logout" class="link">Вийти</a>
+                            <a href="/pages/logout" class="link-cabinet">Вийти</a>
                         @else
-                            <a href="#" class="link">Увійти</a>
+                            <a href="#" class="link" id="login">Увійти</a>
                         @endif
                     </div>
                 </div>
@@ -167,10 +170,6 @@
                     <ul class="list">
                         <li>
                             <a href="/allposts">Новини</a>
-                        </li>
-                        <li><a href="?view=allphoto">Фотогалерея</a>
-                        </li>
-                        <li><a href="?view=allvideo">Відеогалерея</a>
                         </li>
                     </ul>
                 </div>

@@ -12,7 +12,7 @@
                 @endif
             <p>
                 <label>
-                    <input type="text" name="email" class="input" placeholder="E-mail" value="{{old('email')}}">
+                    <input type="text" name="login" class="input" placeholder="Логін" value="{{old('login')}}">
                 </label>
             </p>
             <p>
@@ -22,6 +22,9 @@
             </p>
             <p>
                 <input type="submit" class="submit" value="Увійти">
+            </p>
+            <p>
+                <span class="error-message"></span>
             </p>
             <p>
                 <a href="#" class="reg" id="change-popup">Реєстрація</a>
@@ -54,8 +57,16 @@
             </p>
             <p>
                 <label>
+                    <input type="text" name="login" class="input" placeholder="Логін" value="{{old('login')}}">
+                </label>
+            </p>
+            <p>
+                <label>
                     <input type="password" name="password" class="input" placeholder="Пароль" value="{{old('password')}}">
                 </label>
+            </p>
+            <p>
+                <span class="error-message"></span>
             </p>
             <p>
                 <input type="submit" class="submit" value="Зареєструвати">

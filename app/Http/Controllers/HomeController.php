@@ -7,6 +7,7 @@ use App\Post;
 use App\Anonses;
 use App\User;
 use App\Pages;
+use \Auth;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -34,5 +35,15 @@ class HomeController extends Controller
         $pages = Pages::where('slug', $slug)->firstOrFail();
 
         return view('pages.pages', compact('pages'));
+    }
+
+    public function cabinet() {
+//        $pages = Pages::where('slug', $slug)->firstOrFail();
+//        if (Auth::attempt(['is_active' => 1])) {
+//
+//        } else {
+//            return redirect('/');
+//        }
+        return view('pages.cabinet');
     }
 }

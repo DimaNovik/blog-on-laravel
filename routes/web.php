@@ -26,5 +26,10 @@ Route::group(['prefix'=>'page', 'namespace'=>'Admin', 'middleware'=>'admin'], fu
     Route::resource('/pages', 'PagesController');
     Route::resource('/posts', 'PostsController');
     Route::resource('/anonses', 'AnonsesController');
+    Route::resource('/users', 'UserController');
+});
+
+Route::group([ 'middleware'=>'role'], function (){
+    Route::get('/pages/cabinet', 'HomeController@cabinet');
 });
 
