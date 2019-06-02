@@ -6,43 +6,44 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Керування сторінкою - Користувачі
+                Керування сторінкою - Документи
             </h1>
         </section>
 
         <!-- Main content -->
         <section class="content">
-            {{ Form::open(['route' => 'users.store']) }}
+            {{ Form::open(['route' => 'documents.store', 'files' => true]) }}
             <!-- Default box -->
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Користувачі</h3>
+                    <h3 class="box-title">Документи</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
+                    <div class="form-group">
+                        <a href="{{route('documents.create')}}" class="btn btn-success">Додати</a>
+                    </div>
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
                         <tr>
                             <th>ID</th>
-                            <th>ПІБ</th>
-                            <th>Email</th>
-                            <th>Телефон</th>
-                            <th>Логін</th>
+                            <th>Назва</th>
+                            <th>Категорія</th>
+                            <th>Докумени</th>
                             <th>Статус</th>
-                            <th>Дії з постом</th>
+                            <th>Дії з документом</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($users as $user)
+                        @foreach($documents as $document)
                         <tr>
-                            <td>{{$user->id}}</td>
-                            <td>{{$user->name}}</td>
-                            <td>{{$user->email}}</td>
-                            <td>{{$user->phone}}</td>
-                            <td>{{$user->login}}</td>
-                            <td>{{$user->is_active}}</td>
-                            <td><a href="{{route('users.edit', $user->id)}}" class="fa fa-pencil"></a>
-                                {{Form::open(['route'=>['users.destroy', $user->id], 'method'=>'delete'])}}
+                            <td>{{$document->id}}</td>
+                            <td>{{$document->title}}</td>
+                            <td>{{$document->category}}</td>
+                            <td>{!! $document->file !!}</td>
+                            <td>{{$document->status}}</td>
+                            <td><a href="{{route('documents.edit', $document->id)}}" class="fa fa-pencil"></a>
+                                {{Form::open(['route'=>['documents.destroy', $document->id], 'method'=>'delete'])}}
                                 <button class="delete" onclick="return confirm('Вы уверены в удалении материала?')">
                                     <i class="fa fa-remove"></i>
                                 </button>

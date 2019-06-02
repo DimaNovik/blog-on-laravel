@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\User;
+use App\Documents;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class UserController extends Controller
+class DocumentsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return view('admin.users.index', ['users'=>$users]);
+        $documents = Documents::all();
+        return view('admin.documents.index', ['documents'=>$documents]);
     }
 
     /**
@@ -26,7 +26,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.users.create');
+        return view('admin.documents.create');
     }
 
     /**
@@ -37,19 +37,16 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
         $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
-            'login' => 'required',
+            'title' => 'required',
+            'file' => 'required',
+            'category' => 'required',
         ]);
 
-        $user = User::add($request->all());
-        $user->makeAdmin($request->get('admin'));
-        $user->makeNormal($request->get('active'));
+        $document = Documents::add($request->all());
+        $document->setPublic($request->get('status'));
 
-        return redirect()->route('users.index');
+        return redirect()->route('documents.index');
     }
 
 
@@ -62,9 +59,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
+        $document = Documents::find($id);
 
-        return view('admin.users.edit', ['user'=> $user]);
+        return view('admin.documents.edit', ['document'=> $document]);
     }
 
     /**
@@ -77,18 +74,16 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'login' => 'required',
-            'phone' => 'required',
-            'email' => 'required'
+            'title' => 'required',
+            'content' => 'required',
+            'image' => 'nullable|image',
         ]);
 
-        $user = User::find($id);
-        $user->edit($request->all());
-        $user->makeAdmin($request->get('admin'));
-        $user->makeNormal($request->get('active'));
+        $document = Documents::find($id);
+        $document->edit($request->all());
+        $document->setPublic($request->get('status'));
 
-        return redirect()->route('users.index');
+        return redirect()->route('documents.index');
     }
 
     /**
@@ -99,9 +94,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::find($id)->delete();
 
-        return redirect()->route('users.index');
+        Documents::find($id)->delete();
+
+        return redirect()->route('documents.index');
     }
-
 }

@@ -11,8 +11,7 @@ class DashboardController extends Controller
 {
     public function index() {
 
-//        $users = User::all();
-//
+//        $users = User::where('id','>=','414')->get();
 //        foreach ($users as $user) {
 //
 //            $user->generatePassword($user->password);

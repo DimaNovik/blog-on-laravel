@@ -27,6 +27,7 @@ Route::group(['prefix'=>'page', 'namespace'=>'Admin', 'middleware'=>'admin'], fu
     Route::resource('/posts', 'PostsController');
     Route::resource('/anonses', 'AnonsesController');
     Route::resource('/users', 'UserController');
+    Route::resource('/documents', 'DocumentsController');
 });
 
 Route::group([ 'middleware'=>'role'], function (){

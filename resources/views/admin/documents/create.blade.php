@@ -7,17 +7,17 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Додати нову новину
+                Додати документ
             </h1>
         </section>
 
         <!-- Main content -->
         <section class="content">
-            {{Form::open(['route' => 'posts.store', 'files' => true])}}
+            {{Form::open(['route' => 'documents.store', 'files' => true])}}
             <!-- Default box -->
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Додати новину</h3>
+                    <h3 class="box-title">Додати документ</h3>
                 </div>
                 <div class="box-body">
                     <div class="col-md-6">
@@ -25,26 +25,18 @@
                             <label for="exampleInputEmail1">Заголовок</label>
                             <input type="text" class="form-control" id="exampleInputEmail1" placeholder="" name="title" value="{{old('title')}}">
                         </div>
-
                         <div class="form-group">
-                            <label for="exampleInputFile">Головная картинка</label>
-                            <input type="file" id="exampleInputFile" name="image">
-
-                            <p class="help-block">Доступні формати (JPEG, PNG)..</p>
+                            <label for="exampleInputEmail1">Категорія документа</label>
+                            <select name="category" id="category_id" class="form-control select2">
+                                <option value="0">Оберіть категорію документа</option>
+                                <option value="1">Доручення та інформація відділу нотаріату</option>
+                                <option value="2">Інформаційні листи</option>
+                                <option value="3">Методичні вказівки, рекомендації</option>
+                                <option value="4">Узагальненні нотаріальної практики</option>
+                                <option value="5">Накази Головного управління юстиції в Одеській області</option>
+                                <option value="6">Перелік втрачених паспортів</option>
+                            </select>
                         </div>
-                        <!-- Date -->
-                        <div class="form-group">
-                            <label>Дата:</label>
-
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <input type="text" class="form-control pull-right" id="datepicker" name="date" value="{{old('date')}}">
-                            </div>
-                            <!-- /.input group -->
-                        </div>
-
                         <!-- checkbox -->
                         <div class="form-group">
                             <label>
@@ -57,14 +49,8 @@
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Стислий зміст новини</label>
-                            <textarea cols="30" rows="10" class="form-control" name="description" id="description">{{old('description')}}</textarea>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Повний текст новини</label>
-                            <textarea cols="30" rows="10" class="form-control" name="content" id="content"></textarea>
+                            <label for="exampleInputEmail1">Текст</label>
+                            <textarea cols="30" rows="10" class="form-control" name="file" id="file">{{old('file')}}</textarea>
                         </div>
                     </div>
                 </div>

@@ -32,8 +32,7 @@
                             <input type="text" class="form-control" id="exampleInputEmail1" placeholder="" value="{{$user->login}}" name="login">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Пароль</label>
-                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="" value="{{$user->password}}" name="password">
+                            <input type="hidden" class="form-control" id="exampleInputEmail1" placeholder="" value="{{$user->password}}" name="password">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email</label>
@@ -46,7 +45,7 @@
                         <!-- checkbox -->
                         <div class="form-group">
                             <label>
-                                {{Form::checkbox('status', '1', $user->is_admin, ['class'=>'minimal'])}}
+                                {{Form::checkbox('admin', '1', $user->is_admin, ['class'=>'minimal'])}}
                             </label>
                             <label>
                                 Адміністратор
@@ -54,10 +53,10 @@
                         </div>
                         <div class="form-group">
                             <label>
-                                {{Form::checkbox('status', '1', $user->is_active, ['class'=>'minimal'])}}
+                                {{Form::checkbox('active', '1', $user->is_active, ['class'=>'minimal'])}}
                             </label>
                             <label>
-                                Активувати користувачв
+                                Активувати користувач
                             </label>
                         </div>
                     </div>

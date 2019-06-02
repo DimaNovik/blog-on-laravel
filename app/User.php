@@ -11,7 +11,7 @@ class User extends Authenticatable
     use Notifiable;
 
     const IS_ADMIN = 1;
-    const IS_ACTIVE = 0;
+    const IS_ACTIVE = 1;
 
     /**
      * The attributes that are mass assignable.
@@ -66,22 +66,27 @@ class User extends Authenticatable
         $this->delete();
     }
 
-    public function makeAdmin() {
-        $this->is_admin = USER::IS_ADMIN;
-    }
+    public function makeAdmin($value) {
 
-    public function makeActive()
-    {
-        $this->is_active = USER::IS_ACTIVE;
-    }
-
-    public function toggleAdmin($value)
-    {
-        if($value == null) {
-            return $this->makeNormal();
+        if($value === null) {
+            $this->is_admin = 0;
+            $this->save();
+        } else {
+            $this->is_admin = USER::IS_ADMIN;
+            $this->save();
         }
 
-        return $this->makeAdmin();
+    }
+
+    public function makeNormal($value)
+    {
+        if($value === null) {
+            $this->is_active = 0;
+            $this->save();
+        } else {
+            $this->is_active = USER::IS_ACTIVE;
+            $this->save();
+        }
     }
 
     public function getUserName() {
