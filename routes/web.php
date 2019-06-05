@@ -23,6 +23,7 @@ Route::get('/pages/logout', 'AuthController@logout');
 Route::group(['prefix'=>'page', 'namespace'=>'Admin', 'middleware'=>'admin'], function (){
     Route::get('/admin', 'DashboardController@index');
     Route::resource('/categories', 'CategoriesController');
+    Route::resource('/categories_doc', 'CategoryDocController');
     Route::resource('/pages', 'PagesController');
     Route::resource('/posts', 'PostsController');
     Route::resource('/anonses', 'AnonsesController');
@@ -31,6 +32,8 @@ Route::group(['prefix'=>'page', 'namespace'=>'Admin', 'middleware'=>'admin'], fu
 });
 
 Route::group([ 'middleware'=>'role'], function (){
-    Route::get('/pages/cabinet', 'HomeController@cabinet');
+    Route::get('/pages/cabinet', 'CategoryDocController@index');
+    Route::get('/documents/{id}', 'DocumentsController@index')->name('doc.show');
 });
+
 

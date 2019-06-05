@@ -6,8 +6,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Добавить категорию
-            </h1>
+                Добавить категорию</h1>
         </section>
 
         <!-- Main content -->
@@ -19,24 +18,11 @@
                     <h3 class="box-title">Меняем категорию</h3>
                 </div>
                 <div class="box-body">
-                    {{Form::open(['route'=>['categories.update', $category->id], 'method'=>'put'])}}
+                    {{Form::open(['route'=>['categories_doc.update', $category->id], 'method'=>'put'])}}
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Название</label>
                             <input type="text" class="form-control" id="exampleInputEmail1" name="title" placeholder="" value="{{$category->title}}">
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <input type="number" class="minimal" name="parent" id="parent" value="{{$category->parent}}">
-                            </label>
-                            <label>
-                                Батьківська категорія
-                            </label>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Посилання</label>
-                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="" name="link" value="{{$category->link}}">
                         </div>
                     </div>
                 </div>

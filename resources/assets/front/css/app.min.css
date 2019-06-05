@@ -1051,12 +1051,13 @@ a.underline:hover {
 }
 
 .main__anons-date {
-    max-width: 5.5em;
+    width: 7em;
     padding: 0 15px 0 0;
     border-right: 1px dashed #3a53a5
 }
 
 .main__anons-text {
+    width: 25em;
     padding-left: 10px
 }
 

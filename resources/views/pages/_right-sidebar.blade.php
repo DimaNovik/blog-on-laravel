@@ -16,8 +16,8 @@
         @foreach($anonses as $anons)
             <a href="{{route('post.anons', $anons->id)}}" class="main__anons-item">
                 <div class="main__anons-date">
-                    <p class="date">{{substr($anons->date, 0, -6)}}</p>
-                    <p class="month">{{substr($anons->date, -5)}}</p>
+                    <p class="date">{{substr($anons->date,8, 2)}}</p>
+                    <p class="month">{{substr($anons->date, 0,-3)}}</p>
                 </div>
                 <div class="main__anons-text">
                     <p>{{$anons->title}}</p>

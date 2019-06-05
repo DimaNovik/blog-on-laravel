@@ -3,15 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Documents;
+use App\CategoryDoc;
 use \Auth;
 use Illuminate\Http\Request;
 
 class DocumentsController extends Controller
 {
-    public function index() {
+    public function index($id) {
 
-        $files = Documents::where('status', 0)->orderBy('id', 'desc')->take(9)->get();
+        $documents = Documents::where('category', $id)->get();
+        $category = CategoryDoc::where('id', $id)->firstOrFail();
 
-        return view('pages.index', ['files'=>$files]);
+        return view('pages.documents', compact('documents','category'));
     }
 }
