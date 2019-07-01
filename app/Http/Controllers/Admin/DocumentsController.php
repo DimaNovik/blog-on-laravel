@@ -44,6 +44,8 @@ class DocumentsController extends Controller
         ]);
 
         $document = Documents::add($request->all());
+
+        $document->uploadImage($request->file('file'));
         $document->setPublic($request->get('status'));
 
         return redirect()->route('documents.index');
@@ -75,12 +77,13 @@ class DocumentsController extends Controller
     {
         $this->validate($request, [
             'title' => 'required',
-            'content' => 'required',
-            'image' => 'nullable|image',
+            'file' => 'required',
+            'category' => 'required',
         ]);
 
         $document = Documents::find($id);
         $document->edit($request->all());
+        $document->uploadImage($request->file('file'));
         $document->setPublic($request->get('status'));
 
         return redirect()->route('documents.index');
@@ -94,6 +97,7 @@ class DocumentsController extends Controller
      */
     public function destroy($id)
     {
+
 
         Documents::find($id)->delete();
 

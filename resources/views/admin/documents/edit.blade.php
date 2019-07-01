@@ -13,7 +13,7 @@
         <!-- Main content -->
         <section class="content">
             {{Form::open([
-                'route' => ['posts.update', $post->id],
+                'route' => ['documents.update', $document->id],
                 'files' => true,
                 'method' => 'put'
             ])}}
@@ -26,54 +26,42 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Заголовок</label>
-                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="" value="{{$post->title}}" name="title">
+                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="" name="title" value="{{$document->title}}">
                         </div>
-
                         <div class="form-group">
-                            <img src="{{$post->getImage()}}" alt="" class="img-responsive" width="200">
-                            <label for="exampleInputFile">Головная картинка</label>
-                            <input type="file" id="exampleInputFile" name="image">
-
-                            <p class="help-block">Доступні формати (JPEG, PNG)..</p>
+                            <label for="exampleInputEmail1">Категорія документа</label>
+                            <select name="category" id="category_id" class="form-control select2">
+                                <option value="0">Оберіть категорію документа</option>
+                                <option value="1">Доручення та інформація відділу нотаріату</option>
+                                <option value="2">Інформаційні листи</option>
+                                <option value="3">Методичні вказівки, рекомендації</option>
+                                <option value="4">Узагальненні нотаріальної практики</option>
+                                <option value="5">Накази Головного управління юстиції в Одеській області</option>
+                                <option value="6">Перелік втрачених паспортів</option>
+                            </select>
                         </div>
-                        <!-- Date -->
                         <div class="form-group">
-                            <label>Дата:</label>
+                            <img src="{{$document->getImage()}}" alt="" class="img-responsive" width="200">
+                            <label for="exampleInputFile">Оберіть документ</label>
+                            <input type="file" id="exampleInputFile" name="file">
 
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <input type="text" class="form-control pull-right" id="datepicker" name="date" value="{{$post->date}}">
-                            </div>
-                            <!-- /.input group -->
+                            <p class="help-block">Максимальний розмір файлу 100М..</p>
                         </div>
                         <!-- checkbox -->
                         <div class="form-group">
                             <label>
-                                {{Form::checkbox('status', '1', $post->status, ['class'=>'minimal'])}}
+                                <input type="checkbox" class="minimal" name="status">
                             </label>
                             <label>
                                 Чернетка
                             </label>
                         </div>
+
                     </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Стислий зміст новини</label>
-                            <textarea cols="30" rows="10" class="form-control" name="description" id="description">{{$post->description}}</textarea>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Полный текст</label>
-                            <textarea name="content" id="content" cols="30" rows="10" class="form-control" >{{$post->content}}</textarea>
-                        </div>
-                    </div>
+
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <button class="btn btn-default">Назад</button>
                     <button class="btn btn-warning pull-right">Змінити</button>
                 </div>
                 <!-- /.box-footer-->

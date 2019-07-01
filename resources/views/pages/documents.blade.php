@@ -13,9 +13,15 @@
 
                         @foreach($documents as $doc)
                             <div class="main__post-text" style="margin-bottom: 10px;">
-                                    <p>{{$doc->title}}</p>
-                                    <p>{!!$doc->file!!}</p>
-
+                                    <div class="item">
+                                        <span class="icon">
+                                            <img src="/images/doc.png" alt="Doc">
+                                        </span>
+                                        <span>
+                                            <a href="{{$doc->getImage()}}" download>{{$doc->title}}</a>
+                                        </span>
+                                    </div>
+                                
                             </div>
                         @endforeach
                     </div>

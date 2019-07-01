@@ -9,9 +9,9 @@
                         <div class="main__news_top">
                             <h2>Інформація та інформація відділу нотаріату</h2>
                         </div>
-                        <ul>
+                        <ul class="cabinet_documents_list">
                             @foreach($categories as $category)
-                            <li>
+                            <li class="cabinet_documents_item">
                                 <a href="{{route('doc.show', $category->id)}}">
                                    {{$category->title}}
                                 </a>

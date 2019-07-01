@@ -57,6 +57,30 @@ class Documents extends Model
         $this->save();
     }
 
+    public function uploadImage($image)
+    {
+        if($image === null) { return; }
+
+        $this->removeImage();
+        $filename = $image->getClientOriginalName();
+        $image->storeAs('uploads/files', $filename);
+        $this->file = $filename;
+        $this->save();
+    }
+
+    public function removeImage() {
+        if($this->file != null) {
+            Storage::delete('uploads/files/' . $this->file);
+        }
+    }
+
+    public function getImage()
+    {
+        if($this->file == null) {
+            return '/images/unnamed.jpg';
+        }
+        return '/uploads/files/' . $this->file;
+    }
 
     public function setPublic()
     {

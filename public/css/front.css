@@ -658,11 +658,6 @@ a.underline:hover {
     color: rgba(255, 255, 255, .8)
 }
 
-.header__list .link:hover + .header__down {
-    visibility: visible;
-    opacity: 1
-}
-
 .header__list .link--logo {
     transition: -webkit-transform .4s ease;
     transition: transform .4s ease;
@@ -691,7 +686,7 @@ a.underline:hover {
     transition: opacity .4s ease
 }
 
-.header__down:hover {
+.header__down.active {
     visibility: visible;
     opacity: 1
 }
@@ -864,7 +859,6 @@ a.underline:hover {
 }
 
 .main__news {
-    min-width: 70em;
     padding-right: 2.8125em
 }
 
@@ -892,6 +886,25 @@ a.underline:hover {
     }
 }
 
+.main__post-text .item {
+    display: flex;
+    align-items: center;
+}
+
+.main__post-text .item:hover {
+
+    a {
+        color: #0f74a8;
+        text-decoration: #0f74a8;
+    }
+}
+
+.main__post-text .icon {
+    width: 2em;
+    min-width: 2em;
+    margin-right: 1em;
+}
+
 .main__news_top .other_news {
     font-family: FuturaNewBook, sans-serif;
     font-size: 1.125em;
@@ -911,9 +924,10 @@ a.underline:hover {
 
 .main__cards .item {
     position: relative;
-    width: 21.875em;
-    max-width: 25em;
+    width: 19.875em;
+    max-width: 19.875em;
     height: 21.875em;
+    margin-right: 0.15em;
     margin-bottom: 1.25em;
     background-repeat: no-repeat;
     background-size: cover;
@@ -978,7 +992,6 @@ a.underline:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 18.75em
 }
 
 .main__info {
@@ -1154,7 +1167,49 @@ pagination
     background-color: #314890;
 }
 
+.cabinet_documents_list {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.cabinet_documents_item {
+    margin-right: 1em;
+    margin-bottom: 2em;
+}
+
+.cabinet_documents_item a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25em;
+    min-height: 5em;
+    padding: 1em 1em 1em 2.5em;
+    color: #00010E;
+    font-size: 1.2em;
+    text-align: center;
+    background-color: #dddddd;
+    background-image: url('/images/doc.png');
+    background-position: 1.5% 50%;
+    background-repeat: no-repeat;
+    background-size: 10% auto;
+    transition: background-color .4s ease, color .4s ease;
+}
+
+.cabinet_documents_item a:hover {
+    background-color: #0f74a8;
+    color: #fff;
+}
+
 @media screen and (max-width: 768px) {
+
+    .cabinet_documents_list {
+        justify-content: center;
+    }
+
+    .main__right {
+        width: 100%;
+    }
     .header__nav {
         position: absolute;
         width: 100%;
@@ -1231,7 +1286,9 @@ pagination
     }
 
     .header__down.active {
-        display: block
+        display: block;
+        visibility: visible;
+        opacity: 1
     }
 
     .main__area {

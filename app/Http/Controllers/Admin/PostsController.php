@@ -102,6 +102,6 @@ class PostsController extends Controller
 
         Post::find($id)->delete();
 
-        return redirect()->route('post.index');
+        return redirect()->route('posts.index');
     }
 }

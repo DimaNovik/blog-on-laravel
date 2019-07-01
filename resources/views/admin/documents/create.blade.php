@@ -37,6 +37,12 @@
                                 <option value="6">Перелік втрачених паспортів</option>
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for="exampleInputFile">Оберіть документ</label>
+                            <input type="file" id="exampleInputFile" name="file">
+
+                            <p class="help-block">Максимальний розмір файлу 100М..</p>
+                        </div>
                         <!-- checkbox -->
                         <div class="form-group">
                             <label>
@@ -47,17 +53,12 @@
                             </label>
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Текст</label>
-                            <textarea cols="30" rows="10" class="form-control" name="file" id="file">{{old('file')}}</textarea>
-                        </div>
-                    </div>
+
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <button class="btn btn-default">
-                        <a href="{{route('posts.index')}}">Назад</a></button>
+                        <a href="{{route('documents.index')}}">Назад</a></button>
                     <button class="btn btn-success pull-right">Додати</button>
                 </div>
                 <!-- /.box-footer-->

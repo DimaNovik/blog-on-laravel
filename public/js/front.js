@@ -152,4 +152,43 @@ window.addEventListener('load', function () {
         }
 
     })();
+
+    (function toggleMenu() {
+        var menuItem = document.querySelectorAll('.header__list .header__list-item .link');
+        var dropdown = document.querySelectorAll('.header__down');
+
+        menuItem.forEach(function (item) {
+
+            if(item.nextElementSibling === null) return;
+
+            item.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                    dropdown.forEach(function (item) {
+
+                    if(item.classList.contains('active')) {
+                        item.classList.remove('active');
+                    }
+                });
+                    this.nextElementSibling.classList.add('active');
+            }
+            )
+        })
+
+    })();
+
+    (function targetAwayMenu() {
+
+        window.addEventListener('click', function(event) {
+            if(!event.target.matches('.header__down') && !event.target.matches('.header__list-item')  && !event.target.matches('a.link')) {
+               var dropdown = document.querySelectorAll('.header__down');
+
+               dropdown.forEach(function (item) {
+                   item.classList.remove('active');
+               })
+           }
+        })
+
+    })();
+
 });
