@@ -48,7 +48,7 @@ class User extends Authenticatable
     public function edit($fields)
     {
         $this->fill($fields);
-        $this->password = bcrypt($fields['password']);
+       // $this->password = bcrypt($fields['password']);
         $this->save();
     }
 

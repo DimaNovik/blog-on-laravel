@@ -7,7 +7,7 @@
                 <div class="main__area">
                     <div class="main__news">
                         <div class="main__news_top">
-                            <h2>Інформація та інформація відділу нотаріату</h2>
+                            <h2>Особистий кабінет</h2>
                         </div>
                         <ul class="cabinet_documents_list">
                             @foreach($categories as $category)

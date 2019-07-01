@@ -11,7 +11,7 @@ class DocumentsController extends Controller
 {
     public function index($id) {
 
-        $documents = Documents::where('category', $id)->get();
+        $documents = Documents::where('category', $id)->orderBy('id', 'desc')->get();
         $category = CategoryDoc::where('id', $id)->firstOrFail();
 
         return view('pages.documents', compact('documents','category'));

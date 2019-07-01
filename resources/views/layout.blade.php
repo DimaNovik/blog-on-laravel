@@ -178,7 +178,7 @@
                     <ul class="list">
                         <li><a href="#" class="link">Єдиний реєстр нотаріусів</a></li>
                         <li><a href="#" class="link">Консультативно-матодична Рада</a></li>
-                        <li><a href="old/newphpBB/index.php" class="link">Форум</a></li>
+                        <li><a href="/old/index.php" class="link">Форум</a></li>
                     </ul>
                 </div>
             </div>

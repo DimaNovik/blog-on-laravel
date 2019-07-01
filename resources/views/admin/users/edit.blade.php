@@ -32,9 +32,6 @@
                             <input type="text" class="form-control" id="exampleInputEmail1" placeholder="" value="{{$user->login}}" name="login">
                         </div>
                         <div class="form-group">
-                            <input type="hidden" class="form-control" id="exampleInputEmail1" placeholder="" value="{{$user->password}}" name="password">
-                        </div>
-                        <div class="form-group">
                             <label for="exampleInputEmail1">Email</label>
                             <input type="email" class="form-control" id="exampleInputEmail1" placeholder="" value="{{$user->email}}" name="email">
                         </div>

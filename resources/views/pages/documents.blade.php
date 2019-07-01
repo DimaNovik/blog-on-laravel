@@ -24,6 +24,7 @@
                                 
                             </div>
                         @endforeach
+
                     </div>
 
                     @include('pages._right-sidebar')

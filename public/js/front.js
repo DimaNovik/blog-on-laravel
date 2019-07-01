@@ -119,6 +119,7 @@ window.addEventListener('load', function () {
                     document.location.reload(true);
                 },
                 error: function (error) {
+                    console.log(error);
                     errorArea.innerText = 'Логін чи Пароль не знайден'
                 }
             });

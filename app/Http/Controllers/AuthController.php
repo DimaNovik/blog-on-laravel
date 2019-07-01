@@ -43,6 +43,7 @@ class AuthController extends Controller
             'login' => $request->get('login'),
             'password' => $request->get('password'),
         ])) {
+
             return response()->json([
                 'status' => 'ok'
             ]);
