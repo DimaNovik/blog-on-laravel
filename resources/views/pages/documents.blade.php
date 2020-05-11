@@ -18,10 +18,12 @@
                                             <img src="/images/doc.png" alt="Doc">
                                         </span>
                                         <span>
-                                            <a href="{{$doc->getImage()}}" download>{{$doc->title}}</a>
+                                            <a href="{{$doc->getImage()}}" download class="file-link">{{$doc->title}}</a>
+                                            <p>
+                                                <span class="text-sm"><b>Дата публікації: </b><span class="text-sm">{{$doc->created_at}}</span></span>
+                                            </p>
                                         </span>
                                     </div>
-                                
                             </div>
                         @endforeach
 

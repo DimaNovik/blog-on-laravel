@@ -6,7 +6,7 @@
         </a>
         
         <div class="old">
-            <a href="http://notary-just.odessa.gov.ua/" target="_blank">
+            <a href="https://notary-just.odessa.gov.ua/" target="_blank">
                 Минула версія сайту
             </a>
         </div>

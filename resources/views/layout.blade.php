@@ -93,14 +93,14 @@
         <div class="header__top_bg">
             <div class="container">
                 <div class="header__top">
-                    <div class="header__search">
-                    <span class="text">
-                        <input type="text" name="search" placeholder="Пошук...">
-                    </span>
-                        <span class="icon">
-                        <img src="/svg/search.svg" alt="Пошук">
-                    </span>
-                    </div>
+                    {{--<div class="header__search">--}}
+                    {{--<span class="text">--}}
+                        {{--<input type="text" name="search" placeholder="Пошук...">--}}
+                    {{--</span>--}}
+                        {{--<span class="icon">--}}
+                        {{--<img src="/svg/search.svg" alt="Пошук">--}}
+                    {{--</span>--}}
+                    {{--</div>--}}
                     <div class="header__auth">
                     <a href="http://facebook.com" target="_blank" class="icon">
                         <img src="/images/fb-icon.png" alt="Користувач">

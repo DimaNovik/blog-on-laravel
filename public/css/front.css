@@ -875,6 +875,10 @@ a.underline:hover {
     margin-bottom: 2em;
 }
 
+.main__news_bottom_date {
+    margin-bottom: 20px;
+}
+
 .main__post-text {
     font-family: FuturaNewBook, sans-serif !important;
     font-size: 1.125em !important;
@@ -884,6 +888,18 @@ a.underline:hover {
         font-family: FuturaNewBook, sans-serif !important;
         font-size: 1.125em !important;
     }
+
+}
+
+.file-link {
+
+&:hover {
+     color: #0d6aad;}
+}
+
+
+.text-sm {
+    font-size: 14px;
 }
 
 .main__post-text .item {
