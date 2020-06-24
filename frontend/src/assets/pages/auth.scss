@@ -1,0 +1,14 @@
+.page {
+
+  &--auth {
+    padding: em(80) 0 em(40);
+  }
+}
+
+.auth {
+
+  &__title {
+    margin-bottom: em(30);
+    text-align: center;
+  }
+}

@@ -1,0 +1,16 @@
+.header {
+  padding: em(20) 0;
+  background-color: $blue;
+
+  &__logo {
+    width: em(280);
+  }
+
+  &__link {
+    color: $white;
+
+    &:hover {
+      color: $white;
+    }
+  }
+}

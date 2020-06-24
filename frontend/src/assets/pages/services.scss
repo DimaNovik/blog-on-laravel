@@ -1,0 +1,17 @@
+.page {
+
+  &--services {
+    padding: em(40) 0 em(40);
+  }
+}
+
+.services {
+
+  &__info {
+    margin: em(25) 0;
+  }
+
+  &__table {
+    overflow: hidden;
+  }
+}

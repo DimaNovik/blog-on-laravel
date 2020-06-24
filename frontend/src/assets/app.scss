@@ -1,0 +1,10 @@
+@import "base/variables";
+@import "base/normilize";
+@import "base/mixins";
+@import "base/base";
+
+@import 'components/header';
+@import 'components/auth-form';
+
+@import 'pages/auth';
+@import 'pages/services';
