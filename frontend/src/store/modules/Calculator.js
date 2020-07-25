@@ -5,6 +5,7 @@ const state = () => ({
     notaryServices: [],
     price: null,
     selectedPrices: [],
+    priceToSetting: null,
     moreInfo: {
         name: '',
         list: []
@@ -38,6 +39,9 @@ const actions = {
         });
 
         commit('setNotaryPrice', data);
+        commit('setPriceToSetting', data);
+
+        return data;
     },
 
     async getOnceAction({commit}, id) {
@@ -68,6 +72,7 @@ const getters = {
     notaryPrice: (state) =>  state.price && state.price.toFixed(2),
     selectedPrices: (state) =>  state.selectedPrices,
     moreInfo: (state) =>  state.moreInfo,
+    priceToSetting: (state) =>  state.priceToSetting,
 };
 
 const mutations = {
@@ -152,6 +157,10 @@ const mutations = {
     clearMoreInfo: (state, data) => {
         state.moreInfo.name = '';
         state.moreInfo.list = [];
+    },
+
+    setPriceToSetting: (state, data) => {
+        state.priceToSetting = data;
     }
 
 };

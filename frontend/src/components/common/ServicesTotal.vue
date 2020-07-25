@@ -1,10 +1,10 @@
 <template>
     <b-row align-v="center">
-        <b-col md="8" xl="10">
+        <b-col md="9" xl="10" >
             <p><b>Загальна кількість:</b> {{count}} </p>
-            <p><a href="#">Завантажити дані у Excel</a></p>
+            <p><a href="#" class="primary">Завантажити дані у Excel</a></p>
         </b-col>
-        <b-col md="4" xl="2">
+        <b-col md="3" xl="2" align="right">
             <b-button
                 type="button"
                 variant="primary"

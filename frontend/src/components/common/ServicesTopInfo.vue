@@ -6,12 +6,12 @@
         </b-col>
         <b-col md="4" align="right">
             <p><b>Дата:</b> {{getDatetimeInfo}}</p>
-            <p class="flex">
+            <p>
                 <router-link
-                class="success"
-                to="/">
+                class="primary d-inline-flex"
+                to="/pages/calculator/settings">
                 Налаштування даних
-                <span class="close">
+                <span class="close d-flex align-baseline ml-2">
                     <img src="https://img.icons8.com/windows/32/000000/settings.png"/>
                 </span>
             </router-link></p>

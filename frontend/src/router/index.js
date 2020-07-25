@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Auth from '../views/Auth.vue'
 import Main from '../views/ServicesList.vue'
 import Create from '../views/ServicesCreate.vue'
+import Settings from '../views/Settings.vue'
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,11 @@ const routes = [
         path: '/pages/calculator/create',
         name: 'Create',
         component: Create
+    },
+    {
+        path: '/pages/calculator/settings',
+        name: 'Settings',
+        component: Settings
     },
 ]
 
