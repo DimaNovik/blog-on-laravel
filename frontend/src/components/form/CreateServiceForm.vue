@@ -1,12 +1,28 @@
 <template>
     <form method="post" action="#">
+        <div class="row mb-3">
+            <div class="col col-lg-6 col-xs-4">
+                <b-form-group
+                        id="fieldset-2"
+                        label="ПІБ платника"
+                        label-for="input-1"
+                >
+                    <b-form-input
+                            if="input-1"
+                            v-model="fio"
+                            type="text"
+                            required
+                    />
+                </b-form-group>
+            </div>
+        </div>
 
         <div class="row mb-3">
             <div class="col">
                 <b-form-group
-                    id="fieldset-1"
-                    label="Оберіть пункт"
-                    label-for="input-1"
+                        id="fieldset-1"
+                        label="Оберіть пункт"
+                        label-for="input-1"
                 >
                     <b-form-select
                             v-model="selectedParentAction"
@@ -24,7 +40,7 @@
         <template v-if="childActions.length">
             <div class="row mb-3"
                  v-for="(value, key) in childActions"
-                :key="key">
+                 :key="key">
                 <div class="col">
                     <b-form-group
                             id="`fieldset-${key}`"
@@ -33,7 +49,21 @@
                     >
                         <b-form-select
                                 :options="value"
-                                @change="filterChild(value[key].value)">
+                                v-model="selected0"
+                                value-field="value"
+                                text-field="text"
+                                v-if="key==0">
+                            <template v-slot:first>
+                                <b-form-select-option :value="null" disabled>-- Оберіть дію --</b-form-select-option>
+                            </template>
+                        </b-form-select>
+
+                        <b-form-select
+                                :options="value"
+                                v-model="selected1"
+                                value-field="value"
+                                text-field="text"
+                            v-else>
                             <template v-slot:first>
                                 <b-form-select-option :value="null" disabled>-- Оберіть дію --</b-form-select-option>
                             </template>
@@ -43,47 +73,55 @@
             </div>
         </template>
 
-        <div class="row mt-3" v-if="getNotaryServices.length">
-            <div class="col">
+        <b-row mt="3" v-if="getNotaryServices.length">
+            <b-col>
                 <template>
                     <b-form-group :label="item.text"
                                   v-for="item in servicesGroup"
                                   :key="item.text">
                         <template
-                                v-for="value in getNotaryServices"
+                                v-for="service in getNotaryServices.filter(val=>val.subgroup_id == item.id)"
                                 >
-                        <b-form-radio
-                                v-model="selectedService"
-                                name="some-radios"
-                                class="mb-2"
-                                :value="value.value"
-                                v-if="value.subgroup_id == item.id"
-                                :key="value.value"
-                                @change="servicePrice(value.value)">{{value.text}}</b-form-radio>
+                            <b-row class="mt-3 mb-3" lg="auto"
+                                   :key="service.value">
+                                <b-col cols="7" md="9">
+                                    <label :for="service.value"
+                                    >
+                                        <b-form-checkbox-group
+                                                v-model="selectedService"
+                                                :options="getCheckboxOptions(service)"
+                                                :name="getNotaryServices.value"
+                                                :value-field="getNotaryServices.value"
+                                                stacked
+                                        ></b-form-checkbox-group>
+                                    </label>
+                                </b-col>
+                                <b-col cols="5" md="3" lg="2">
+                                    <b-form-spinbutton
+                                            :id="'service.value'"
+                                            size="sm"
+                                            min="1"
+                                            :value="service.choosed"
+                                            :disabled="!checkDisabledSpin(service.value)"
+                                            ref="spin"
+                                            :data-id="service.value"
+                                            @change="setCount(service.value, $event)"
+                                          ></b-form-spinbutton>
+                                </b-col>
+                            </b-row>
                         </template>
                     </b-form-group>
                 </template>
-            </div>
-        </div>
+            </b-col>
+        </b-row>
 
-        <div class="row mt-3" v-if="selectedService">
+        <div class="row mt-3">
             <div class="col-6 col-md-6">
-                <b-form-group
-                        class="mb-0"
-                        label="Оберіть кількість:"
-                        label-for="count"
-                >
-                    <b-form-input
-                            id="count"
-                            v-model="count"
-                            type="number"
-                            min="1"
-                            @change="changePrice(notaryCurrentPrice)"
-                    ></b-form-input>
-                </b-form-group>
+                <p class="error"><b>{{error}}</b></p>
             </div>
             <div class="col-12 col-md-6">
-                <p class="mt-5 mt-md-4" align="center">Вартість послуги: <strong>{{notaryCurrentPrice}} грн.</strong></p>
+                <p class="mt-5 mt-md-4" align="center">Загальна вартість: <strong>{{getNotaryPrice || 0}} грн.</strong>
+                </p>
             </div>
         </div>
 
@@ -92,6 +130,7 @@
                 <b-button
                         type="submit"
                         variant="primary"
+
                         @click.prevent="onSubmit">
                     Зберегти
                 </b-button>
@@ -102,7 +141,7 @@
 
 <script>
 
-    import { mapGetters, mapActions, mapMutations } from 'vuex';
+    import {mapGetters, mapActions, mapMutations} from 'vuex';
 
     export default {
         name: 'CreateServiceForm',
@@ -112,7 +151,8 @@
                 childActions: [],
                 services: [],
                 selectedParentAction: null,
-                selectedService: null,
+                selectedService: [],
+                selectedChild: [],
                 servicesGroup: [
                     {
                         id: 1,
@@ -135,13 +175,57 @@
                         text: 'Послуги, які надаються державним нотаріальним архівом  як архівною установою'
                     }
                 ],
-                count: 1,
-                currentCount: 1,
-                code: Math.floor(Math.random() * (999999 - 100000)) + 100000,
+                fio: '',
+                count: 0,
+                selected0: null,
+                selected1: null,
+                error: ''
+            }
+        },
+        watch: {
+            'selectedService': {
+                immediate: false,
+                handler(newVal, oldVal) {
+                    if(newVal.length === 0) {
+                        this.clearPrice();
+                    } else if(newVal.length === this.selectedService.length && newVal.length > oldVal.length) {
+                        this.servicePrice(newVal.slice(-1))
+                        this.setCount(newVal.slice(-1), 1)
+                    } else {
+
+                        let serviceId;
+
+                        for (var i = 0; i < oldVal.length; i++) {
+                            if (newVal.indexOf(oldVal[i]) === -1) {
+                                serviceId = oldVal[i];
+                            }
+                        }
+
+                        this.resetCount(serviceId);
+                        this.decrementSelectedPrice(serviceId)
+                    }
+                }
+            },
+            'selected0': {
+                immediate: false,
+                handler(newVal, oldVal) {
+
+                    if(newVal !== oldVal) {
+                        this.childActions.splice(1);
+                    }
+
+                    this.filterChild(newVal);
+                }
+            },
+            'selected1': {
+                immediate: false,
+                handler(id) {
+                    this.filterChild(id);
+                }
             }
         },
         computed: {
-            ...mapGetters('Calculator', ['notaryActions', 'notaryServices', 'notaryPrice', 'notaryCurrentPrice']),
+            ...mapGetters('Calculator', ['notaryActions', 'notaryServices', 'notaryPrice', 'selectedPrices', 'notaryServices']),
             getParentActions() {
                 return this.notaryActions.filter(item => item.parent_id == 0);
             },
@@ -150,17 +234,40 @@
             },
             getNotaryPrice() {
                 return this.notaryPrice || 0
+            },
+            getRandomCode() {
+                return Math.floor(Math.random() * (999999 - 100000)) + 100000;
+            },
+            getServicesCount() {
+                let arr = [];
+
+                this.notaryServices.forEach(item => {
+                    if(item.choosed > 0) {
+                        arr.push( item.choosed)
+                    }
+
+                })
+
+                return arr.reduce((a, b) => a+b, 0)
             }
         },
         methods: {
             ...mapActions('Calculator', ['getServices', 'getPrice', 'setOrder']),
             ...mapActions('Orders', ['setOrder']),
-            ...mapMutations('Calculator', ['incrementPrice', 'clearNotaryServices', 'setNotaryPrice']),
+            ...mapMutations('Calculator', [
+                'incrementPrice',
+                'decrementPrice',
+                'clearNotaryServices',
+                'setNotaryPrice',
+                'changeSelectedPriceCount',
+                'clearPrice',
+                'decrementSelectedPrice',
+                'choosedCount']),
             filterMain(id) {
                 this.clearData();
                 let data = this.notaryActions.filter(item => item.parent_id == id);
 
-                if(!data.length) {
+                if (!data.length) {
                     this.getServices(id);
                     return;
                 }
@@ -171,62 +278,114 @@
             filterChild(id) {
 
                 let data = this.notaryActions.filter(item => item.parent_id == id);
+                this.selectedChild.push(id);
+                this.clearNotaryServices();
 
-                if(!data.length) {
-                    this.getServices(this.childActions[this.childActions.length - 1][0].value);
+                if (!data.length) {
+                    this.getServices(this.selectedChild[this.selectedChild.length - 1]);
                     return;
                 }
 
                 this.childActions.push(data)
             },
             servicePrice(id) {
-                this.getPrice(id);
-            },
-            changePrice(price) {
-
-                if(this.count < 1) return;
-
-                if(this.count>= this.currentCount) {
-                    let convertedPrice = Number(this.notaryPrice) + Number(price);
-                    this.currentCount++;
-                    this.incrementPrice(convertedPrice.toFixed(2))
-                }
-
-                if(this.count < this.currentCount) {
-                    let convertedPrice = Number(price) - Number(this.notaryPrice);
-                    this.currentCount--;
-                    this.incrementPrice(convertedPrice.toFixed(2))
-                }
+                this.getPrice(id).then(()=> {
+                    this.checkDisabledSpin(id)
+                });
             },
             clearData() {
                 this.childActions = [];
                 this.clearNotaryServices();
-                this.selectedService = null;
-                this.count = 1;
-                this.currentCount = 1;
+                this.selectedService = [];
             },
             onSubmit() {
 
+                if(!this.fio.length || !this.selectedService.length) {
+                    this.error = 'Заповніть необхідні поля';
+                    return;
+                }
+
                 let formData = new FormData();
+                let convertedServices = [];
+
+                this.selectedPrices.map(item => {
+                    convertedServices.push({
+                        service: item.service,
+                        count: item.count
+                    })
+                });
+
+                console.log(convertedServices);
+
 
                 formData.append('region_id', 1);
                 formData.append('office_id', '01');
                 formData.append('user_id', '01');
-                formData.append('action_id', this.selectedParentAction);
-                formData.append('sub_action_1_id', '');
-                formData.append('sub_action_2_id', '');
-                formData.append('service_id', this.selectedService);
-                formData.append('code', `${this.selectedParentAction}${this.selectedService}${this.code}`);
-                formData.append('count', this.count);
-                formData.append('price', this.notaryCurrentPrice);
-                formData.append('start_date', '2020-06-22');
-                formData.append('finish_date', '2020-06-22');
-                formData.append('type', 1);
+                formData.append('action_id', +this.selectedParentAction);
+                formData.append('sub_action_1_id', +this.selectedChild[0] || '');
+                formData.append('sub_action_2_id', +this.selectedChild[1] || '');
+                formData.append('service_id', JSON.stringify(convertedServices));
+                formData.append('code', `A10101-${this.getRandomCode}`);
+                formData.append('count', this.getServicesCount);
+                formData.append('price', this.notaryPrice);
+                formData.append('pay_date', '');
+                formData.append('type', 0);
+                formData.append('fio', this.fio || 'Дані не задані');
 
-                this.setOrder(formData).then(()=> {
-                    this.$router.push('/pages/calculator/main')
+                this.setOrder(formData).then(() => {
+                    this.$router.push('/pages/calculator/main');
+                    this.clearData();
+                    this.error = '';
                 });
-            }
+            },
+            getCheckboxOptions(val) {
+                let arr = [];
+                arr.push({
+                    text: val.text,
+                    value: val.value
+                })
+
+                return arr;
+            },
+            setCount(service, val) {
+                this.choosedCount({id: service, count: val});
+
+                for(let i=0; i< this.selectedPrices.length; i++) {
+
+                    if(this.selectedPrices[i].service == service) {
+
+                        if(this.selectedPrices[i].count == 1 && val == 1) return;
+                        if(this.selectedPrices[i].count < val) {
+                            this.incrementPrice(this.selectedPrices[i].price);
+                            this.selectedPrices[i].count = val
+                        } else {
+                            this.decrementPrice(this.selectedPrices[i].price);
+                            this.selectedPrices[i].count = val;
+                        }
+                    }
+
+
+                }
+
+            },
+            resetCount(id) {
+                let { spin } = this.$refs;
+
+                for(let i=0; i< spin.length; i++) {
+                    if(spin[i].$attrs['data-id'] == id) {
+                        spin[i].$el.value= 1
+                    }
+                }
+            },
+            checkDisabledSpin(id) {
+                if(this.selectedService) {
+                    return this.selectedService.includes(id)
+                }
+
+            },
+        },
+        beforeDestroy() {
+            this.error = ''
         }
 
     }

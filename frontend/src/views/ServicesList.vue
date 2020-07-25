@@ -8,7 +8,7 @@
 
                 <div class="services__info">
                     <ServicesTotal
-                        :count="orders.length"></ServicesTotal>
+                        :count="ordersData.length"></ServicesTotal>
                 </div>
 
                 <ServicesFilter
@@ -16,8 +16,9 @@
 
                 <div class="services__table">
                     <ServicesTable
-                            :data="orders"
-                        :filter="filterText"></ServicesTable>
+                        :value="ordersData"
+                        :filter="filterText"
+                        @update="getUpdatedOrders"></ServicesTable>
                 </div>
             </div>
         </b-container>
@@ -47,15 +48,21 @@
             ServicesTable
         },
         computed: {
-            ...mapGetters('Orders', ['orders'])
+            ...mapGetters('Orders', ['orders']),
+            ordersData() {
+                return this.orders || [];
+            },
         },
         methods: {
             ...mapActions('Orders', ['getOrders']),
             getFilterText(val) {
                 this.filterText = val
+            },
+            getUpdatedOrders() {
+                this.getOrders('01');
             }
         },
-        mounted() {
+        created() {
             this.getOrders('01');
         }
     }

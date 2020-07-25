@@ -23,6 +23,14 @@ const actions = {
 
         commit('setOrders', data);
     },
+
+    async updateOrder({commit}, params) {
+        let {data} = await rest({
+            method: 'post',
+            url:`notary_order_update/${params.id}`,
+            data: params.data
+        });
+    },
 };
 
 const getters = {

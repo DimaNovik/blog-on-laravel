@@ -20,6 +20,7 @@ Route::post('/pages/register', 'AuthController@register')->name('register');
 Route::post('/pages/login', 'AuthController@login')->name('login');
 Route::get('/pages/logout', 'AuthController@logout');
 Route::get('/pages/calculator', 'CalcController@index');
+Route::get('/pages/calculator/pdf-create/{id}','CalcController@create_pdf');
 
 Route::group(['prefix'=>'page', 'namespace'=>'Admin', 'middleware'=>'admin'], function (){
     Route::get('/admin', 'DashboardController@index');

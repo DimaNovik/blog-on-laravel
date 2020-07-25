@@ -2,48 +2,129 @@
     <div class="auth__form">
         <b-form
             @submit.prevent="onSubmit">
-            <b-form-group
-                id="input-group-1"
-                label="Логін"
-                label-for="input-1">
-                <b-form-input
-                    id="input-1"
-                    v-model="formData.login"
-                    type="text"
-                    required></b-form-input>
-            </b-form-group>
-            <b-form-group
-                    id="input-group-2"
-                    label="Пароль"
-                    label-for="input-2">
-                <b-form-input
-                        id="input-2"
-                        v-model="formData.password"
-                        type="password"
-                        required></b-form-input>
-            </b-form-group>
+            <b-row>
+                <b-col>
+                    <b-form-group
+                            id="fieldset-1"
+                            label="Оберіть контору"
+                            label-for="input-1"
+                            v-if="isReg"
+                    >
+                        <b-form-select
+                                :options="groupOptions"
+                                v-model="formData.selectedGroup">
+                            <template v-slot:first>
+                                <b-form-select-option :value="null" disabled>-- Оберіть контору --</b-form-select-option>
+                            </template>
 
-            <div class="auth__btn">
-                <b-button type="submit" variant="primary">Увійти</b-button>
-            </div>
+                        </b-form-select>
+                    </b-form-group>
+
+                    <b-form-group
+                            id="input-group-1"
+                            label="ФІО"
+                            label-for="input-1"
+                        v-if="isReg">
+                        <b-form-input
+                                id="input-1"
+                                v-model="formData.fio"
+                                type="text"
+                                required></b-form-input>
+                    </b-form-group>
+
+                    <b-form-group
+                            id="input-group-2"
+                            label="Логін"
+                            label-for="input-2">
+                        <b-form-input
+                                id="input-1"
+                                v-model="formData.login"
+                                type="text"
+                                required></b-form-input>
+                    </b-form-group>
+
+                    <b-form-group
+                            id="input-group-3"
+                            label="Пароль"
+                            label-for="input-3">
+                        <b-form-input
+                                id="input-2"
+                                v-model="formData.password"
+                                type="password"
+                                required></b-form-input>
+                    </b-form-group>
+                </b-col>
+            </b-row>
+
+            <b-row class="mt-2">
+                <b-col md="6" cols="5" align="right">
+                    <b-button type="submit" variant="primary">Увійти</b-button>
+                </b-col>
+                <b-col md="6" cols="7" align="left">
+                    <b-button
+                            type="button"
+                            variant="primary"
+                        @click="setRegStatus">Реєстрація</b-button>
+                </b-col>
+            </b-row>
         </b-form>
     </div>
 </template>
 
 <script>
+
+    import { mapActions, mapGetters } from 'vuex';
+
     export default {
         name: "AuthForm",
         data() {
             return {
                 formData: {
+                    fio: '',
                     login: '',
-                    password: ''
-                }
+                    password: '',
+                    selectedGroup: null
+                },
+                isReg: false,
+            }
+        },
+        computed: {
+          ...mapGetters('User', ['groups']),
+            groupOptions() {
+              return this.groups || []
             }
         },
         methods: {
+            ...mapActions('User', ['getGroups', 'regUser', 'loginUser']),
             onSubmit() {
-                this.$router.push('/pages/calculator/main')
+                let formLoginData = new FormData();
+                formLoginData.append('login', this.formData.login);
+                formLoginData.append('password', this.formData.password);
+
+                this.loginUser(formLoginData).then(()=> {
+                    this.$router.push('/pages/calculator/main')
+                })
+
+            },
+            setRegStatus() {
+
+                if(!this.isReg) {
+                    this.getGroups().then(()=> {
+                        this.isReg = true
+                    })
+                } else {
+                    let formRegData = new FormData();
+
+                    formRegData.append('name', this.formData.fio);
+                    formRegData.append('login', this.formData.login);
+                    formRegData.append('password', this.formData.password);
+                    formRegData.append('group_id', this.formData.selectedGroup);
+
+                    this.regUser(formRegData).then((res)=> {
+                        this.$router.push('calculator/main')
+                    });
+                }
+
             }
         }
     }

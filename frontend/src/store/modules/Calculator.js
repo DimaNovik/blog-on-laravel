@@ -4,7 +4,11 @@ const state = () => ({
     notaryActions: [],
     notaryServices: [],
     price: null,
-    currentPrice: null
+    selectedPrices: [],
+    moreInfo: {
+        name: '',
+        list: []
+    }
 });
 
 const actions = {
@@ -35,13 +39,35 @@ const actions = {
 
         commit('setNotaryPrice', data);
     },
+
+    async getOnceAction({commit}, id) {
+        let {data} = await rest({
+            method: 'get',
+            url: `notary_once_action/${id}`
+        });
+
+        commit('setMoreInfoName', data)
+    },
+
+
+    async getOnceService({commit}, params) {
+        let {data} = await rest({
+            method: 'get',
+            url: `notary_once_service/${params.id}`
+        });
+
+        commit('setMoreInfo', {name: data.name, count: params.count})
+    },
+
+
 };
 
 const getters = {
     notaryActions: (state) =>  state.notaryActions,
     notaryServices: (state) =>  state.notaryServices,
-    notaryPrice: (state) =>  state.price,
-    notaryCurrentPrice: (state) =>  state.currentPrice,
+    notaryPrice: (state) =>  state.price && state.price.toFixed(2),
+    selectedPrices: (state) =>  state.selectedPrices,
+    moreInfo: (state) =>  state.moreInfo,
 };
 
 const mutations = {
@@ -65,7 +91,8 @@ const mutations = {
                 text: data[i].name,
                 value: data[i].id,
                 parent_id: data[i].parent_id,
-                subgroup_id: data[i].subgroup_id
+                subgroup_id: data[i].subgroup_id,
+                choosed: 0,
             })
         }
 
@@ -73,17 +100,60 @@ const mutations = {
     },
 
     setNotaryPrice: (state, data) => {
-        state.price = data.price || 0;
-        state.currentPrice = data.price || 0;
+        state.price += Number(data.price) || 0;
+        state.selectedPrices.push({
+            service: data.service_id,
+            price: data.price,
+            count: 1,
+        });
     },
 
     incrementPrice: (state, price) => {
-        state.currentPrice = Number(price);
+        state.price = +state.price + Number(price);
+    },
+
+    decrementPrice: (state, price) => {
+        state.price = +state.price - Number(price);
     },
 
     clearNotaryServices: (state) => {
         state.notaryServices = [];
+        state.price = null;
+        state.selectedPrices = [];
+    },
+
+    clearPrice: (state) => {
+        state.price = null;
+        state.selectedPrices = [];
+        state.notaryServices.forEach(item => item.choosed = 0)
+    },
+
+    decrementSelectedPrice: (state, id) => {
+        let deletedService = state.selectedPrices.find(item => item.service == id);
+        let newPrice = +deletedService.price * deletedService.count;
+        deletedService.count = 1;
+        state.price = +state.price - Number(newPrice);
+        state.notaryServices.find(item => item.value == id).choosed = 0;
+    },
+
+    choosedCount: (state, data) => {
+        state.notaryServices.find(item => item.value == data.id).choosed = data.count;
+
+    },
+
+    setMoreInfoName: (state, data) => {
+        state.moreInfo.name = data.name;
+    },
+
+    setMoreInfo: (state, data) => {
+        state.moreInfo.list.push(data)
+    },
+
+    clearMoreInfo: (state, data) => {
+        state.moreInfo.name = '';
+        state.moreInfo.list = [];
     }
+
 };
 
 export const Calculator = {
