@@ -75,4 +75,14 @@ class CalcController extends Controller
         return $pdf->download($order[0]['code'].".pdf");
     }
 
+    public function price_update(Request $request, $id)
+    {
+        $price = cl_notary_services_price::where('service_id',$id)->first();
+
+        $price->editPrice($request->all());
+
+        return response()->json([
+            'status' => 'ok'
+        ]);
+    }
 }

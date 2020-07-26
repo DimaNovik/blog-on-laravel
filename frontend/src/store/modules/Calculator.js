@@ -5,7 +5,6 @@ const state = () => ({
     notaryServices: [],
     price: null,
     selectedPrices: [],
-    priceToSetting: null,
     moreInfo: {
         name: '',
         list: []
@@ -39,7 +38,6 @@ const actions = {
         });
 
         commit('setNotaryPrice', data);
-        commit('setPriceToSetting', data);
 
         return data;
     },
@@ -63,6 +61,13 @@ const actions = {
         commit('setMoreInfo', {name: data.name, count: params.count})
     },
 
+    async priceUpdate({commit}, params) {
+        let {data} = await rest({
+            method: 'post',
+            url:`notary_price_update/${params.id}`,
+            data: params.data
+        });
+    },
 
 };
 
@@ -72,7 +77,6 @@ const getters = {
     notaryPrice: (state) =>  state.price && state.price.toFixed(2),
     selectedPrices: (state) =>  state.selectedPrices,
     moreInfo: (state) =>  state.moreInfo,
-    priceToSetting: (state) =>  state.priceToSetting,
 };
 
 const mutations = {
@@ -158,10 +162,6 @@ const mutations = {
         state.moreInfo.name = '';
         state.moreInfo.list = [];
     },
-
-    setPriceToSetting: (state, data) => {
-        state.priceToSetting = data;
-    }
 
 };
 

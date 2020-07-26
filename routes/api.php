@@ -44,3 +44,4 @@ Route::get('/notary_service_price/{id}', 'CalcController@price');
 Route::post('/notary_order', 'CalcController@create');
 Route::get('/notary_order_user/{id}', 'CalcController@orders');
 Route::post('/notary_order_update/{id}', 'CalcController@order_update');
+Route::post('/notary_price_update/{id}', 'CalcController@price_update');

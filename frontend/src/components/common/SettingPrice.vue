@@ -10,7 +10,8 @@
                     <b-form-select
                             v-model="selectedParentAction"
                             :options="getParentActions"
-                            @change="filterMain(selectedParentAction)">
+                            @change="filterMain(selectedParentAction)"
+                            :disabled="startRequest">
                         <template v-slot:first>
                             <b-form-select-option :value="null" disabled>-- Оберіть дію --</b-form-select-option>
                         </template>
@@ -22,8 +23,8 @@
 
         <template v-if="childActions.length">
             <b-row class="mb-3"
-                 v-for="(value, key) in childActions"
-                 :key="key">
+                   v-for="(value, key) in childActions"
+                   :key="key">
                 <b-col>
                     <b-form-group
                             id="`fieldset-${key}`"
@@ -35,7 +36,8 @@
                                 v-model="selected0"
                                 value-field="value"
                                 text-field="text"
-                                v-if="key==0">
+                                v-if="key==0"
+                                :disabled="startRequest">
                             <template v-slot:first>
                                 <b-form-select-option :value="null" disabled>-- Оберіть дію --</b-form-select-option>
                             </template>
@@ -46,6 +48,7 @@
                                 v-model="selected1"
                                 value-field="value"
                                 text-field="text"
+                                :disabled="startRequest"
                                 v-else>
                             <template v-slot:first>
                                 <b-form-select-option :value="null" disabled>-- Оберіть дію --</b-form-select-option>
@@ -56,72 +59,68 @@
             </b-row>
         </template>
 
-        <template v-if="notaryServices.length">
-            <b-row>
-                <b-col>
-                    <b-form-group
-                            id="fieldset-2"
-                            label="Оберіть пункт"
-                            label-for="input-1"
-                    >
-                        <b-form-select
-                                v-model="selectedService"
-                                :options="notaryServices"
-                                @change="getPrice(selectedService)">
-                            <template v-slot:first>
-                                <b-form-select-option :value="null" disabled>-- Оберіть дію --</b-form-select-option>
-                            </template>
-
-                        </b-form-select>
-                    </b-form-group>
-                </b-col>
-            </b-row>
-        </template>
-        {{price}}
-{{priceToSetting}}
-        <template v-if="price">
-            <b-row>
-                <b-col>
-                    <b-form-group
-                            id="input-group-1"
-                            label="Вартість послуги"
-                            label-for="input-1">
-                        <b-form-input
-                                id="input-1"
-                                v-model="price"
-                                type="text"
-                                required></b-form-input>
-                    </b-form-group>
-                </b-col>
-            </b-row>
-        </template>
-
-        <b-row class="mt-4">
-            <b-col>
-                <b-button type="submit"
-                        variant="primary">
-                    Зберегти
-                </b-button>
+        <b-row v-if="notaryServices.length && !showPrices">
+            <b-col align="center">
+                <b-spinner small label="Small Spinner" class="ml-3" ></b-spinner>
             </b-col>
         </b-row>
+
+        <template v-if="notaryServices.length">
+            <b-row
+                   v-for="(value, j) in notaryServices"
+                   :key="value.value">
+                <b-col>
+
+                    <b-row v-if="showPrices" align-v="center">
+                        <b-col cols="12" md="6">
+                            <b-form-group
+                                    :id="`input-group-${j}`"
+                                    :label="value.text"
+                                    :label-for="`input-${j}`">
+                                <b-form-input
+                                        :id="`input-${j}`"
+                                        v-model="price[value.value]"
+                                        type="text"
+                                        required></b-form-input>
+                            </b-form-group>
+                        </b-col>
+                        <b-col cols="12" md="6">
+                            <p>
+                                <b-button type="button"
+                                          variant="primary"
+                                          @click="handleUpdate(value.value)">
+                                    Зберегти
+                                </b-button>
+                                <b-spinner small label="Small Spinner" class="ml-3" v-if="showSpinner && updatedId===value.value"></b-spinner>
+                            </p>
+                        </b-col>
+                    </b-row>
+                </b-col>
+            </b-row>
+        </template>
     </form>
 </template>
 
 <script>
 
-    import { mapGetters, mapActions, mapMutations } from 'vuex';
+    import {mapGetters, mapActions, mapMutations} from 'vuex';
 
+    let requests = [];
+    let responses = 0;
     export default {
         name: "SettingPrice",
         data() {
             return {
                 selectedParentAction: null,
-                selectedService: null,
                 childActions: [],
                 selectedChild: [],
                 selected0: null,
                 selected1: null,
-                price: null
+                price: [],
+                startRequest: false,
+                showPrices: false,
+                showSpinner: false,
+                updatedId: null,
             }
         },
         watch: {
@@ -129,7 +128,7 @@
                 immediate: false,
                 handler(newVal, oldVal) {
 
-                    if(newVal !== oldVal) {
+                    if (newVal !== oldVal) {
                         this.childActions.splice(1);
                     }
 
@@ -141,10 +140,23 @@
                 handler(id) {
                     this.filterChild(id);
                 }
+            },
+            'notaryServices': {
+                immediate: false,
+                handler(val) {
+
+                    requests = [];
+                    responses = 0;
+                    this.showPrices = false;
+
+                    val.forEach(item => {
+                        this.getServicePrice(item.value)
+                    })
+                }
             }
         },
         methods: {
-            ...mapActions('Calculator', ['getMainActions', 'getServices', 'getPrice']),
+            ...mapActions('Calculator', ['getMainActions', 'getServices', 'getPrice', 'priceUpdate']),
             ...mapMutations('Calculator', ['clearNotaryServices']),
             filterMain(id) {
                 this.clearData();
@@ -154,7 +166,6 @@
                     this.getServices(id);
                     return;
                 }
-
 
                 this.childActions.push(data)
             },
@@ -172,19 +183,43 @@
                 this.childActions.push(data)
             },
             getServicePrice(id) {
-                this.getPrice(id).then((response)=> {
-                    console.log(response);
-                    this.price = this.getServiceCurrentPrice();
+                this.startRequest = true;
+                requests.push(id);
+
+                this.getPrice(id).then((response) => {
+                    responses += 1;
+
+                    this.price[id] = response.price;
+
+                    if(requests.length === responses) {
+                        this.showPrices = true;
+                        this.startRequest = false;
+                        return;
+                    }
                 })
+
+
             },
             clearData() {
                 this.childActions = [];
-                this.selectedService = [];
                 this.clearNotaryServices();
             },
+            handleUpdate(id) {
+                let formData = new FormData();
+
+                formData.append('price', this.price[id]);
+
+                this.showSpinner = true;
+                this.updatedId = id;
+
+                this.priceUpdate({id: id, data: formData}).then(() => {
+                    this.showSpinner = false;
+                })
+            }
+
         },
         computed: {
-            ...mapGetters('Calculator', ['notaryActions','notaryServices', 'priceToSetting']),
+            ...mapGetters('Calculator', ['notaryActions', 'notaryServices', 'priceToSetting']),
             getParentActions() {
                 return this.notaryActions.filter(item => item.parent_id == 0);
             },

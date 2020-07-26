@@ -18,7 +18,7 @@
                             <b-tabs v-model="tabIndex" card >
                                 <b-tab title="Ціни" :title-link-class="linkClass(0)">
                                     <p>Коригування вартості послуг</p>
-                                    <SettingPrice class="mt-5"/>
+                                    <SettingPrice class="mt-5 mb-5"/>
                                 </b-tab>
                                 <b-tab title="Користувачі" :title-link-class="linkClass(1)">
                                     <p>Управління користувачами</p>

@@ -57,10 +57,10 @@
             </b-row>
 
             <b-row class="mt-2">
-                <b-col md="6" cols="5" align="right">
-                    <b-button type="submit" variant="primary">Увійти</b-button>
+                <b-col  v-if="!isReg" align="center">
+                    <b-button type="submit" variant="primary" >Увійти</b-button>
                 </b-col>
-                <b-col md="6" cols="7" align="left">
+                <b-col  align="center">
                     <b-button
                             type="button"
                             variant="primary"
@@ -83,7 +83,7 @@
                     fio: '',
                     login: '',
                     password: '',
-                    selectedGroup: null
+                    selectedGroup: null,
                 },
                 isReg: false,
             }
@@ -97,9 +97,11 @@
         methods: {
             ...mapActions('User', ['getGroups', 'regUser', 'loginUser']),
             onSubmit() {
+                console.log(this.csrf);
                 let formLoginData = new FormData();
                 formLoginData.append('login', this.formData.login);
                 formLoginData.append('password', this.formData.password);
+                formLoginData.append('_token', window.csrf_token);
 
                 this.loginUser(formLoginData).then(()=> {
                     this.$router.push('/pages/calculator/main')
@@ -126,6 +128,9 @@
                 }
 
             }
+        },
+        mounted() {
+            console.log(document.querySelector('#token'));
         }
     }
 </script>

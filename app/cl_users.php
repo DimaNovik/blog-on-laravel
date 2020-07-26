@@ -2,12 +2,16 @@
 
 namespace App;
 use \Storage;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
-use \Auth;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class cl_users extends Model
+
+class cl_users extends Authenticatable
 {
     //
+    use Notifiable;
+
     protected $fillable = [
         'name', 'group_id', 'phone', 'login', 'password'
     ];

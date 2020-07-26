@@ -8,6 +8,7 @@
 
                 <div class="services__info">
                     <ServicesTotal
+                        :item="ordersData"
                         :count="ordersData.length"></ServicesTotal>
                 </div>
 

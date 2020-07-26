@@ -26,10 +26,11 @@ const actions = {
     },
 
     async loginUser({commit}, formData) {
+
         let {data} = await rest({
             method: 'post',
             url:`user/login`,
-            data: formData
+            data: formData,
         });
 
         return data;

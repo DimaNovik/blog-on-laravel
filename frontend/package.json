@@ -12,10 +12,9 @@
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.14.0",
     "core-js": "^3.6.4",
-    "jspdf": "^1.5.3",
-    "jspdf-customfonts": "0.0.4-rc.4",
     "vue": "^2.6.11",
     "vue-axios": "^2.1.5",
+    "vue-json-excel": "^0.2.98",
     "vue-moment": "^4.1.0",
     "vue-router": "^3.1.6",
     "vuex": "^3.1.3"
