@@ -16,7 +16,6 @@ class UserMiddleware
      */
     public function handle($request, Closure $next)
     {
-        dd(Auth::check());
         if(Auth::check() && Auth::user()->is_active) {
             return $next($request);
         } else {

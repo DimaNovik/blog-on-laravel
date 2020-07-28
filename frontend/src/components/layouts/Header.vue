@@ -7,7 +7,7 @@
                         <img src="https://notary-just.odessa.gov.ua/images/main-logo.png" alt="">
                     </div>
                 </b-col>
-                <b-col md="4" xl="2" sm="6" align="center">
+                <b-col md="4" xl="2" sm="6" align="right">
                     <b-link
                         :href="'/'"
                         class="header__link">

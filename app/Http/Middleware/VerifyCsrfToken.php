@@ -28,5 +28,4 @@ class VerifyCsrfToken extends Middleware
 
         return $request->session()->token() == $token;
     }
-
 }

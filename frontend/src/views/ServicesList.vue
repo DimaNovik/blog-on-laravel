@@ -2,7 +2,9 @@
     <div class="page page--services">
         <b-container>
             <div class="services">
-                <ServicesTopInfo></ServicesTopInfo>
+                <ServicesTopInfo
+                    :info="getUserInfo"
+                    :group="getGroupName"></ServicesTopInfo>
 
                 <hr/>
 
@@ -50,9 +52,19 @@
         },
         computed: {
             ...mapGetters('Orders', ['orders']),
+            ...mapGetters('User', ['user', 'userGroup']),
             ordersData() {
                 return this.orders || [];
             },
+            getUserInfo() {
+                return this.user || {}
+            },
+            getUserId() {
+                return this.user && this.user.id
+            },
+            getGroupName() {
+                return this.userGroup && this.userGroup.name || ''
+            }
         },
         methods: {
             ...mapActions('Orders', ['getOrders']),
@@ -60,11 +72,11 @@
                 this.filterText = val
             },
             getUpdatedOrders() {
-                this.getOrders('01');
+                this.getOrders(this.getUserId);
             }
         },
-        created() {
-            this.getOrders('01');
+        mounted() {
+            this.getOrders(this.getUserId);
         }
     }
 </script>

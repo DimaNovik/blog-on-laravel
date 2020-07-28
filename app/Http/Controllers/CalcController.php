@@ -62,6 +62,10 @@ class CalcController extends Controller
         return cl_groups::all();
     }
 
+    public function get_user_group($id) {
+        return cl_groups::where('id', $id)->firstOrFail();
+    }
+
     public function create_pdf($id)
     {
         $order = cl_notary_order::where('id', $id)->get();

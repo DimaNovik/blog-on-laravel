@@ -56,6 +56,18 @@
                 </b-col>
             </b-row>
 
+            <b-row v-if="hasError">
+                <b-col align="center">
+                    <p class="error">Значення логіну чи паролю невірне</p>
+                </b-col>
+            </b-row>
+
+            <b-row v-if="errors">
+                <b-col align="center">
+                    <p class="error" v-for="(value, j) in errors" :key="j">{{value}}</p>
+                </b-col>
+            </b-row>
+
             <b-row class="mt-2">
                 <b-col  v-if="!isReg" align="center">
                     <b-button type="submit" variant="primary" >Увійти</b-button>
@@ -86,6 +98,8 @@
                     selectedGroup: null,
                 },
                 isReg: false,
+                hasError: false,
+                errors: [],
             }
         },
         computed: {
@@ -97,14 +111,17 @@
         methods: {
             ...mapActions('User', ['getGroups', 'regUser', 'loginUser']),
             onSubmit() {
-                console.log(this.csrf);
+
                 let formLoginData = new FormData();
                 formLoginData.append('login', this.formData.login);
                 formLoginData.append('password', this.formData.password);
-                formLoginData.append('_token', window.csrf_token);
 
-                this.loginUser(formLoginData).then(()=> {
-                    this.$router.push('/pages/calculator/main')
+                this.loginUser(formLoginData)
+                    .then((response)=> {
+                        this.$router.push('/pages/calculator/main');
+                    })
+                .catch(()=> {
+                    this.hasError = true;
                 })
 
             },
@@ -122,15 +139,17 @@
                     formRegData.append('password', this.formData.password);
                     formRegData.append('group_id', this.formData.selectedGroup);
 
-                    this.regUser(formRegData).then((res)=> {
-                        this.$router.push('calculator/main')
-                    });
+                    this.regUser(formRegData)
+                        .then((res)=> {
+                            this.isReg = false;
+                        })
+                        .catch((reject)=> {
+                            this.errors.push(reject.errors);
+                        });
+
                 }
 
             }
         },
-        mounted() {
-            console.log(document.querySelector('#token'));
-        }
     }
 </script>

@@ -226,6 +226,7 @@
         },
         computed: {
             ...mapGetters('Calculator', ['notaryActions', 'notaryServices', 'notaryPrice', 'selectedPrices', 'notaryServices']),
+            ...mapGetters('User', ['user','userGroup']),
             getParentActions() {
                 return this.notaryActions.filter(item => item.parent_id == 0);
             },
@@ -249,6 +250,15 @@
                 })
 
                 return arr.reduce((a, b) => a+b, 0)
+            },
+            getUserId() {
+                return (this.user) ? (this.user.id < 10) ? `0${this.user.id}` : this.user.id : 0;
+            },
+            getRegionId() {
+                return this.userGroup && this.userGroup.region_id || 0;
+            },
+            getGroupId() {
+                return this.userGroup && this.userGroup.group_code || 0;
             }
         },
         methods: {
@@ -315,12 +325,9 @@
                     })
                 });
 
-                console.log(convertedServices);
-
-
-                formData.append('region_id', 1);
-                formData.append('office_id', '01');
-                formData.append('user_id', '01');
+                formData.append('region_id', this.getRegionId);
+                formData.append('office_id', this.getGroupId);
+                formData.append('user_id', this.getUserId);
                 formData.append('action_id', +this.selectedParentAction);
                 formData.append('sub_action_1_id', +this.selectedChild[0] || '');
                 formData.append('sub_action_2_id', +this.selectedChild[1] || '');

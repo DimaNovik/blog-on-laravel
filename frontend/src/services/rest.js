@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from "js-cookie";
 
 const rest = axios.create({
     baseURL: '/api/',
@@ -9,8 +10,7 @@ const rest = axios.create({
 });
 
 rest.interceptors.request.use(config => {
-    config.headers['X-Requested-With'] = 'XMLHttpRequest';
-    config.headers['X-CSRF-TOKEN'] = window.csrf_token;
+    config.headers['Authorization'] = `Bearer ${Cookies.get('access_token')}`;
     return config;
 }, err => Promise.reject(err));
 
