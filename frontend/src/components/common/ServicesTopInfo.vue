@@ -1,12 +1,12 @@
 <template>
     <b-row>
         <b-col md="8">
-            <p><b>Відділ:</b> {{group}}</p>
+            <p v-if="info.role != 1"><b>Відділ:</b> {{group}}</p>
             <p><b>Нотаріус:</b> {{info.name}}</p>
         </b-col>
         <b-col md="4" align="right">
             <p><b>Дата:</b> {{getDatetimeInfo}}</p>
-            <p v-if="info.role === 1">
+            <p v-if="info.role == 1">
                 <router-link
                         class="primary d-inline-flex"
                         to="/pages/calculator/settings">

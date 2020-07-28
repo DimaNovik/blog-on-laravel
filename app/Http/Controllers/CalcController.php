@@ -46,6 +46,17 @@ class CalcController extends Controller
         ]);
     }
 
+    public function service_update(Request $request, $id)
+    {
+        $service = cl_notary_services::find($id);
+
+        $service->edit($request->all());
+
+        return response()->json([
+            'status' => 'ok'
+        ]);
+    }
+
     public function price($id) {
         return cl_notary_services_price::where('service_id', $id)->firstOrFail();
     }

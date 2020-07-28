@@ -4,7 +4,7 @@
             <b-container>
                 <b-row class="mt-5">
                     <b-col>
-                        <router-link to="/pages/calculator">
+                        <router-link to="/pages/calculator/main">
                             До калькулятора
                         </router-link>
                     </b-col>

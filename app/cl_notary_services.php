@@ -7,4 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class cl_notary_services extends Model
 {
     protected $fillable = ['parent_id', 'subgroup_id', 'name'];
+
+    public function edit($fields)
+    {
+        $this->fill($fields);
+        $this->save();
+    }
 }

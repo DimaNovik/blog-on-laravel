@@ -62,9 +62,9 @@
                 </b-col>
             </b-row>
 
-            <b-row v-if="errors">
+            <b-row v-if="hasRegError">
                 <b-col align="center">
-                    <p class="error" v-for="(value, j) in errors" :key="j">{{value}}</p>
+                    <p class="error">Перевірте введені дані. Оберіть всі поля. Або логін та пароль вже існує</p>
                 </b-col>
             </b-row>
 
@@ -99,7 +99,7 @@
                 },
                 isReg: false,
                 hasError: false,
-                errors: [],
+                hasRegError: false,
             }
         },
         computed: {
@@ -126,6 +126,8 @@
 
             },
             setRegStatus() {
+                this.hasError = false;
+                this.hasRegError = false;
 
                 if(!this.isReg) {
                     this.getGroups().then(()=> {
@@ -143,8 +145,8 @@
                         .then((res)=> {
                             this.isReg = false;
                         })
-                        .catch((reject)=> {
-                            this.errors.push(reject.errors);
+                        .catch(()=> {
+                            this.hasRegError = true;
                         });
 
                 }

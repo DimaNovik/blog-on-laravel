@@ -71,12 +71,20 @@
                    :key="value.value">
                 <b-col>
 
-                    <b-row v-if="showPrices" align-v="center">
+                    <b-row v-if="showPrices" align-v="end">
                         <b-col cols="12" md="6">
+
                             <b-form-group
                                     :id="`input-group-${j}`"
                                     :label="value.text"
                                     :label-for="`input-${j}`">
+
+                                <b-form-input
+                                v-model="name[value.value]"
+                                type="text"
+                                required
+                                class="mb-3"></b-form-input>
+
                                 <b-form-input
                                         :id="`input-${j}`"
                                         v-model="price[value.value]"
@@ -88,13 +96,22 @@
                             <p>
                                 <b-button type="button"
                                           variant="primary"
+                                          @click="handleServiceUpdate(value.value)">
+                                    Зберегти назву
+                                </b-button>
+
+                            </p>
+                            <p>
+                                <b-button type="button"
+                                          variant="primary"
                                           @click="handleUpdate(value.value)">
-                                    Зберегти
+                                    Зберегти вартість
                                 </b-button>
                                 <b-spinner small label="Small Spinner" class="ml-3" v-if="showSpinner && updatedId===value.value"></b-spinner>
                             </p>
                         </b-col>
                     </b-row>
+                    <hr />
                 </b-col>
             </b-row>
         </template>
@@ -117,6 +134,7 @@
                 selected0: null,
                 selected1: null,
                 price: [],
+                name: [],
                 startRequest: false,
                 showPrices: false,
                 showSpinner: false,
@@ -150,13 +168,14 @@
                     this.showPrices = false;
 
                     val.forEach(item => {
-                        this.getServicePrice(item.value)
+                        this.getServicePrice(item.value);
+                        this.setNameModel(item)
                     })
                 }
             }
         },
         methods: {
-            ...mapActions('Calculator', ['getMainActions', 'getServices', 'getPrice', 'priceUpdate']),
+            ...mapActions('Calculator', ['getMainActions', 'getServices', 'getPrice', 'priceUpdate', 'serviceUpdate']),
             ...mapMutations('Calculator', ['clearNotaryServices']),
             filterMain(id) {
                 this.clearData();
@@ -215,8 +234,22 @@
                 this.priceUpdate({id: id, data: formData}).then(() => {
                     this.showSpinner = false;
                 })
-            }
+            },
+            handleServiceUpdate(id) {
+                let formData = new FormData();
 
+                formData.append('name', this.name[id]);
+
+                this.showSpinner = true;
+                this.updatedId = id;
+
+                this.serviceUpdate({id: id, data: formData}).then(() => {
+                    this.showSpinner = false;
+                })
+            },
+            setNameModel(val) {
+                this.name[val.value] = val.text
+            }
         },
         computed: {
             ...mapGetters('Calculator', ['notaryActions', 'notaryServices', 'priceToSetting']),

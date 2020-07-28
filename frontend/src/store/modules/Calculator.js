@@ -69,6 +69,14 @@ const actions = {
         });
     },
 
+    async serviceUpdate({commit}, params) {
+        let {data} = await rest({
+            method: 'post',
+            url:`service_update/${params.id}`,
+            data: params.data
+        });
+    },
+
 };
 
 const getters = {
