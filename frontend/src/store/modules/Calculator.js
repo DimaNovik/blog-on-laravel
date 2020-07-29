@@ -8,7 +8,8 @@ const state = () => ({
     moreInfo: {
         name: '',
         list: []
-    }
+    },
+    allPrices: [],
 });
 
 const actions = {
@@ -77,6 +78,17 @@ const actions = {
         });
     },
 
+    async getAllPrice({commit}) {
+        let {data} = await rest({
+            method: 'get',
+            url: `notary_all_prices`
+        });
+
+        commit('setAllPrices', data)
+    },
+
+
+
 };
 
 const getters = {
@@ -85,6 +97,7 @@ const getters = {
     notaryPrice: (state) =>  state.price && state.price.toFixed(2),
     selectedPrices: (state) =>  state.selectedPrices,
     moreInfo: (state) =>  state.moreInfo,
+    allPrices: (state) =>  state.allPrices,
 };
 
 const mutations = {
@@ -169,6 +182,10 @@ const mutations = {
     clearMoreInfo: (state, data) => {
         state.moreInfo.name = '';
         state.moreInfo.list = [];
+    },
+
+    setAllPrices: (state, data) => {
+        state.allPrices = data;
     },
 
 };

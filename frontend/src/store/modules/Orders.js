@@ -3,6 +3,7 @@ import rest from '@/services/rest';
 const state = () => ({
     orders: [],
     allOrders: [],
+    allUsers: null
 });
 
 const actions = {
@@ -48,6 +49,7 @@ const actions = {
             url:`all_users`
         });
 
+        commit('setUsers', data);
         commit('updateAllOrders', data);
     },
 };
@@ -55,6 +57,7 @@ const actions = {
 const getters = {
     orders: (state) =>  state.orders,
     allOrders: (state) =>  state.allOrders,
+    allUsers: (state) =>  state.allUsers
 };
 
 const mutations = {
@@ -64,6 +67,10 @@ const mutations = {
 
     setAllOrders: (state, data) => {
         state.allOrders = data;
+    },
+
+    setUsers: (state, data) => {
+        state.allUsers = data;
     },
 
     updateAllOrders: (state, data) => {

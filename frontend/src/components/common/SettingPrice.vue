@@ -59,11 +59,6 @@
             </b-row>
         </template>
 
-        <b-row v-if="notaryServices.length && !showPrices">
-            <b-col align="center">
-                <b-spinner small label="Small Spinner" class="ml-3" ></b-spinner>
-            </b-col>
-        </b-row>
 
         <template v-if="notaryServices.length">
             <b-row
@@ -71,7 +66,7 @@
                    :key="value.value">
                 <b-col>
 
-                    <b-row v-if="showPrices" align-v="end">
+                    <b-row  align-v="end">
                         <b-col cols="12" md="6">
 
                             <b-form-group
@@ -165,7 +160,6 @@
 
                     requests = [];
                     responses = 0;
-                    this.showPrices = false;
 
                     val.forEach(item => {
                         this.getServicePrice(item.value);
@@ -175,7 +169,7 @@
             }
         },
         methods: {
-            ...mapActions('Calculator', ['getMainActions', 'getServices', 'getPrice', 'priceUpdate', 'serviceUpdate']),
+            ...mapActions('Calculator', ['getMainActions', 'getServices', 'getPrice', 'priceUpdate', 'serviceUpdate', 'getAllPrice']),
             ...mapMutations('Calculator', ['clearNotaryServices']),
             filterMain(id) {
                 this.clearData();
@@ -202,22 +196,11 @@
                 this.childActions.push(data)
             },
             getServicePrice(id) {
-                this.startRequest = true;
-                requests.push(id);
-
-                this.getPrice(id).then((response) => {
-                    responses += 1;
-
-                    this.price[id] = response.price;
-
-                    if(requests.length === responses) {
-                        this.showPrices = true;
-                        this.startRequest = false;
-                        return;
+                for(let i=0, length = this.allPrices.length; i<length; i++) {
+                    if(this.allPrices[i].service_id == id) {
+                        this.price[id] = this.allPrices[i].price;
                     }
-                })
-
-
+                }
             },
             clearData() {
                 this.childActions = [];
@@ -252,7 +235,7 @@
             }
         },
         computed: {
-            ...mapGetters('Calculator', ['notaryActions', 'notaryServices', 'priceToSetting']),
+            ...mapGetters('Calculator', ['notaryActions', 'notaryServices', 'priceToSetting', 'allPrices']),
             getParentActions() {
                 return this.notaryActions.filter(item => item.parent_id == 0);
             },
@@ -261,7 +244,9 @@
             }
         },
         mounted() {
-            this.getMainActions();
+            this.getMainActions().then(()=> {
+                this.getAllPrice();
+            });
         }
     }
 </script>

@@ -49,4 +49,11 @@ class cl_users extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function edit($fields)
+    {
+        $this->fill($fields);
+        $this->password = bcrypt($fields['password']);
+        $this->save();
+    }
+
 }

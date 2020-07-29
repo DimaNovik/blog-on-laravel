@@ -14,25 +14,30 @@ use PDF;
 
 class CalcController extends Controller
 {
-    public function index() {
+    public function index()
+    {
 
         return view('pages.calculator');
 
     }
 
-    public function actions() {
+    public function actions()
+    {
         return cl_notary_actions::all();
     }
 
-    public function once_action($id) {
+    public function once_action($id)
+    {
         return cl_notary_actions::find($id);
     }
 
-    public function once_service($id) {
+    public function once_service($id)
+    {
         return cl_notary_services::find($id);
     }
 
-    public function services($id) {
+    public function services($id)
+    {
         return cl_notary_services::where('parent_id', $id)->get();
     }
 
@@ -59,24 +64,28 @@ class CalcController extends Controller
     }
 
 
-
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         return cl_notary_order::create($request->all());
     }
 
-    public function orders($id) {
+    public function orders($id)
+    {
         return cl_notary_order::where('user_id', $id)->get();
     }
 
-    public function all_orders() {
+    public function all_orders()
+    {
         return cl_notary_order::all();
     }
 
-    public function get_notary_groups() {
+    public function get_notary_groups()
+    {
         return cl_groups::all();
     }
 
-    public function get_user_group($id) {
+    public function get_user_group($id)
+    {
         return cl_groups::where('id', $id)->firstOrFail();
     }
 
@@ -90,19 +99,20 @@ class CalcController extends Controller
             'code' => $order[0]['code']];
         $pdf = PDF::loadView('pages.pdf', $data);
 
-        return $pdf->download($order[0]['code'].".pdf");
+        return $pdf->download($order[0]['code'] . ".pdf");
     }
 
 
     // PRICE
 
-    public function price($id) {
+    public function price($id)
+    {
         return cl_notary_services_price::where('service_id', $id)->firstOrFail();
     }
 
     public function price_update(Request $request, $id)
     {
-        $price = cl_notary_services_price::where('service_id',$id)->first();
+        $price = cl_notary_services_price::where('service_id', $id)->first();
 
         $price->editPrice($request->all());
 
@@ -111,8 +121,30 @@ class CalcController extends Controller
         ]);
     }
 
+    public function price_all()
+    {
+        return cl_notary_services_price::all();
+    }
+
     // USERS
-    public function get_notary_users() {
+    public function get_notary_users()
+    {
         return cl_users::all();
+    }
+
+    public function get_once_user($id)
+    {
+        return cl_users::where('id', $id)->firstOrFail();
+    }
+
+    public function once_user_update(Request $request, $id)
+    {
+        $service = cl_users::find($id);
+
+        $service->edit($request->all());
+
+        return response()->json([
+            'status' => 'ok'
+        ]);
     }
 }

@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 const state = () => ({
     groups: [],
     user: null,
-    userGroup: null
+    userGroup: null,
 });
 
 const actions = {
@@ -75,6 +75,24 @@ const actions = {
         return data;
     },
 
+    async onceUser({commit}, id) {
+        let {data} = await rest({
+            method: 'get',
+            url:`once_user/${id}`
+        });
+
+        return data;
+    },
+
+    async onceUserUpdate({commit}, params) {
+        let {data} = await rest({
+            method: 'post',
+            url:`once_user_update/${params.id}`,
+            data: params.info
+        });
+
+        return data;
+    },
 };
 
 const getters = {
@@ -105,10 +123,9 @@ const mutations = {
     },
 
     clearUser: (state) => {
-        state.user = null,
+        state.user = null;
         state.userGroup = null
-    }
-
+    },
 };
 
 export const User = {

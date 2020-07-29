@@ -48,7 +48,10 @@ Route::group(['middleware' => 'auth'], static function () {
     Route::post('/notary_price_update/{id}', 'CalcController@price_update');
     Route::get('/user_group/{id}', 'CalcController@get_user_group');
     Route::get('/all_users', 'CalcController@get_notary_users');
+    Route::get('/once_user/{id}', 'CalcController@get_once_user');
+    Route::post('/once_user_update/{id}', 'CalcController@once_user_update');
     Route::post('/service_update/{id}', 'CalcController@service_update');
+    Route::get('/notary_all_prices', 'CalcController@price_all');
 });
 
 Route::get('/notary_groups', 'CalcController@get_notary_groups');

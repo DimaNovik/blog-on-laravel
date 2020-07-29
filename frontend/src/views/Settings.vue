@@ -22,6 +22,7 @@
                                 </b-tab>
                                 <b-tab title="Користувачі" :title-link-class="linkClass(1)">
                                     <p>Управління користувачами</p>
+                                    <SettingUser class="mt-5 mb-5"/>
                                 </b-tab>
                                 <b-tab title="Статистика" :title-link-class="linkClass(2)">
                                     <p>Статистичні дані</p>
@@ -38,6 +39,7 @@
 <script>
 
     import SettingPrice from '@/components/common/SettingPrice';
+    import SettingUser from '@/components/common/SettingUser';
 
     export default {
         name: "Settings",
@@ -47,7 +49,8 @@
             }
         },
         components: {
-            SettingPrice
+            SettingPrice,
+            SettingUser
         },
         methods: {
             linkClass(idx) {
