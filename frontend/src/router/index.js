@@ -14,17 +14,6 @@ const routes = [
         path: '/pages/calculator',
         name: 'Auth',
         component: Auth,
-        // beforeEnter: (to, from, next) =>
-        // {
-        //     store.dispatch('User/checkUser').then(response => {
-        //         next();
-        //         // the above state is not available here, since it
-        //         // it is resolved asynchronously in the store action
-        //     }, error => {
-        //         // handle error here
-        //         next('/pages/calculator')
-        //     })
-        // }
     },
     {
         path: '/pages/calculator/main',
@@ -34,7 +23,20 @@ const routes = [
         {
             store.dispatch('User/checkUser').then(response => {
                 store.dispatch('User/userGroup', response.group_id).then(()=> {
-                    next();
+
+                    if(response.role == 0) {
+                        store.dispatch('Orders/getOrders', response.id).then(()=> {
+                            next();
+                        })
+                    } else {
+
+                        store.dispatch('Orders/getAllOrders').then(()=> {
+                            store.dispatch('Orders/getAllUsers').then(()=> {
+                                next();
+                            })
+                        })
+                    }
+
                 })
             }, error => {
                 next('/pages/calculator')
@@ -50,6 +52,10 @@ const routes = [
         path: '/pages/calculator/settings',
         name: 'Settings',
         component: Settings
+    },
+    {
+        path: '*',
+        redirect: '/pages/calculator/main'
     },
 ]
 

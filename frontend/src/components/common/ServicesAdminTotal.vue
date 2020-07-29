@@ -6,28 +6,20 @@
                 <a href="#">
 
                     <download-excel
-                    :data  = "item"
-                    :fields = "json_fields"
-                    name    = "filename.xls">
+                            :data  = "item"
+                            :fields = "json_fields"
+                            name    = "filename.xls">
 
-                Завантажити дані у Excel
+                        Завантажити дані у Excel
                         <img src="https://img.icons8.com/officexs/16/000000/ms-excel.png" class="mt-n1 ml-2"/>
-            </download-excel></a></p>
-        </b-col>
-        <b-col md="3" xl="2" align="right">
-            <b-button
-                type="button"
-                variant="primary"
-                @click="handlerClick">
-                Створити договір
-            </b-button>
+                    </download-excel></a></p>
         </b-col>
     </b-row>
 </template>
 
 <script>
     export default {
-        name: "ServicesTotal",
+        name: "ServicesAdminTotal",
         props: {
             item: {
                 type: Array,Object,
@@ -45,6 +37,9 @@
         data() {
             return {
                 json_fields: {
+                    'Код регіону': 'region_id',
+                    'Код офісу': 'office_id',
+                    'Нотаріус': 'name',
                     'Код дії': 'code',
                     'Загальна кількість': 'count',
                     'Вартість': 'price',
@@ -54,10 +49,5 @@
                 },
             }
         },
-        methods: {
-            handlerClick() {
-                this.$router.push('/pages/calculator/create');
-            }
-        }
     }
 </script>

@@ -8,6 +8,7 @@ use App\cl_notary_services;
 use App\cl_notary_services_price;
 use App\cl_notary_order;
 use App\cl_groups;
+use App\cl_users;
 
 use PDF;
 
@@ -57,9 +58,7 @@ class CalcController extends Controller
         ]);
     }
 
-    public function price($id) {
-        return cl_notary_services_price::where('service_id', $id)->firstOrFail();
-    }
+
 
     public function create(Request $request) {
         return cl_notary_order::create($request->all());
@@ -67,6 +66,10 @@ class CalcController extends Controller
 
     public function orders($id) {
         return cl_notary_order::where('user_id', $id)->get();
+    }
+
+    public function all_orders() {
+        return cl_notary_order::all();
     }
 
     public function get_notary_groups() {
@@ -90,6 +93,13 @@ class CalcController extends Controller
         return $pdf->download($order[0]['code'].".pdf");
     }
 
+
+    // PRICE
+
+    public function price($id) {
+        return cl_notary_services_price::where('service_id', $id)->firstOrFail();
+    }
+
     public function price_update(Request $request, $id)
     {
         $price = cl_notary_services_price::where('service_id',$id)->first();
@@ -99,5 +109,10 @@ class CalcController extends Controller
         return response()->json([
             'status' => 'ok'
         ]);
+    }
+
+    // USERS
+    public function get_notary_users() {
+        return cl_users::all();
     }
 }

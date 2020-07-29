@@ -2,6 +2,7 @@ import rest from '@/services/rest';
 
 const state = () => ({
     orders: [],
+    allOrders: [],
 });
 
 const actions = {
@@ -31,15 +32,49 @@ const actions = {
             data: params.data
         });
     },
+
+    async getAllOrders({commit}) {
+        let {data} = await rest({
+            method: 'get',
+            url:`notary_all_orders`
+        });
+
+        commit('setAllOrders', data);
+    },
+
+    async getAllUsers({commit}) {
+        let {data} = await rest({
+            method: 'get',
+            url:`all_users`
+        });
+
+        commit('updateAllOrders', data);
+    },
 };
 
 const getters = {
     orders: (state) =>  state.orders,
+    allOrders: (state) =>  state.allOrders,
 };
 
 const mutations = {
     setOrders: (state, data) => {
         state.orders = data;
+    },
+
+    setAllOrders: (state, data) => {
+        state.allOrders = data;
+    },
+
+    updateAllOrders: (state, data) => {
+
+        for(let i=0, length = state.allOrders.length; i<length; i++) {
+            for(let j=0, length = data.length; j<length; j++) {
+                if(state.allOrders[i].user_id == data[j].id) {
+                    state.allOrders[i].name = data[j].name;
+                }
+            }
+        }
     },
 };
 
