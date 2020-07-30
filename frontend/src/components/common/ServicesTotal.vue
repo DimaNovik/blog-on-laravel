@@ -19,7 +19,7 @@
                 type="button"
                 variant="primary"
                 @click="handlerClick">
-                Створити договір
+                Калькулятор
             </b-button>
         </b-col>
     </b-row>

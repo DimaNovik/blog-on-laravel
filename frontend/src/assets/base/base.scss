@@ -197,6 +197,12 @@ img {
   background-color: $blue;
 }
 
+.table {
+  th {
+    white-space: nowrap;
+  }
+}
+
 td {
   white-space: nowrap;
 }

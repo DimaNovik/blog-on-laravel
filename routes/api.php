@@ -35,7 +35,7 @@ Route::group([
 
 });
 
-Route::group(['middleware' => 'auth'], static function () {
+Route::group(['middleware' => 'auth:api'], static function () {
     Route::get('/notary_actions', 'CalcController@actions');
     Route::get('/notary_once_action/{id}', 'CalcController@once_action');
     Route::get('/notary_once_service/{id}', 'CalcController@once_service');

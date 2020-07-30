@@ -4,7 +4,7 @@
             <div class="col col-lg-6 col-xs-4">
                 <b-form-group
                         id="fieldset-2"
-                        label="ПІБ платника"
+                        label="ПІБ замовника-платника нотаріальної послуги"
                         label-for="input-1"
                 >
                     <b-form-input
@@ -21,7 +21,7 @@
             <div class="col">
                 <b-form-group
                         id="fieldset-1"
-                        label="Оберіть пункт"
+                        label="Оберіть нотаріальну дію"
                         label-for="input-1"
                 >
                     <b-form-select
@@ -29,7 +29,7 @@
                             :options="getParentActions"
                             @change="filterMain(selectedParentAction)">
                         <template v-slot:first>
-                            <b-form-select-option :value="null" disabled>-- Оберіть дію --</b-form-select-option>
+                            <b-form-select-option :value="null" disabled>------</b-form-select-option>
                         </template>
 
                     </b-form-select>
@@ -44,28 +44,35 @@
                 <div class="col">
                     <b-form-group
                             id="`fieldset-${key}`"
-                            label="Оберіть пункт"
-                            label-for="input-1"
+                            label="Оберіть категорію нотаріальної дії"
+                            label-for="select2"
+                            v-if="key==0"
                     >
                         <b-form-select
                                 :options="value"
                                 v-model="selected0"
                                 value-field="value"
                                 text-field="text"
-                                v-if="key==0">
+                            id="select2">
                             <template v-slot:first>
-                                <b-form-select-option :value="null" disabled>-- Оберіть дію --</b-form-select-option>
+                                <b-form-select-option :value="null" disabled>------</b-form-select-option>
                             </template>
                         </b-form-select>
-
+                    </b-form-group>
+                    <b-form-group
+                            id="`fieldset2-${key}`"
+                            label="Оберіть підкатегорію нотаріальної дії"
+                            label-for="select3"
+                            v-else
+                    >
                         <b-form-select
                                 :options="value"
                                 v-model="selected1"
                                 value-field="value"
                                 text-field="text"
-                            v-else>
+                                id="select3">
                             <template v-slot:first>
-                                <b-form-select-option :value="null" disabled>-- Оберіть дію --</b-form-select-option>
+                                <b-form-select-option :value="null" disabled>----</b-form-select-option>
                             </template>
                         </b-form-select>
                     </b-form-group>
@@ -332,7 +339,7 @@
                 formData.append('sub_action_1_id', +this.selectedChild[0] || '');
                 formData.append('sub_action_2_id', +this.selectedChild[1] || '');
                 formData.append('service_id', JSON.stringify(convertedServices));
-                formData.append('code', `A10101-${this.getRandomCode}`);
+                formData.append('code', `A${this.getRegionId}${this.getGroupId}${this.getUserId}-${this.getRandomCode}`);
                 formData.append('count', this.getServicesCount);
                 formData.append('price', this.notaryPrice);
                 formData.append('pay_date', '');

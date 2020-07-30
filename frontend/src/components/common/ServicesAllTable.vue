@@ -69,7 +69,7 @@
                     },
                     {
                         key: "office_id",
-                        label: "Код офісу",
+                        label: "Код контори",
                         sortable: true
                     },
                     {
