@@ -31,7 +31,7 @@
                             size="sm"
                             class="ml-3"
                             variant="success"
-                            target="_blank">Квітанція
+                            target="_blank">Квитанція
                     </b-link>
                 </template>
             </b-table>
