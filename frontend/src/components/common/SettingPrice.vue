@@ -78,13 +78,21 @@
                                 v-model="name[value.value]"
                                 type="text"
                                 required
-                                class="mb-3"></b-form-input>
+                                class="mb-3" />
+
+                                <b-form-input
+                                        :id="`input-${j}`"
+                                        v-model="code[value.value]"
+                                        type="text"
+                                        required
+                                        placeholder="Код дії"
+                                        class="mb-3"/>
 
                                 <b-form-input
                                         :id="`input-${j}`"
                                         v-model="price[value.value]"
                                         type="text"
-                                        required></b-form-input>
+                                        required />
                             </b-form-group>
                         </b-col>
                         <b-col cols="12" md="6">
@@ -93,6 +101,14 @@
                                           variant="primary"
                                           @click="handleServiceUpdate(value.value)">
                                     Зберегти назву
+                                </b-button>
+
+                            </p>
+                            <p>
+                                <b-button type="button"
+                                          variant="primary"
+                                          @click="handleUpdateCode(value.value)">
+                                    Зберегти код
                                 </b-button>
 
                             </p>
@@ -130,6 +146,7 @@
                 selected1: null,
                 price: [],
                 name: [],
+                code: [],
                 startRequest: false,
                 showPrices: false,
                 showSpinner: false,
@@ -163,13 +180,14 @@
 
                     val.forEach(item => {
                         this.getServicePrice(item.value);
-                        this.setNameModel(item)
+                        this.setNameModel(item);
+                        this.setCodeModel(item);
                     })
                 }
             }
         },
         methods: {
-            ...mapActions('Calculator', ['getMainActions', 'getServices', 'getPrice', 'priceUpdate', 'serviceUpdate', 'getAllPrice']),
+            ...mapActions('Calculator', ['getMainActions', 'getServices', 'getPrice', 'priceUpdate', 'serviceUpdate', 'getAllPrice', 'codeUpdate']),
             ...mapMutations('Calculator', ['clearNotaryServices']),
             filterMain(id) {
                 this.clearData();
@@ -230,9 +248,25 @@
                     this.showSpinner = false;
                 })
             },
+            handleUpdateCode(id) {
+                let formData = new FormData();
+
+                formData.append('code', this.code[id]);
+
+                this.showSpinner = true;
+                this.updatedId = id;
+
+                this.codeUpdate({id: id, data: formData}).then(() => {
+                    this.showSpinner = false;
+                })
+            },
             setNameModel(val) {
                 this.name[val.value] = val.text
-            }
+            },
+            setCodeModel(val) {
+                this.code[val.value] = val.code
+            },
+
         },
         computed: {
             ...mapGetters('Calculator', ['notaryActions', 'notaryServices', 'priceToSetting', 'allPrices']),

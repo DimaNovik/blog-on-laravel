@@ -102,6 +102,19 @@ class CalcController extends Controller
         return $pdf->download($order[0]['code'] . ".pdf");
     }
 
+    public function create_score_pdf($id)
+    {
+        $order = cl_notary_order::where('id', $id)->get();
+
+        $data = [
+            'price' => $order[0]['price'],
+            'fio' => $order[0]['fio'],
+            'code' => $order[0]['code']];
+        $pdf = PDF::loadView('pages.score', $data);
+
+        return $pdf->download($order[0]['code'] . "-рахунок.pdf");
+    }
+
 
     // PRICE
 

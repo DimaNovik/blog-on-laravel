@@ -72,12 +72,12 @@
                 <b-col  v-if="!isReg" align="center">
                     <b-button type="submit" variant="primary" >Увійти</b-button>
                 </b-col>
-                <b-col  align="center">
-                    <b-button
-                            type="button"
-                            variant="primary"
-                        @click="setRegStatus">Реєстрація</b-button>
-                </b-col>
+<!--                <b-col  align="center">-->
+<!--                    <b-button-->
+<!--                            type="button"-->
+<!--                            variant="primary"-->
+<!--                        @click="setRegStatus">Реєстрація</b-button>-->
+<!--                </b-col>-->
             </b-row>
         </b-form>
     </div>

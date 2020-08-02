@@ -12,6 +12,7 @@
                      @row-clicked="showDetails">
                 <template v-slot:cell(type)="row" >
                     <span v-if="row.item.type == 1" class="success"><b>Сплачено</b></span>
+
                     <span v-else>
 
                         <b-button size="sm"
@@ -27,12 +28,20 @@
                             </b-button>
 
                     </span>
+
+                    <b-link :href="`score-pdf-create/${row.item.id}`"
+                            size="sm"
+                            class="ml-3"
+                            variant="success"
+                            target="_blank">Рахунок
+                    </b-link>
                     <b-link :href="`pdf-create/${row.item.id}`"
                             size="sm"
                             class="ml-3"
                             variant="success"
                             target="_blank">Квитанція
                     </b-link>
+
                 </template>
             </b-table>
 

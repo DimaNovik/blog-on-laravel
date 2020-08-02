@@ -78,6 +78,14 @@ const actions = {
         });
     },
 
+    async codeUpdate({commit}, params) {
+        let {data} = await rest({
+            method: 'post',
+            url:`notary_code_update/${params.id}`,
+            data: params.data
+        });
+    },
+
     async getAllPrice({commit}) {
         let {data} = await rest({
             method: 'get',
@@ -123,6 +131,7 @@ const mutations = {
                 parent_id: data[i].parent_id,
                 subgroup_id: data[i].subgroup_id,
                 choosed: 0,
+                code: data[i].code,
             })
         }
 
