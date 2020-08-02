@@ -97,6 +97,7 @@ class CalcController extends Controller
             'price' => $order[0]['price'],
             'fio' => $order[0]['fio'],
             'code' => $order[0]['code']];
+
         $pdf = PDF::loadView('pages.pdf', $data);
 
         return $pdf->download($order[0]['code'] . ".pdf");
@@ -106,11 +107,23 @@ class CalcController extends Controller
     {
         $order = cl_notary_order::where('id', $id)->get();
 
-        $data = [
-            'price' => $order[0]['price'],
-            'fio' => $order[0]['fio'],
-            'code' => $order[0]['code']];
-        $pdf = PDF::loadView('pages.score', $data);
+        $services = json_decode($order[0]['service_id']);
+
+        $data = array();
+
+        foreach ($services as &$value) {
+            $service = cl_notary_services::where('id', $value->service)->get();
+
+            array_push($data, [
+                'name' => $service[0]['name'],
+                'code' => $service[0]['code'],
+                'price' => $value->price,
+                'count' => $value->count,
+                'all' => $value->price * $value->count
+            ]);
+        }
+
+        $pdf = PDF::loadView('pages.score', compact('data'));
 
         return $pdf->download($order[0]['code'] . "-рахунок.pdf");
     }

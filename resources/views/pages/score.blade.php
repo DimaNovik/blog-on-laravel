@@ -8,8 +8,16 @@
     <title>Document</title>
 
     <style>
-        body { font-family: 'Times New Roman', DejaVu Sans, serif; }
-        .container { width: 640px; max-width: 100%; margin: 0 auto;}
+        body {
+            font-family: 'Times New Roman', DejaVu Sans, serif;
+        }
+
+        .container {
+            width: 640px;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
         .header {
 
         }
@@ -25,15 +33,17 @@
 
 <div class="container">
 
-<header class="header">
-    <div class="header__title">
-        <h2 style="font-size: 13px;" align="center">Форма обліку послуг за Розмірами плати за надання державними нотаріусами Одеської області додаткових послуг
-            правового характеру, які не пов'язані із вчинюваними нотаріальними діями, а також послуг технічного характеру</h2>
-    </div>
-</header>
+    <header class="header">
+        <div class="header__title">
+            <h2 style="font-size: 13px;" align="center">Форма обліку послуг за Розмірами плати за надання державними
+                нотаріусами Одеської області додаткових послуг
+                правового характеру, які не пов'язані із вчинюваними нотаріальними діями, а також послуг технічного
+                характеру</h2>
+        </div>
+    </header>
 
-<table cellpadding="5" cellspacing="0" border="1" width="100%">
-    <thead>
+    <table cellpadding="5" cellspacing="0" border="1" width="100%">
+        <thead>
         <tr>
             <td width="5">
                 <p style="font-size: 10px;" align="center"><b>Код послуги</b> (пп., п. глава, розділ Розмірів плати)</p>
@@ -54,27 +64,45 @@
                 <p style="font-size: 10px;" align="center">6</p>
             </td>
         </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>1</td>
-            <td>2</td>
-            <td>3</td>
-            <td>4</td>
-            <td>5</td>
-            <td>6</td>
-        </tr>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
 
-    <p style="margin-top: 30px;">«____» ______________ 20 __ року</p>
-    <p>Державний нотаріус<span style="display: inline-block; margin-left: 200px;">_______________</span><span style="display: inline-block; margin-left: 30px;">___________</span></p>
-    <p><span style="display: inline-block; margin-left: 395px;">(підпис)</span><span style="display: inline-block; margin-left: 80px;">(П.І.Б)</span></p>
-    <p style="margin-top: 30px; text-indent: 35px;">Умови оплати та вартість послуг згідно з Розмірами плати мені державним
+        @foreach ($data as $value)
+            <tr>
+                <td>
+                    <p style="font-size: 11px;">{{$value['code']}}</p></td>
+                <td>
+                    <p style="font-size: 11px;">{{$value['name']}}</p>
+                </td>
+                <td>
+                    <p style="font-size: 11px;">{{$value['price']}}</p>
+                </td>
+                <td>
+                    <p style="font-size: 11px;">{{$value['count']}}</p>
+                </td>
+                <td>
+                    <p style="font-size: 11px;">{{$value['all']}}</p>
+                </td>
+                <td></td>
+            </tr>
+        @endforeach
+
+        </tbody>
+    </table>
+
+    <p style="margin-top: 30px; font-size: 13px;">«____» ______________ 20 __ року</p>
+    <p style=" font-size: 13px;">Державний нотаріус<span style="display: inline-block; margin-left: 200px;">_______________</span><span
+                style="display: inline-block; margin-left: 30px;">___________</span></p>
+    <p style=" font-size: 13px;"><span style="display: inline-block; margin-left: 360px;">(підпис)</span><span
+                style="display: inline-block; margin-left: 80px;">(П.І.Б)</span></p>
+    <p style="margin-top: 30px; text-indent: 35px; font-size: 13px;">Умови оплати та вартість послуг згідно з Розмірами плати мені
+        державним
         нотаріусом роз’яснено.</p>
-    <p style="margin-top: 30px;">«____» ______________ 20 __ року</p>
-    <p><span style="display: inline-block; margin-left: 280px;">_______________</span><span style="display: inline-block; margin-left: 30px;">___________</span></p>
-    <p><span style="display: inline-block; margin-left: 300px;">(підпис)</span><span style="display: inline-block; margin-left: 80px;">(П.І.Б)</span></p>
+    <p style="margin-top: 30px; font-size: 13px;">«____» ______________ 20 __ року</p>
+    <p style=" font-size: 13px;"><span style="display: inline-block; margin-left: 280px;">_______________</span><span
+                style="display: inline-block; margin-left: 30px;">___________</span></p>
+    <p style=" font-size: 13px;"><span style="display: inline-block; margin-left: 300px;">(підпис)</span><span
+                style="display: inline-block; margin-left: 80px;">(П.І.Б)</span></p>
 </div>
 </body>
 </html>

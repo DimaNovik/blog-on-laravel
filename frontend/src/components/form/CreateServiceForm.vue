@@ -333,7 +333,8 @@
                 this.selectedPrices.map(item => {
                     convertedServices.push({
                         service: item.service,
-                        count: item.count
+                        count: item.count,
+                        price: item.price
                     })
                 });
 
