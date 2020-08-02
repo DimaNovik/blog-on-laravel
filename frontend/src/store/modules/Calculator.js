@@ -124,16 +124,28 @@ const mutations = {
 
     setNotaryServices: (state, data) => {
         let convertData = [];
+
+
+
         for(let i=0; i<data.length; i++) {
-            convertData.push({
-                text: data[i].name,
-                value: data[i].id,
-                parent_id: data[i].parent_id,
-                subgroup_id: data[i].subgroup_id,
-                choosed: 0,
-                code: data[i].code,
-            })
+            for(let j=0, length = state.allPrices.length; j<length; j++) {
+
+                if(data[i].id === state.allPrices[j].id) {
+                    convertData.push({
+                        text: data[i].name,
+                        value: data[i].id,
+                        parent_id: data[i].parent_id,
+                        subgroup_id: data[i].subgroup_id,
+                        choosed: 0,
+                        code: data[i].code,
+                        price: state.allPrices[j].price
+                    })
+                }
+            }
+
         }
+
+
 
         state.notaryServices = convertData;
     },

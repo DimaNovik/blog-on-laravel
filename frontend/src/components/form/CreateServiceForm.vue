@@ -91,7 +91,7 @@
                                 >
                             <b-row class="mt-3 mb-3" lg="auto"
                                    :key="service.value">
-                                <b-col cols="7" md="9">
+                                <b-col cols="5" md="9" lg="9">
                                     <label :for="service.value"
                                     >
                                         <b-form-checkbox-group
@@ -103,7 +103,12 @@
                                         ></b-form-checkbox-group>
                                     </label>
                                 </b-col>
-                                <b-col cols="5" md="3" lg="2">
+                                <b-col cols="2" md="1" lg="1">
+                                    <p>
+                                        {{service.price}}
+                                    </p>
+                                </b-col>
+                                <b-col cols="5" md="2" lg="2">
                                     <b-form-spinbutton
                                             :id="'service.value'"
                                             size="sm"

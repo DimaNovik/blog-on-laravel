@@ -47,7 +47,15 @@ const routes = [
     {
         path: '/pages/calculator/create',
         name: 'Create',
-        component: Create
+        component: Create,
+        beforeEnter: (to, from, next) =>
+        {
+            store.dispatch('Calculator/getAllPrice').then(response => {
+                next();
+            }, error => {
+                next('/pages/calculator')
+            })
+        }
     },
     {
         path: '/pages/calculator/settings',
