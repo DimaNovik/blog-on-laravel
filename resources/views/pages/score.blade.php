@@ -60,8 +60,8 @@
             <td width="10">
                 <p style="font-size: 10px;" align="center"><b>Загальна сума, грн.</b></p>
             </td>
-            <td width="5">
-                <p style="font-size: 10px;" align="center">6</p>
+            <td width="25">
+                <p style="font-size: 10px;" align="center">Дата та реєстровий № нотаріальної дії</p>
             </td>
         </tr>
         </thead>

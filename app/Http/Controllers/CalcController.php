@@ -128,6 +128,48 @@ class CalcController extends Controller
         return $pdf->download($order[0]['code'] . "-рахунок.pdf");
     }
 
+    public function create_registry_pdf($id)
+    {
+        $firstDay = $_GET['start'] . " 00:00:00";
+        $lastDay = $_GET['end'] . " 23:59:59";
+
+        $order = cl_notary_order::where('user_id', $id)
+            ->where('pay_date', '>=', $firstDay)
+            ->where('pay_date', '<=', $lastDay)
+            ->where('type', '=', 1)->get();
+
+        $data = array();
+
+        foreach ($order as &$value) {
+
+            $data_service = array();
+
+            $services = json_decode($value['service_id']);
+
+            foreach ($services as &$item) {
+                $service = cl_notary_services::where('id', $item->service)->get();
+
+                array_push($data_service, [
+                    'actions' => $service[0]['code'] . ' ' . $service[0]['name']
+                ]);
+
+            }
+
+            array_push($data, [
+                'created_at' => $value['created_at'],
+                'updated_at' => $value['updated_at'],
+                'actions' => $data_service,
+                'fio' => $value['fio'],
+                'code' =>  $value['code'],
+                'price' => $value['price'],
+            ]);
+        }
+
+        $pdf = PDF::loadView('pages.registry', compact('data'));
+
+        return $pdf->download("Registry.pdf");
+    }
+
 
     // PRICE
 

@@ -25,7 +25,7 @@
                                     <SettingUser class="mt-5 mb-5"/>
                                 </b-tab>
                                 <b-tab title="Статистика" :title-link-class="linkClass(2)">
-                                    <p>Статистичні дані</p>
+                                    <p>Реєстр</p>
                                 </b-tab>
                             </b-tabs>
                         </b-card>

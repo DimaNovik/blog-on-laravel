@@ -22,6 +22,7 @@ Route::get('/pages/logout', 'AuthController@logout');
 Route::get('/pages/calculator', 'CalcController@index');
 Route::get('/pages/calculator/pdf-create/{id}','CalcController@create_pdf');
 Route::get('/pages/calculator/score-pdf-create/{id}','CalcController@create_score_pdf');
+Route::get('/pages/calculator/registry-pdf-create/{id}','CalcController@create_registry_pdf');
 
 Route::group(['prefix'=>'page', 'namespace'=>'Admin', 'middleware'=>'admin'], function (){
     Route::get('/admin', 'DashboardController@index');

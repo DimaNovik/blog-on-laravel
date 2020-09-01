@@ -22,7 +22,12 @@
                         @if(!$children->isEmpty())
                             <ul class="header__down">
                                 @foreach($children as $child)
-                                    <li><a href="/{{ $child->link }}" class="link">{{ $child->title }}</a></li>
+
+                                    @if(substr_count($child->link,"https") > 0)
+                                        <li><a href="{{ $child->link }}" class="link" target="_blank" rel="noopener">{{ $child->title }}</a></li>
+                                    @else
+                                        <li><a href="/{{ $child->link }}" class="link">{{ $child->title }}</a></li>
+                                    @endif
                                 @endforeach
                             </ul>
                         @endif

@@ -13,6 +13,7 @@
                         :item="ordersData"
                         :count="ordersData.length"
                         :role="getUserRole"
+                        :userId="getUserId"
                         v-if="getUserRole != 1" />
 
                     <ServicesAdminTotal

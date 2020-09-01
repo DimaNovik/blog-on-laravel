@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <title>Нотаріат Одеської області</title>
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <!--<link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">-->
 
     <meta property="og:title" content="Нотаріат Одеської області"/>
@@ -161,7 +161,7 @@
                     <h2 class="title">Про відділ</h2>
                     <ul class="list">
                         <li><a href="/pro-viddil" class="link">Склад відділу</a></li>
-                        <li><a href="#" class="link">Правові засади діяльності</a></li>
+                        <li><a href="https://just.odessa.gov.ua/files/upload/files/%d0%9f%d0%be%d0%bb%d0%be%d0%b6%d0%b5%d0%bd%d0%bd%d1%8f%20%d0%bf%d1%80%d0%be%20%d1%83%d0%bf%d1%80%d0%b0%d0%b2%d0%bb%d1%96%d0%bd%d0%bd%d1%8f%20%20%d1%81%d0%ba%d0%b0%d0%bd-%d0%ba%d0%be%d0%bf%d1%96%d1%8f.pdf" class="link" target="_blank" rel="noopener">Правові засади діяльності</a></li>
                         <li><a href="/kontakti" class="link">Контакти</a></li>
                     </ul>
                 </div>

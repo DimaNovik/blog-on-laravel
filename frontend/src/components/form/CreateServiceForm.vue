@@ -201,6 +201,7 @@
                     if(newVal.length === 0) {
                         this.clearPrice();
                     } else if(newVal.length === this.selectedService.length && newVal.length > oldVal.length) {
+
                         this.servicePrice(newVal.slice(-1))
                         this.setCount(newVal.slice(-1), 1)
                     } else {
@@ -315,6 +316,7 @@
                     this.checkDisabledSpin(id)
                 });
             },
+
             clearData() {
                 this.childActions = [];
                 this.clearNotaryServices();
@@ -368,6 +370,7 @@
                 return arr;
             },
             setCount(service, val) {
+
                 this.choosedCount({id: service, count: val});
 
                 for(let i=0; i< this.selectedPrices.length; i++) {
