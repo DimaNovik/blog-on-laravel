@@ -74,18 +74,27 @@
                 <td>
                     <p style="font-size: 11px;">{{$value['name']}}</p>
                 </td>
-                <td>
+                <td align="center">
                     <p style="font-size: 11px;">{{$value['price']}}</p>
                 </td>
-                <td>
+                <td align="center">
                     <p style="font-size: 11px;">{{$value['count']}}</p>
                 </td>
-                <td>
+                <td align="center">
                     <p style="font-size: 11px;">{{$value['all']}}</p>
                 </td>
                 <td></td>
             </tr>
         @endforeach
+
+        <tr>
+            <td align="left" colspan="4">
+                <p style="font-size: 11px;"><b>Всього:</b></p>
+            </td>
+            <td colspan="2">
+                <p style="font-size: 11px;"><b>{{$value['total']}}</b></p>
+            </td>
+        </tr>
 
         </tbody>
     </table>

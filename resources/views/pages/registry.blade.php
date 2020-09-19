@@ -9,12 +9,15 @@
 
     <style>
         body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
             font-family: 'Times New Roman', DejaVu Sans, serif;
+            page-break-before: avoid;
         }
 
         .container {
-            width: 900px;
-            max-width: 100%;
+            width: 100%;
             margin: 0 auto;
         }
 
@@ -26,13 +29,10 @@
             margin-bottom: 30px;
         }
 
-        @media print {
 
-            table.report { page-break-after:auto }
-            table.report tr    { page-break-inside:avoid; page-break-after:auto }
-            table.report td    { page-break-inside:avoid; page-break-after:auto }
-            table.report thead { display:table-header-group }
-            table.report tfoot { display:table-footer-group }
+
+        @page {
+            size: A4 landscape;
         }
 
     </style>
@@ -55,26 +55,29 @@
     <table cellpadding="0" cellspacing="0" border="1" width="100%">
         <thead>
         <tr>
-            <td width="5">
-                <p style="font-size: 11px;" align="center">№<br/>з/п</p>
+            <td>
+                <p style="font-size: 11px;" align="center">№ з/п</p>
             </td>
-            <td width="30">
-                <p style="font-size: 11px;" align="center">Дата</p>
+            <td>
+                <p style="font-size: 11px;" align="center">Прізвище,<br/> ініціали особи,<br/> якій<br/> надавались<br/> послуги</p>
             </td>
-            <td width="15">
-                <p style="font-size: 11px;" align="center">Прізвище, ініціали особи, якій надавались послуги</p>
+            <td>
+                <p style="font-size: 11px;" align="center">Код<br/> послуги</p>
             </td>
-            <td width="65">
-                <p style="font-size: 11px;" align="center">Види додаткових платних послуг</p>
+            <td>
+                <p style="font-size: 11px;" align="center">Кількість<br/> наданих<br/> послуг</p>
             </td>
-            <td width="10">
-                <p style="font-size: 11px;" align="center">№№<br/> квитанцій</p>
+            <td>
+                <p style="font-size: 11px;" align="center">Сума<br/> сплачених коштів в<br/> звітному місяці,<br/> грн.</p>
             </td>
-            <td width="5">
-                <p style="font-size: 11px;" align="center">Сума</p>
+            <td>
+                <p style="font-size: 11px;" align="center">Номер<br/> квитанції<br/> банку про<br/> оплату<br/> послуги</p>
             </td>
-            <td width="5">
-                <p style="font-size: 11px;" align="center">Примітка</p>
+            <td>
+                <p style="font-size: 11px;" align="center">Дата оплати<br/>послуги<br/> згідно з<br/> квитанцією</p>
+            </td>
+            <td>
+                <p style="font-size: 11px;" align="center">Дата<br/> надання <br/>послуги</p>
             </td>
         </tr>
         <tr>
@@ -85,6 +88,7 @@
             <td align="center"><p style="font-size: 11px;margin: 0;">5</p></td>
             <td align="center"><p style="font-size: 11px;margin: 0;">6</p></td>
             <td align="center"><p style="font-size: 11px;margin: 0;">7</p></td>
+            <td align="center"><p style="font-size: 11px;margin: 0;">8</p></td>
         </tr>
         </thead>
         <tbody>
@@ -95,9 +99,6 @@
                     <p style="font-size: 10px; margin: 0;">{{++$key}}</p>
                 </td>
                 <td align="center">
-                    <p style="font-size: 10px; margin: 0;">{{substr($value['updated_at'], 0, 10)}}</p>
-                </td>
-                <td align="center">
                     <p style="font-size: 10px; margin: 0;">{{$value['fio']}}</p>
                 </td>
                 <td align="center">
@@ -106,14 +107,32 @@
                     @endforeach
                 </td>
                 <td align="center">
-                    <p style="font-size: 10px; margin: 0;">{{$value['code']}}</p>
+                    <p style="font-size: 10px; margin: 0;">{{$value['counts']}}</p>
                 </td>
                 <td align="center">
                     <p style="font-size: 10px; margin: 0;">{{$value['price']}}</p>
                 </td>
-                <td></td>
+                <td align="center">
+                    <p style="font-size: 10px; margin: 0;">{{$value['invoice']}}</p>
+                </td>
+                <td align="center">
+                    <p style="font-size: 10px; margin: 0;">{{$value['pay_date']}}</p>
+                </td>
+                <td align="center">
+                    <p style="font-size: 10px; margin: 0;">{{$value['action_date']}}</p>
+                </td>
             </tr>
         @endforeach
+
+        <tr>
+            <td align="right" colspan="4" style="padding: 10px;">
+                <p style="font-size: 10px; margin: 0; padding-left: 15px"><b>ВСЬОГО:</b></p>
+            </td>
+            <td align="center">
+                <p style="font-size: 10px; margin: 0;"><b>{{$value['total']}}</b></p>
+            </td>
+            <td colspan="3"></td>
+        </tr>
 
         </tbody>
     </table>

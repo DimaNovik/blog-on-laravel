@@ -96,7 +96,7 @@
             },
             getUpdatedOrders() {
                 this.getOrders((this.getUserId < 10) ? `0${this.getUserId}` : this.getUserId);
-            }
+            },
         },
     }
 </script>

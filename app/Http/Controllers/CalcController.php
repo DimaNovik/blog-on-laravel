@@ -52,6 +52,17 @@ class CalcController extends Controller
         ]);
     }
 
+    public function order_delete(Request $request, $id)
+    {
+        $service = cl_notary_order::find($id);
+
+        $service->delete($request->all());
+
+        return response()->json([
+            'status' => 'ok'
+        ]);
+    }
+
     public function service_update(Request $request, $id)
     {
         $service = cl_notary_services::find($id);
@@ -110,16 +121,19 @@ class CalcController extends Controller
         $services = json_decode($order[0]['service_id']);
 
         $data = array();
+        $total = 0;
 
         foreach ($services as &$value) {
             $service = cl_notary_services::where('id', $value->service)->get();
+            $total += $value->price;
 
             array_push($data, [
                 'name' => $service[0]['name'],
                 'code' => $service[0]['code'],
                 'price' => $value->price,
                 'count' => $value->count,
-                'all' => $value->price * $value->count
+                'all' => $value->price * $value->count,
+                'total' => $total
             ]);
         }
 
@@ -130,19 +144,21 @@ class CalcController extends Controller
 
     public function create_registry_pdf($id)
     {
-        $firstDay = $_GET['start'] . " 00:00:00";
-        $lastDay = $_GET['end'] . " 23:59:59";
+        $firstDay = $_GET['start'];
+        $lastDay = $_GET['end'];
 
         $order = cl_notary_order::where('user_id', $id)
-            ->where('pay_date', '>=', $firstDay)
-            ->where('pay_date', '<=', $lastDay)
+            ->where('action_date', '>=', $firstDay)
+            ->where('action_date', '<=', $lastDay)
             ->where('type', '=', 1)->get();
 
         $data = array();
+        $total = 0;
 
         foreach ($order as &$value) {
 
             $data_service = array();
+            $total += $value['price'];
 
             $services = json_decode($value['service_id']);
 
@@ -150,18 +166,19 @@ class CalcController extends Controller
                 $service = cl_notary_services::where('id', $item->service)->get();
 
                 array_push($data_service, [
-                    'actions' => $service[0]['code'] . ' ' . $service[0]['name']
+                    'actions' => $service[0]['code'],
                 ]);
-
             }
 
             array_push($data, [
-                'created_at' => $value['created_at'],
-                'updated_at' => $value['updated_at'],
+                'action_date' => $value['action_date'],
                 'actions' => $data_service,
+                'counts' => $value['count'],
                 'fio' => $value['fio'],
-                'code' =>  $value['code'],
                 'price' => $value['price'],
+                'invoice' => $value['invoice'],
+                'pay_date' => $value['pay_date'],
+                'total' => $total,
             ]);
         }
 

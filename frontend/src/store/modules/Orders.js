@@ -34,6 +34,13 @@ const actions = {
         });
     },
 
+    async deleteOrder({commit}, id) {
+        let {data} = await rest({
+            method: 'delete',
+            url:`delete_order/${id}`,
+        });
+    },
+
     async getAllOrders({commit}) {
         let {data} = await rest({
             method: 'get',

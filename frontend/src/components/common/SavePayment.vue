@@ -52,6 +52,23 @@
                     </b-form-group>
                 </b-col>
             </b-row>
+            <b-row>
+                <b-col>
+                    <b-form-group
+                            id="fieldset-3"
+                            label="Дата надання послуги"
+                            label-for="action-date"
+                    >
+                        <b-form-datepicker
+                                id="action-date"
+                                v-model="actionDate"
+                                :locale="locale"
+                                v-bind="labels[locale] || {}"
+                                :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric'}"
+                        ></b-form-datepicker>
+                    </b-form-group>
+                </b-col>
+            </b-row>
             <b-row v-if="error">
                 <b-col>
                     <p class="error">{{error}}</p>
@@ -110,6 +127,7 @@
                 },
                 invoice: null,
                 paymentDate: null,
+                actionDate: null,
                 type: 1,
                 error: ''
             }
@@ -121,26 +139,25 @@
             getFio() {
                 return this.item ? this.item.fio : ''
             },
-            getCurrentTime() {
-                return moment().format('HH:MM:ss');
-            },
         },
         methods: {
             ...mapActions('Orders', ['updateOrder']),
             savePayment() {
 
                 let momentDiff = moment(this.paymentDate).diff(this.item.create, 'days');
+                let momentActionDiff = moment(this.actionDate).diff(this.item.create, 'days');
 
-                if(!this.invoice || !this.paymentDate) {
+                if(!this.invoice || !this.paymentDate || !this.actionDate) {
                     this.error = 'Заповніть усі поля'
-                } else if(momentDiff < 0) {
+                } else if(momentDiff < 0 || momentActionDiff < 0) {
                     this.error = 'Дата оплати менша за дату створення'
                 } else {
 
                     let formData = new FormData();
 
                     formData.append('invoice', this.invoice);
-                    formData.append('pay_date', this.paymentDate + ' ' + this.getCurrentTime);
+                    formData.append('pay_date', this.paymentDate);
+                    formData.append('action_date', this.actionDate);
                     formData.append('type', this.type);
 
                     this.updateOrder({id: this.item.id, data: formData}).then(() => {
