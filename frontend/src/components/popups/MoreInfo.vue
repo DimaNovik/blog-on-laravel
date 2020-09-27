@@ -1,7 +1,7 @@
 <template>
     <div class="invoice invoice--more"
          :class="{'active': isActive}">
-        <b-row>
+        <b-row class="mb-4">
             <b-col></b-col>
             <b-col>
                 <a href="#"

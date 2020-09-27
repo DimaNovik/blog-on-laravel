@@ -54,6 +54,7 @@ Route::group(['middleware' => 'auth:api'], static function () {
     Route::post('/notary_code_update/{id}', 'CalcController@service_update');
     Route::get('/notary_all_prices', 'CalcController@price_all');
     Route::delete('/delete_order/{id}', 'CalcController@order_delete');
+    Route::post('/pages/calculator/group_score','CalcController@create_group_score_pdf');
 });
 
 Route::get('/notary_groups', 'CalcController@get_notary_groups');

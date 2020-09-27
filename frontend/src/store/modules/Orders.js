@@ -59,6 +59,16 @@ const actions = {
         commit('setUsers', data);
         commit('updateAllOrders', data);
     },
+
+    async getGroupScore({commit}, params) {
+        let {data} = await rest({
+            method: 'post',
+            url:`/pages/calculator/group_score`,
+            data: params
+        });
+
+        return data;
+    },
 };
 
 const getters = {

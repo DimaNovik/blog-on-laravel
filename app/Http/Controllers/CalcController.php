@@ -142,6 +142,42 @@ class CalcController extends Controller
         return $pdf->download($order[0]['code'] . "-рахунок.pdf");
     }
 
+    public function create_group_score_pdf(Request $request)
+    {
+
+        $actions = $request->all();
+
+        $actions = explode(',', $actions['array']);
+
+        $data = array();
+        $total = 0;
+
+        foreach ($actions as &$value) {
+
+            $order = cl_notary_order::where('id', $value)->get();
+
+
+            $services = json_decode($order[0]['service_id']);
+
+            $service = cl_notary_services::where('id', $services[0]->service)->get();
+            $total += $order[0]->price * $order[0]->count;
+
+
+            array_push($data, [
+                'name' => $service[0]['name'],
+                'code' => $service[0]['code'],
+                'price' => $order[0]->price,
+                'count' => $order[0]->count,
+                'all' => $order[0]->price * $order[0]->count,
+                'total' => $total
+            ]);
+        }
+
+        $pdf = PDF::loadView('pages.score', compact('data'));
+
+        return $pdf->download("Груповий-рахунок.pdf");
+    }
+
     public function create_registry_pdf($id)
     {
         $firstDay = $_GET['start'];
@@ -181,7 +217,7 @@ class CalcController extends Controller
                 'total' => $total,
             ]);
         }
-
+        
         $pdf = PDF::loadView('pages.registry', compact('data'));
 
         return $pdf->download("Registry.pdf");

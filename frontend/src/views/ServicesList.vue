@@ -59,7 +59,9 @@
         name: "ServicesList",
         data() {
             return {
-                filterText: ''
+                filterText: '',
+                hasChooseAction: false,
+                selectedActions: []
             }
         },
         components: {
@@ -97,6 +99,10 @@
             getUpdatedOrders() {
                 this.getOrders((this.getUserId < 10) ? `0${this.getUserId}` : this.getUserId);
             },
+            getChoosingActions(val) {
+                this.hasChooseAction = true;
+                this.selectedActions = val;
+            }
         },
     }
 </script>

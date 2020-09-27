@@ -127,25 +127,22 @@
             </b-col>
         </b-row>
 
-        <div class="row mt-3">
+        <div class="row mt-3 mb-5">
             <div class="col-6 col-md-6">
                 <p class="error"><b>{{error}}</b></p>
+                <div class="col">
+                    <b-button
+                            type="submit"
+                            variant="primary"
+                            size="lg"
+                            @click.prevent="onSubmit">
+                        Зберегти
+                    </b-button>
+                </div>
             </div>
             <div class="col-12 col-md-6">
                 <p class="mt-5 mt-md-4" align="center">Загальна вартість: <strong>{{getNotaryPrice || 0}} грн.</strong>
                 </p>
-            </div>
-        </div>
-
-        <div class="row mt-5 mb-5">
-            <div class="col">
-                <b-button
-                        type="submit"
-                        variant="primary"
-
-                        @click.prevent="onSubmit">
-                    Зберегти
-                </b-button>
             </div>
         </div>
     </form>

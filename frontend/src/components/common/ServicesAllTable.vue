@@ -36,8 +36,8 @@
 </template>
 
 <script>
-    import InvoicePopup from './SavePayment';
-    import MorePopup from './MoreInfo';
+    import InvoicePopup from '../popups/SavePayment';
+    import MorePopup from '../popups/MoreInfo';
     import { mapActions, mapGetters, mapMutations } from 'vuex';
 
     export default {

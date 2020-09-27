@@ -14,37 +14,19 @@
                         <img src="https://img.icons8.com/officexs/16/000000/ms-excel.png" class="mt-n1 ml-2"/>
                     </download-excel>
                 </a></p>
-            <b-row align-v="center" class="mt-3 mb-3">
-                <b-col xl="4" md="6">
+            <b-row align-v="center" class="mt-5 mb-3">
+                <b-col cols="md-4 lg-4">
                     <b-form-group
                             id="fieldset-1"
-                            label="Реєстр з:"
-                            label-for="invoice-date-start"
+                            label="Період формування реєстру:"
+                            label-for="input-1"
                     >
-                        <b-form-datepicker
-                                id="invoice-date-start"
-                                v-model="startDate"
-                                :locale="locale"
-                                v-bind="labels[locale] || {}"
-                                :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric'}"
-                        ></b-form-datepicker>
+                        <b-form-select
+                                v-model="selectedPeriod"
+                                :options="periods"
+                                @change="filterPeriod(selectedPeriod)">
+                        </b-form-select>
                     </b-form-group>
-
-                    <b-form-group
-                            id="fieldset-2"
-                            label="Реєстр по:"
-                            label-for="invoice-date-end"
-                    >
-                        <b-form-datepicker
-                                id="invoice-date-end"
-                                v-model="endDate"
-                                :locale="locale"
-                                v-bind="labels[locale] || {}"
-                                :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric'}"
-                        ></b-form-datepicker>
-                    </b-form-group>
-                </b-col>
-                <b-col>
                     <b-link :href="`registry-pdf-create/${getUseId}?start=${startDate}&end=${endDate}`"
                             size="sm"
                             class="btn btn-primary"
@@ -58,6 +40,7 @@
             <b-button
                     type="button"
                     variant="primary"
+                    size="lg"
                     @click="handlerClick">
                 Калькулятор
             </b-button>
@@ -68,6 +51,7 @@
 <script>
 
     import {mapGetters} from 'vuex';
+    import moment from 'moment';
 
     export default {
         name: "ServicesTotal",
@@ -101,6 +85,60 @@
                     'Дата сплати': 'pay_date',
                     'ПІБ': 'fio',
                 },
+                periods: [
+                    {
+                        value: null,
+                        text: 'Оберіть місяць' },
+                    {
+                        value: 0,
+                        text: 'Січень'
+                    },
+                    {
+                        value: 1,
+                        text: 'Лютий'
+                    },
+                    {
+                        value: 2,
+                        text: 'Березень'
+                    },
+                    {
+                        value: 3,
+                        text: 'Квітень'
+                    },
+                    {
+                        value: 4,
+                        text: 'Травень'
+                    },
+                    {
+                        value: 5,
+                        text: 'Червень'
+                    },
+                    {
+                        value: 6,
+                        text: 'Липень'
+                    },
+                    {
+                        value: 7,
+                        text: 'Серпень'
+                    },
+                    {
+                        value: 8,
+                        text: 'Вересень'
+                    },
+                    {
+                        value: 9,
+                        text: 'Жовтень'
+                    },
+                    {
+                        value: 10,
+                        text: 'Листопад'
+                    },
+                    {
+                        value: 11,
+                        text: 'Грудень'
+                    },
+
+                ],
                 startDate: null,
                 endDate: null,
                 locale: 'ua',
@@ -124,7 +162,8 @@
                 invoice: null,
                 paymentDate: null,
                 type: 1,
-                error: ''
+                error: '',
+                selectedPeriod: null
             }
         },
         computed: {
@@ -136,6 +175,11 @@
             handlerClick() {
                 this.$router.push('/pages/calculator/create');
             },
+            filterPeriod(id) {
+                let countDays =moment().month(id).daysInMonth()
+                this.startDate = moment().month(id).format('YYYY-MM-01');
+                this.endDate = `${moment().month(id).format('YYYY-MM')}-${countDays}`;
+            }
         }
     }
 </script>
