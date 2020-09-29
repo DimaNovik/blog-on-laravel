@@ -3,11 +3,18 @@
         <b-col>
 
             <b-row v-if="selectedActions.length && selectedActions.length > 1" class="mb-3">
-                <b-col>
+                <b-col cols="6" md="3">
                     <b-link :href="`/pages/calculator/group-score-pdf-create?array=${this.selectedActions}`"
                             target="_blank"
                         class="btn btn-primary">
-                        Груповий рахунок
+                        Зведений рахунок
+                    </b-link>
+                </b-col>
+                <b-col cols="6"  md="3" class="ml-n5">
+                    <b-link :href="`/pages/calculator/create_group_pdf?array=${this.selectedActions}`"
+                            target="_blank"
+                            class="btn btn-primary">
+                        Зведена квитанція
                     </b-link>
                 </b-col>
             </b-row>
@@ -26,7 +33,7 @@
                             v-model="selectedActions"
                             :key="row.item.id"
                             :value="row.item.id"
-                            v-if="row.item.type == 1"
+                            v-if="row.item.type == 0"
                     >
                     </b-form-checkbox>
                 </template>
@@ -254,7 +261,7 @@
             },
             getMoreInfo() {
                 return this.moreInfo || {}
-            }
+            },
         },
         methods: {
             ...mapActions('Calculator', ['getOnceAction', 'getOnceService']),

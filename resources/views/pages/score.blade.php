@@ -42,26 +42,26 @@
         </div>
     </header>
 
-    <table cellpadding="5" cellspacing="0" border="1" width="100%">
+    <table cellpadding="3" cellspacing="0" border="1" width="100%">
         <thead>
         <tr>
             <td width="5">
-                <p style="font-size: 10px;" align="center"><b>Код послуги</b> (пп., п. глава, розділ Розмірів плати)</p>
+                <p style="font-size: 10px; margin: 0;padding: 0" align="center"><b>Код послуги</b> (пп., п. глава, розділ Розмірів плати)</p>
             </td>
             <td width="60">
-                <p style="font-size: 10px;" align="center"><b>Назва послуги</b></p>
+                <p style="font-size: 10px;  margin: 0;padding: 0" align="center"><b>Назва послуги</b></p>
             </td>
             <td width="30">
-                <p style="font-size: 10px;" align="center"><b>Розмір плати</b> (сума, грн. (за одну послугу))</p>
+                <p style="font-size: 10px;  margin: 0;padding: 0" align="center"><b>Розмір плати</b> (сума, грн. (за одну послугу))</p>
             </td>
             <td width="35">
-                <p style="font-size: 10px;" align="center"><b>Кількість наданих послуг</b></p>
+                <p style="font-size: 10px;  margin: 0;padding: 0" align="center"><b>Кількість наданих послуг</b></p>
             </td>
             <td width="10">
-                <p style="font-size: 10px;" align="center"><b>Загальна сума, грн.</b></p>
+                <p style="font-size: 10px;  margin: 0;padding: 0" align="center"><b>Загальна сума, грн.</b></p>
             </td>
             <td width="25">
-                <p style="font-size: 10px;" align="center">Дата та реєстровий № нотаріальної дії</p>
+                <p style="font-size: 10px;  margin: 0;padding: 0" align="center"><b>Дата та реєстровий № нотаріальної дії</b></p>
             </td>
         </tr>
         </thead>
@@ -70,18 +70,18 @@
         @foreach ($data as $value)
             <tr>
                 <td>
-                    <p style="font-size: 11px;">{{$value['code']}}</p></td>
+                    <p style="font-size: 11px;  margin: 0;padding: 0" align="center">{{$value['code']}}</p></td>
                 <td>
-                    <p style="font-size: 11px;">{{$value['name']}}</p>
+                    <p style="font-size: 11px;  margin: 0;padding: 0" align="justify">{{$value['name']}}</p>
                 </td>
                 <td align="center">
-                    <p style="font-size: 11px;">{{$value['price']}}</p>
+                    <p style="font-size: 11px;  margin: 0;padding: 0">{{$value['price']}}</p>
                 </td>
                 <td align="center">
-                    <p style="font-size: 11px;">{{$value['count']}}</p>
+                    <p style="font-size: 11px;  margin: 0;padding: 0">{{$value['count']}}</p>
                 </td>
                 <td align="center">
-                    <p style="font-size: 11px;">{{$value['all']}}</p>
+                    <p style="font-size: 11px;  margin: 0;padding: 0">{{$value['all']}}</p>
                 </td>
                 <td></td>
             </tr>
@@ -89,10 +89,10 @@
 
         <tr>
             <td align="left" colspan="4">
-                <p style="font-size: 11px;"><b>Всього:</b></p>
+                <p style="font-size: 11px;  margin: 0;padding: 0"><b>Всього:</b></p>
             </td>
             <td colspan="2">
-                <p style="font-size: 11px;"><b>{{$value['total']}}</b></p>
+                <p style="font-size: 11px;  margin: 0;padding: 0"><b>{{$value['total']}}</b></p>
             </td>
         </tr>
 

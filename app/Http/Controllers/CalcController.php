@@ -107,11 +107,42 @@ class CalcController extends Controller
         $data = [
             'price' => $order[0]['price'],
             'fio' => $order[0]['fio'],
-            'code' => $order[0]['code']];
+            'code' => $order[0]['code'] . ";"];
 
         $pdf = PDF::loadView('pages.pdf', $data);
 
         return $pdf->download($order[0]['code'] . ".pdf");
+    }
+
+    public function create_group_pdf(Request $request)
+    {
+
+        $actions = $request->all();
+
+        $actions = explode(',', $actions['array']);
+
+        $data = array();
+        $total = 0;
+        $fio = '';
+        $code = '';
+
+        foreach ($actions as &$value) {
+            $order = cl_notary_order::where('id', $value)->get();
+
+            $total += $order[0]['price'];
+            $code .= $order[0]['code'] . "; ";
+            $fio = $order[0]['fio'];
+        }
+
+        $data = [
+            'price' => $total,
+            'fio' => $fio,
+            'code' => $code
+        ];
+
+        $pdf = PDF::loadView('pages.pdf', $data);
+
+        return $pdf->download("Зведений " . $order[0]['code'] . ".pdf");
     }
 
     public function create_score_pdf($id)
@@ -156,21 +187,24 @@ class CalcController extends Controller
 
             $order = cl_notary_order::where('id', $value)->get();
 
-
             $services = json_decode($order[0]['service_id']);
 
-            $service = cl_notary_services::where('id', $services[0]->service)->get();
-            $total += $order[0]->price * $order[0]->count;
+
+            foreach ($services as &$item) {
+                $service = cl_notary_services::where('id', $item->service)->get();
+                $total += $item->price * $item->count;
 
 
-            array_push($data, [
-                'name' => $service[0]['name'],
-                'code' => $service[0]['code'],
-                'price' => $order[0]->price,
-                'count' => $order[0]->count,
-                'all' => $order[0]->price * $order[0]->count,
-                'total' => $total
-            ]);
+                array_push($data, [
+                    'name' => $service[0]['name'],
+                    'code' => $service[0]['code'],
+                    'price' => $item->price,
+                    'count' => $item->count,
+                    'all' => $item->price * $item->count,
+                    'total' => $total
+                ]);
+            }
+
         }
 
         $pdf = PDF::loadView('pages.score', compact('data'));

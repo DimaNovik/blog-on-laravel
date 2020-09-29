@@ -68,6 +68,7 @@
             </b-row>
             <b-row v-if="action_date">
                 <b-col>
+
                     <b-form-group
                             id="fieldset-4"
                             label="Дата надання послуги"
@@ -79,6 +80,7 @@
                                 :locale="locale"
                                 v-bind="labels[locale] || {}"
                                 :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric'}"
+                                reset-button
                         ></b-form-datepicker>
                     </b-form-group>
                 </b-col>
@@ -171,8 +173,10 @@
 
                     if(this.fio) formData.append('fio', this.fio);
                     if(this.invoice) formData.append('invoice', this.invoice);
-                    if(this.pay_date) formData.append('pay_date', this.pay_date);
-                    if(this.action_date) formData.append('action_date', this.action_date);
+                    formData.append('pay_date', this.pay_date);
+                    formData.append('action_date', this.action_date);
+
+                    if (!this.pay_date || !this.action_date) formData.append('type',0);
 
 
                     this.updateOrder({id: this.item.id, data: formData}).then(() => {
