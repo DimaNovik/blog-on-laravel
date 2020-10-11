@@ -65,7 +65,6 @@
                    v-for="(value, j) in notaryServices"
                    :key="value.value">
                 <b-col>
-
                     <b-row  align-v="end">
                         <b-col cols="12" md="6">
 

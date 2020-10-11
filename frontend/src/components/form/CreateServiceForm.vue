@@ -333,7 +333,8 @@
                     convertedServices.push({
                         service: item.service,
                         count: item.count,
-                        price: item.price
+                        price: item.price,
+                        code: this.getNotaryServices.find(value => value.id == item.service).code
                     })
                 });
 

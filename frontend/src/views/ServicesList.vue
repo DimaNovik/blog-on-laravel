@@ -14,6 +14,7 @@
                         :count="ordersData.length"
                         :role="getUserRole"
                         :userId="getUserId"
+                        :group="userGroup.group_code"
                         v-if="getUserRole != 1" />
 
                     <ServicesAdminTotal
@@ -25,19 +26,20 @@
                 <ServicesFilter
                     @filter="getFilterText"></ServicesFilter>
 
-                <div class="services__table" v-if="getUserRole != 1">
-                    <ServicesTable
-                        :value="ordersData"
-                        :filter="filterText"
-                        @update="getUpdatedOrders"></ServicesTable>
-                </div>
 
-                <div class="services__table" v-else>
+                <div class="services__table" v-if="getUserRole == 1">
                     <ServicesAllTable
                             :value="allOrders"
                             :filter="filterText"
                             @update="getUpdatedOrders"
                     />
+                </div>
+
+                <div class="services__table" v-else>
+                    <ServicesTable
+                        :value="ordersData"
+                        :filter="filterText"
+                        @update="getUpdatedOrders"></ServicesTable>
                 </div>
             </div>
         </b-container>

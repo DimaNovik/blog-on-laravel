@@ -257,6 +257,134 @@ class CalcController extends Controller
         return $pdf->download("Registry.pdf");
     }
 
+    public function create_total_score_pdf(Request $request, $id) {
+        $query = $request->all();
+        $data = array();
+
+        $orders = cl_notary_order::where('user_id', $id)
+            ->where('action_date', '>=', $query['start'])
+            ->where('action_date', '<=', $query['end'])
+            ->where('type', '=', 1)
+            ->get()
+            ->toArray();
+
+        $services = cl_notary_services::select('subgroup_id', 'name','code', 'cl_notary_services_prices.price')
+            ->leftJoin('cl_notary_services_prices', 'cl_notary_services.id', '=', 'cl_notary_services_prices.service_id')
+            ->distinct()
+            ->orderBy('code')
+            ->get()
+            ->toArray();
+
+
+        foreach ($services as &$service) {
+            foreach ($orders as &$order) {
+                $order_service = json_decode($order['service_id']);
+
+                foreach ($order_service as &$once) {
+
+                    if($once->code == $service['code'] && $once->price === $service['price']) {
+
+                        array_push($data, [
+                            'subgroup' => $service['subgroup_id'],
+                            'code' => $service['code'],
+                            'name' => $service['name'],
+                            'price' => $service['price'],
+                            'count' => $once->count,
+                            'total' => $service['price'],
+                        ]);
+                    }
+                }
+            }
+
+            array_push($data, [
+                'subgroup' => $service['subgroup_id'],
+                'code' => $service['code'],
+                'name' => $service['name'],
+                'price' => $service['price'],
+                'count' => 0,
+                'total' => 0,
+            ]);
+        }
+
+
+        $res  = array();
+        foreach($data as $vals){
+            if(array_key_exists($vals['code'],$res)){
+                $res[$vals['code']]['count'] += $vals['count'];
+            }
+            else{
+                $res[$vals['code']]  = $vals;
+            }
+        }
+
+        $pdf = PDF::loadView('pages.total-score', compact('res'));
+        return $pdf->download("ЗвітНотаріуса.pdf");
+    }
+
+    public function create_total_group_score_pdf(Request $request, $id) {
+        $query = $request->all();
+        $data = array();
+
+        $orders = cl_notary_order::where('office_id', $id)
+            ->where('action_date', '>=', $query['start'])
+            ->where('action_date', '<=', $query['end'])
+            ->where('type', '=', 1)
+            ->get()
+            ->toArray();
+
+        $services = cl_notary_services::select('subgroup_id', 'name','code', 'cl_notary_services_prices.price')
+            ->leftJoin('cl_notary_services_prices', 'cl_notary_services.id', '=', 'cl_notary_services_prices.service_id')
+            ->distinct()
+            ->orderBy('code')
+            ->get()
+            ->toArray();
+
+
+        foreach ($services as &$service) {
+            foreach ($orders as &$order) {
+                $order_service = json_decode($order['service_id']);
+
+                foreach ($order_service as &$once) {
+
+                    if($once->code == $service['code'] && $once->price === $service['price']) {
+
+                        array_push($data, [
+                            'subgroup' => $service['subgroup_id'],
+                            'code' => $service['code'],
+                            'name' => $service['name'],
+                            'price' => $service['price'],
+                            'count' => $once->count,
+                            'total' => $service['price'],
+                        ]);
+                    }
+                }
+            }
+
+            array_push($data, [
+                'subgroup' => $service['subgroup_id'],
+                'code' => $service['code'],
+                'name' => $service['name'],
+                'price' => $service['price'],
+                'count' => 0,
+                'total' => 0,
+            ]);
+        }
+
+
+        $res  = array();
+        foreach($data as $vals){
+            if(array_key_exists($vals['code'],$res)){
+                $res[$vals['code']]['count'] += $vals['count'];
+            }
+            else{
+                $res[$vals['code']]  = $vals;
+            }
+        }
+
+        $pdf = PDF::loadView('pages.total-score', compact('res'));
+        return $pdf->download("ЗвітНотаріуса.pdf");
+    }
+
 
     // PRICE
 

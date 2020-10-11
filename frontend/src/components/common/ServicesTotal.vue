@@ -1,21 +1,25 @@
 <template>
     <b-row align-v="center">
-        <b-col md="9" xl="10">
-            <p><b>Загальна кількість:</b> {{count}} </p>
-            <p>
-                <a href="#">
+        <b-col>
+            <b-row>
+                <b-col md="4" xl="4">
+                    <p><b>Загальна кількість:</b> {{count}} </p>
+                    <p>
+                        <a href="#">
 
-                    <download-excel
-                            :data="item"
-                            :fields="json_fields"
-                            name="filename.xls">
+                            <download-excel
+                                    :data="item"
+                                    :fields="json_fields"
+                                    name="filename.xls">
 
-                        Завантажити дані у Excel
-                        <img src="https://img.icons8.com/officexs/16/000000/ms-excel.png" class="mt-n1 ml-2"/>
-                    </download-excel>
-                </a></p>
-            <b-row align-v="center" class="mt-5 mb-3">
-                <b-col cols="md-4 lg-4">
+                                Завантажити дані у Excel
+                                <img src="https://img.icons8.com/officexs/16/000000/ms-excel.png" class="mt-n1 ml-2"/>
+                            </download-excel>
+                        </a></p>
+                </b-col>
+            </b-row>
+            <b-row align-v="center">
+                <b-col md="4" xl="4">
                     <b-form-group
                             id="fieldset-1"
                             label="Період формування реєстру:"
@@ -34,16 +38,47 @@
                             :disabled="!startDate || !endDate">Сформувати реєстр
                     </b-link>
                 </b-col>
+                <b-col md="4" xl="4">
+                    <b-form-group
+                            id="fieldset-3"
+                            label="Період формування звіту про роботу:"
+                            label-for="input-1"
+                    >
+                        <b-form-select
+                                v-model="selectedPeriodZvit"
+                                :options="periodsZvit"
+                                @change="filterZvitPeriod(selectedPeriodZvit)">
+                        </b-form-select>
+                    </b-form-group>
+                    <b-row>
+                        <b-col>
+                            <b-link :href="`create_total_score_pdf/${getUseId}?start=${startZvitDate}&end=${endZvitDate}`"
+                                    size="sm"
+                                    class="btn btn-primary"
+                                    target="_blank"
+                                    :disabled="!startZvitDate || !endZvitDate">Звіт нотаріса
+                            </b-link>
+                        </b-col>
+                        <b-col v-if="role == 2">
+                            <b-link :href="`create_total_group_score_pdf/${group}?start=${startZvitDate}&end=${endZvitDate}`"
+                                    size="sm"
+                                    class="btn btn-primary"
+                                    target="_blank"
+                                    :disabled="!startZvitDate || !endZvitDate">Звіт контори
+                            </b-link>
+                        </b-col>
+                    </b-row>
+                </b-col>
+                <b-col md="4" xl="4" align="right">
+                    <b-button
+                            type="button"
+                            size="lg"
+                            variant="primary"
+                            @click="handlerClick">
+                        Калькулятор
+                    </b-button>
+                </b-col>
             </b-row>
-        </b-col>
-        <b-col md="3" xl="2" align="right">
-            <b-button
-                    type="button"
-                    variant="primary"
-                    size="lg"
-                    @click="handlerClick">
-                Калькулятор
-            </b-button>
         </b-col>
     </b-row>
 </template>
@@ -74,6 +109,18 @@
                     return 0
                 }
             },
+            role: {
+                type: Number,
+                default() {
+                    return 0
+                }
+            },
+            group: {
+                type: String,Number,
+                default() {
+                    return '00'
+                }
+            },
         },
         data() {
             return {
@@ -88,7 +135,67 @@
                 periods: [
                     {
                         value: null,
-                        text: 'Оберіть місяць' },
+                        text: 'Оберіть місяць'
+                    },
+                    {
+                        value: 0,
+                        text: 'Січень'
+                    },
+                    {
+                        value: 1,
+                        text: 'Лютий'
+                    },
+                    {
+                        value: 2,
+                        text: 'Березень'
+                    },
+                    {
+                        value: 3,
+                        text: 'Квітень'
+                    },
+                    {
+                        value: 4,
+                        text: 'Травень'
+                    },
+                    {
+                        value: 5,
+                        text: 'Червень'
+                    },
+                    {
+                        value: 6,
+                        text: 'Липень'
+                    },
+                    {
+                        value: 7,
+                        text: 'Серпень'
+                    },
+                    {
+                        value: 8,
+                        text: 'Вересень'
+                    },
+                    {
+                        value: 9,
+                        text: 'Жовтень'
+                    },
+                    {
+                        value: 10,
+                        text: 'Листопад'
+                    },
+                    {
+                        value: 11,
+                        text: 'Грудень'
+                    },
+
+                ],
+                periodsZvit: [
+                    {
+                        value: null,
+                        text: 'Оберіть місяць'
+                    },
+                    {
+                        value: 12,
+                        text: 'За рік'
+                    },
                     {
                         value: 0,
                         text: 'Січень'
@@ -141,6 +248,8 @@
                 ],
                 startDate: null,
                 endDate: null,
+                startZvitDate: null,
+                endZvitDate: null,
                 locale: 'ua',
                 labels: {
                     ua: {
@@ -163,7 +272,8 @@
                 paymentDate: null,
                 type: 1,
                 error: '',
-                selectedPeriod: null
+                selectedPeriod: null,
+                selectedPeriodZvit: null
             }
         },
         computed: {
@@ -176,9 +286,20 @@
                 this.$router.push('/pages/calculator/create');
             },
             filterPeriod(id) {
-                let countDays =moment().month(id).daysInMonth()
+                let countDays = moment().month(id).daysInMonth()
                 this.startDate = moment().month(id).format('YYYY-MM-01');
                 this.endDate = `${moment().month(id).format('YYYY-MM')}-${countDays}`;
+            },
+            filterZvitPeriod(id) {
+                if(id == 12) {
+                    this.startZvitDate = moment().format('YYYY-01-01');
+                    this.endZvitDate = moment().format('YYYY-12-31');
+                } else {
+                    let countDays = moment().month(id).daysInMonth()
+                    this.startZvitDate = moment().month(id).format('YYYY-MM-01');
+                    this.endZvitDate = `${moment().month(id).format('YYYY-MM')}-${countDays}`;
+                }
+
             }
         }
     }

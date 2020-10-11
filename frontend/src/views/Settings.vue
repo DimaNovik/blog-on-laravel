@@ -24,7 +24,11 @@
                                     <p>Управління користувачами</p>
                                     <SettingUser class="mt-5 mb-5"/>
                                 </b-tab>
-                                <b-tab title="Статистика" :title-link-class="linkClass(2)">
+                                <b-tab title="Додати користувача" :title-link-class="linkClass(2)">
+                                    <p>Додати нового користувача</p>
+                                    <SettingNewUser class="mt-5 mb-5"/>
+                                </b-tab>
+                                <b-tab title="Статистика" :title-link-class="linkClass(3)">
                                     <p>Реєстр</p>
                                 </b-tab>
                             </b-tabs>
@@ -40,6 +44,7 @@
 
     import SettingPrice from '@/components/common/SettingPrice';
     import SettingUser from '@/components/common/SettingUser';
+    import SettingNewUser from '@/components/common/SettingNewUser';
 
     export default {
         name: "Settings",
@@ -50,7 +55,8 @@
         },
         components: {
             SettingPrice,
-            SettingUser
+            SettingUser,
+            SettingNewUser
         },
         methods: {
             linkClass(idx) {

@@ -24,7 +24,7 @@ const routes = [
             store.dispatch('User/checkUser').then(response => {
                 store.dispatch('User/userGroup', response.group_id).then(()=> {
 
-                    if(response.role == 0) {
+                    if(response.role != 1) {
                         let id = (response.id<10) ? `0${response.id}`: response.id
                         store.dispatch('Orders/getOrders', id).then(()=> {
                             next();
@@ -60,7 +60,23 @@ const routes = [
     {
         path: '/pages/calculator/settings',
         name: 'Settings',
-        component: Settings
+        component: Settings,
+        beforeEnter: (to, from, next) =>
+        {
+            store.dispatch('User/checkUser').then(response => {
+                store.dispatch('User/userGroup', response.group_id).then(()=> {
+
+                    if(response.role == 0) {
+                        next('/pages/calculator/main');
+                    } else {
+                        next();
+                    }
+
+                })
+            }, error => {
+                next('/pages/calculator')
+            })
+        }
     },
     {
         path: '*',

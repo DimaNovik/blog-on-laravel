@@ -132,6 +132,7 @@ const mutations = {
 
                 if(data[i].id === state.allPrices[j].id) {
                     convertData.push({
+                        id: data[i].id,
                         text: data[i].name,
                         value: data[i].id,
                         parent_id: data[i].parent_id,
