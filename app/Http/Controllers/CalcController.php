@@ -132,12 +132,14 @@ class CalcController extends Controller
             $total += $order[0]['price'];
             $code .= $order[0]['code'] . "; ";
             $fio = $order[0]['fio'];
+            $inn = $order[0]['inn'];
         }
 
         $data = [
             'price' => $total,
             'fio' => $fio,
-            'code' => $code
+            'code' => $code,
+            'inn' => $inn
         ];
 
         $pdf = PDF::loadView('pages.pdf', $data);

@@ -28,7 +28,7 @@
                             <p style="margin: 0; padding: 0;">ПІБ замовника-платника нотаріальної послуги</p>
                         </td>
                         <td>
-                            <p style="margin: 0; padding: 0;" align="center">{{$fio}}</p>
+                            <p style="margin: 0; padding: 0;" align="center">{{$fio}}; {{$inn}}</p>
                         </td>
                     </tr>
                     <tr>

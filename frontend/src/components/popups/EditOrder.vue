@@ -173,8 +173,8 @@
 
                     if(this.fio) formData.append('fio', this.fio);
                     if(this.invoice) formData.append('invoice', this.invoice);
-                    formData.append('pay_date', this.pay_date);
-                    formData.append('action_date', this.action_date);
+                    if(this.pay_date) formData.append('pay_date', this.pay_date);
+                    if(this.action_date) formData.append('action_date', this.action_date);
 
                     if (!this.pay_date || !this.action_date) formData.append('type',0);
 

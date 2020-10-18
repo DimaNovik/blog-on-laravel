@@ -89,7 +89,7 @@
                     },
                     {
                         key: "count",
-                        label: "Кідькість",
+                        label: "Кількість",
                         sortable: true
                     },
                     {

@@ -2,7 +2,7 @@
     <b-row>
         <b-col>
 
-            <b-row v-if="selectedActions.length && selectedActions.length > 1" class="mb-3">
+            <b-row class="mb-3">
                 <b-col cols="6" md="3">
                     <b-link :href="`/pages/calculator/group-score-pdf-create?array=${this.selectedActions}`"
                             target="_blank"

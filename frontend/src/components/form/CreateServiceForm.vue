@@ -18,6 +18,23 @@
         </div>
 
         <div class="row mb-3">
+            <div class="col col-lg-6 col-xs-4">
+                <b-form-group
+                        id="fieldset-4"
+                        label="ІНН / Паспортні дані"
+                        label-for="input-2"
+                >
+                    <b-form-input
+                            if="input-2"
+                            v-model="inn"
+                            type="text"
+                            required
+                    />
+                </b-form-group>
+            </div>
+        </div>
+
+        <div class="row mb-3">
             <div class="col">
                 <b-form-group
                         id="fieldset-1"
@@ -185,6 +202,7 @@
                     }
                 ],
                 fio: '',
+                inn: '',
                 count: 0,
                 selected0: null,
                 selected1: null,
@@ -351,6 +369,7 @@
                 formData.append('pay_date', '');
                 formData.append('type', 0);
                 formData.append('fio', this.fio || 'Дані не задані');
+                formData.append('inn', this.inn || '');
 
                 this.setOrder(formData).then(() => {
                     this.$router.push('/pages/calculator/main');

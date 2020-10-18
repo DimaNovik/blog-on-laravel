@@ -164,6 +164,7 @@
                         this.$emit('showPopup');
                         this.invoice = null;
                         this.paymentDate = null;
+                        this.actionDate = null;
                         this.error = ''
                     })
                 }
@@ -172,6 +173,7 @@
                 this.$emit('showPopup');
                 this.invoice = null;
                 this.paymentDate = null;
+                this.actionDate = null;
                 this.error = ''
             }
         }
