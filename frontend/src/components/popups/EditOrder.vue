@@ -173,13 +173,14 @@
 
                     if(this.fio) formData.append('fio', this.fio);
                     if(this.invoice) formData.append('invoice', this.invoice);
-                    if(this.pay_date) formData.append('pay_date', this.pay_date);
-                    if(this.action_date) formData.append('action_date', this.action_date);
+                    formData.append('pay_date', this.pay_date);
+                    formData.append('action_date', this.action_date);
 
                     if (!this.pay_date || !this.action_date) formData.append('type',0);
 
 
                     this.updateOrder({id: this.item.id, data: formData}).then(() => {
+
                         this.$emit('showPopup');
                         this.fio = null;
                         this.invoice = null;

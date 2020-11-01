@@ -107,6 +107,7 @@ class CalcController extends Controller
         $data = [
             'price' => $order[0]['price'],
             'fio' => $order[0]['fio'],
+            'inn' => $order[0]['inn'],
             'code' => $order[0]['code'] . ";"];
 
         $pdf = PDF::loadView('pages.pdf', $data);
@@ -158,7 +159,7 @@ class CalcController extends Controller
 
         foreach ($services as &$value) {
             $service = cl_notary_services::where('id', $value->service)->get();
-            $total += $value->price;
+            $total += $value->price * $value->count;
 
             array_push($data, [
                 'name' => $service[0]['name'],
@@ -223,6 +224,7 @@ class CalcController extends Controller
             ->where('action_date', '>=', $firstDay)
             ->where('action_date', '<=', $lastDay)
             ->where('type', '=', 1)->get();
+
 
         $data = array();
         $total = 0;

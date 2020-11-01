@@ -216,11 +216,9 @@
                     if(newVal.length === 0) {
                         this.clearPrice();
                     } else if(newVal.length === this.selectedService.length && newVal.length > oldVal.length) {
-
                         this.servicePrice(newVal.slice(-1))
                         this.setCount(newVal.slice(-1), 1)
                     } else {
-
                         let serviceId;
 
                         for (var i = 0; i < oldVal.length; i++) {
@@ -411,6 +409,7 @@
             resetCount(id) {
                 let { spin } = this.$refs;
 
+                console.log(this.selectedPrices);
                 for(let i=0; i< spin.length; i++) {
                     if(spin[i].$attrs['data-id'] == id) {
                         spin[i].$el.value= 1

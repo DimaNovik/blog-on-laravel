@@ -6,14 +6,16 @@
                 <b-col cols="6" md="3">
                     <b-link :href="`/pages/calculator/group-score-pdf-create?array=${this.selectedActions}`"
                             target="_blank"
-                        class="btn btn-primary">
+                        class="btn btn-primary"
+                        :disabled="selectedActions.length === 0">
                         Зведений рахунок
                     </b-link>
                 </b-col>
                 <b-col cols="6"  md="3" class="ml-n5">
                     <b-link :href="`/pages/calculator/create_group_pdf?array=${this.selectedActions}`"
                             target="_blank"
-                            class="btn btn-primary">
+                            class="btn btn-primary"
+                            :disabled="selectedActions.length === 0">
                         Зведена квитанція
                     </b-link>
                 </b-col>
@@ -271,19 +273,24 @@
                 this.$router.push(`pages/calculator/pdg-create/${id}`)
             },
             openInvoice(data) {
+                this.selectedActions = [];
                 this.isOpenSavePayment = true;
                 this.rowPaymentData = data;
             },
             successPayment() {
+
+                this.selectedActions = [];
                 this.isOpenSavePayment = false;
                 this.$emit('update');
             },
             successEdit() {
+                this.selectedActions = [];
                 this.isOpenEdit = false;
                 this.$emit('update');
             },
             showDetails(record, index) {
 
+                this.selectedActions = [];
                 let services = JSON.parse(record.service_id);
 
                 this.getOnceAction(record.action_id).then(() => {
@@ -305,6 +312,7 @@
                 if (confirm('Ви впевнені?')) {
                     this.deleteOrder(id).then(() => {
                         this.$emit('update');
+                        this.selectedActions = [];
                     })
                 }
 
