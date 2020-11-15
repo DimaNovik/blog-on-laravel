@@ -184,7 +184,7 @@ const mutations = {
         let deletedService = state.selectedPrices.find(item => item.service == id);
         let newPrice = +deletedService.price * deletedService.count;
         deletedService.count = 1;
-        state.selectedPrices = state.selectedPrices.filter(item => item.service !== id);
+        state.selectedPrices = state.selectedPrices.filter(item => item.service != id);
         state.price = +state.price - Number(newPrice);
         state.notaryServices.find(item => item.value == id).choosed = 0;
     },

@@ -60,9 +60,6 @@
             <td width="10">
                 <p style="font-size: 10px;  margin: 0;padding: 0" align="center"><b>Загальна сума, грн.</b></p>
             </td>
-            <td width="25">
-                <p style="font-size: 10px;  margin: 0;padding: 0" align="center"><b>Дата та реєстровий № нотаріальної дії</b></p>
-            </td>
         </tr>
         </thead>
         <tbody>
@@ -83,12 +80,11 @@
                 <td align="center">
                     <p style="font-size: 11px;  margin: 0;padding: 0">{{$value['all']}}</p>
                 </td>
-                <td></td>
             </tr>
         @endforeach
 
         <tr>
-            <td align="left" colspan="4">
+            <td align="left" colspan="3">
                 <p style="font-size: 11px;  margin: 0;padding: 0"><b>Всього:</b></p>
             </td>
             <td colspan="2">

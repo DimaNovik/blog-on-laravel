@@ -53,7 +53,7 @@
 
     <header class="header">
         <div class="header__title">
-            <h2 style="font-size: 11px;" align="center">Звіт про роботоу державного нотаріуса</h2>
+            <h2 style="font-size: 11px;" align="center">Звіт про роботу державного нотаріуса</h2>
         </div>
     </header>
 

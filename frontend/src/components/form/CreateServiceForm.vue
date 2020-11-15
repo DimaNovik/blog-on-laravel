@@ -409,7 +409,6 @@
             resetCount(id) {
                 let { spin } = this.$refs;
 
-                console.log(this.selectedPrices);
                 for(let i=0; i< spin.length; i++) {
                     if(spin[i].$attrs['data-id'] == id) {
                         spin[i].$el.value= 1

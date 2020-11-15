@@ -56,7 +56,7 @@
                                     size="sm"
                                     class="btn btn-primary"
                                     target="_blank"
-                                    :disabled="!startZvitDate || !endZvitDate">Звіт нотаріса
+                                    :disabled="!startZvitDate || !endZvitDate">Звіт нотаріуса
                             </b-link>
                         </b-col>
                         <b-col v-if="role == 2">
