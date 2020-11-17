@@ -15,7 +15,7 @@
                         :role="getUserRole"
                         :userId="getUserId"
                         :group="userGroup.group_code"
-                        v-if="getUserRole != 1" />
+                        v-if="getUserRole == 0 ||  getUserRole == 2" />
 
                     <ServicesAdminTotal
                             :item="allOrders"
@@ -23,11 +23,12 @@
                             v-else />
                 </div>
 
+
                 <ServicesFilter
                     @filter="getFilterText"></ServicesFilter>
 
 
-                <div class="services__table" v-if="getUserRole == 1">
+                <div class="services__table" v-if="getUserRole == 1 || getUserRole == 3">
                     <ServicesAllTable
                             :value="allOrders"
                             :filter="filterText"

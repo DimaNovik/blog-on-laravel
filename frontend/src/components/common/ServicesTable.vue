@@ -3,7 +3,7 @@
         <b-col>
 
             <b-row class="mb-3">
-                <b-col cols="6" md="3">
+                <b-col cols="6" md="4" lg="3">
                     <b-link :href="`/pages/calculator/group-score-pdf-create?array=${this.selectedActions}`"
                             target="_blank"
                         class="btn btn-primary"
@@ -11,7 +11,7 @@
                         Зведений рахунок
                     </b-link>
                 </b-col>
-                <b-col cols="6"  md="3" class="ml-n5">
+                <b-col cols="6"  md="4" lg="3" class="ml-n5">
                     <b-link :href="`/pages/calculator/create_group_pdf?array=${this.selectedActions}`"
                             target="_blank"
                             class="btn btn-primary"

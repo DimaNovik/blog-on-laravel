@@ -1,6 +1,6 @@
 <template>
     <b-row>
-        <b-col md="4" cols="12">
+        <b-col md="12" cols="12">
             <b-form-input
                     v-model="filter"
                     type="search"

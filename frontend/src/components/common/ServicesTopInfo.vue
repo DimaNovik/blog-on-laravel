@@ -1,8 +1,8 @@
 <template>
     <b-row>
         <b-col md="8">
-            <p v-if="info.role != 1"><b>Відділ:</b> {{group}}</p>
-            <p><b>Нотаріус:</b> {{info.name}}</p>
+            <p v-if="info.role == 0 || info.role == 2"><b>Відділ:</b> {{group}}</p>
+            <p v-if="info.role == 0 || info.role == 2"><b>Нотаріус:</b> {{info.name}}</p>
         </b-col>
         <b-col md="4" align="right">
             <p><b>Дата:</b> {{getDatetimeInfo}}</p>

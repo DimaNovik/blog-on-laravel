@@ -103,6 +103,11 @@
                         sortable: true
                     },
                     {
+                        key: "action_date",
+                        label: "Дата над.пос.",
+                        sortable: true
+                    },
+                    {
                         key: "pay_date",
                         label: "Дата оплати",
                         sortable: true

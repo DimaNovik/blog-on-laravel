@@ -311,14 +311,14 @@ class CalcController extends Controller
             ]);
         }
 
-
         $res  = array();
         foreach($data as $vals){
+            dd($vals);
             if(array_key_exists($vals['code'],$res)){
                 $res[$vals['code']]['count'] += $vals['count'];
             }
             else{
-                $res[$vals['code']]  = $vals;
+                $res[$vals['code']] = $vals;
             }
         }
 

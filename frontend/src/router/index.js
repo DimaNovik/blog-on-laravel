@@ -24,7 +24,7 @@ const routes = [
             store.dispatch('User/checkUser').then(response => {
                 store.dispatch('User/userGroup', response.group_id).then(()=> {
 
-                    if(response.role != 1) {
+                    if(response.role == 0 || response.role == 2) {
                         let id = (response.id<10) ? `0${response.id}`: response.id
                         store.dispatch('Orders/getOrders', id).then(()=> {
                             next();

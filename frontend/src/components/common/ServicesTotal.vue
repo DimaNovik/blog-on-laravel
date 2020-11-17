@@ -19,7 +19,7 @@
                 </b-col>
             </b-row>
             <b-row align-v="center">
-                <b-col md="4" xl="4">
+                <b-col md="12" lg="4" xl="4">
                     <b-form-group
                             id="fieldset-1"
                             label="Період формування реєстру:"
@@ -38,7 +38,7 @@
                             :disabled="!startDate || !endDate">Сформувати реєстр
                     </b-link>
                 </b-col>
-                <b-col md="4" xl="4">
+                <b-col md="12" lg="6" xl="4">
                     <b-form-group
                             id="fieldset-3"
                             label="Період формування звіту про роботу:"
@@ -69,7 +69,7 @@
                         </b-col>
                     </b-row>
                 </b-col>
-                <b-col md="4" xl="4" align="right">
+                <b-col md="12" lg="2" xl="4" align="center" class="mt-md-5">
                     <b-button
                             type="button"
                             size="lg"
