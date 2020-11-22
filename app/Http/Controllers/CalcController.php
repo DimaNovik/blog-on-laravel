@@ -226,6 +226,9 @@ class CalcController extends Controller
             ->where('action_date', '<=', $lastDay)
             ->where('type', '=', 1)->get();
 
+        $userInfo = cl_users::where('id', $id)->get();
+
+        $groupInfo = cl_groups::where('id', $userInfo[0]['group_id'])->get();
 
         $data = array();
         $total = 0;
@@ -254,9 +257,59 @@ class CalcController extends Controller
                 'invoice' => $value['invoice'],
                 'pay_date' => $value['pay_date'],
                 'total' => $total,
+                'userName' => $userInfo[0]['name'],
+                'userGroup' => $groupInfo[0]['name']
             ]);
         }
-        
+
+        $pdf = PDF::loadView('pages.registry', compact('data'));
+
+        return $pdf->download("Registry.pdf");
+    }
+
+    public function create_group_registry_pdf($id)
+    {
+        $firstDay = $_GET['start'];
+        $lastDay = $_GET['end'];
+
+        $order = cl_notary_order::where('office_id', $id)
+            ->where('action_date', '>=', $firstDay)
+            ->where('action_date', '<=', $lastDay)
+            ->where('type', '=', 1)->get();
+
+        $groupInfo = cl_groups::where('group_code', $id)->get();
+
+        $data = array();
+        $total = 0;
+
+        foreach ($order as &$value) {
+
+            $data_service = array();
+            $total += $value['price'];
+
+            $services = json_decode($value['service_id']);
+
+            foreach ($services as &$item) {
+                $service = cl_notary_services::where('id', $item->service)->get();
+
+                array_push($data_service, [
+                    'actions' => $service[0]['code'],
+                ]);
+            }
+
+            array_push($data, [
+                'action_date' => $value['action_date'],
+                'actions' => $data_service,
+                'counts' => $value['count'],
+                'fio' => $value['fio'],
+                'price' => $value['price'],
+                'invoice' => $value['invoice'],
+                'pay_date' => $value['pay_date'],
+                'total' => $total,
+                'userGroup' => $groupInfo[0]['name']
+            ]);
+        }
+
         $pdf = PDF::loadView('pages.registry', compact('data'));
 
         return $pdf->download("Registry.pdf");
@@ -313,7 +366,6 @@ class CalcController extends Controller
 
         $res  = array();
         foreach($data as $vals){
-            dd($vals);
             if(array_key_exists($vals['code'],$res)){
                 $res[$vals['code']]['count'] += $vals['count'];
             }
@@ -343,7 +395,6 @@ class CalcController extends Controller
             ->orderBy('code')
             ->get()
             ->toArray();
-
 
         foreach ($services as &$service) {
             foreach ($orders as &$order) {

@@ -44,11 +44,19 @@
     <header class="header">
         <div class="header__title">
             <h2 style="font-size: 11px;" align="center">РЕЄСТР</h2>
+            @if(isset($data[0]['userName'])):
             <p align="center" style="font-size: 11px;">обліку додаткових платних послуг правового характеру,<br/> які не пов'язані із вчинюваними нотаріальними
-                діями, а також послуг технічного характеру, наданих державним нотаріусом _____________________________________________________________</p>
-            <p align="center" style="font-size: 11px; margin: 0; margin-top: -20px; padding-left: 90px">(назва ДНК та ПІБ нотаріуса)</p>
+                діями, а також послуг технічного характеру, наданих державним нотаріусом<br/> {{$data[0]['userName']}} ({{$data[0]['userGroup']}})
+            </p>
+            @else
+                <p align="center" style="font-size: 11px;">обліку додаткових платних послуг правового характеру,<br/> які не пов'язані із вчинюваними нотаріальними
+                    діями, а також послуг технічного характеру, наданих державними нотаріусами контори: <br/> {{$data[0]['userGroup']}}
+                </p>
+            @endif
+            <p align="center" style="font-size: 11px; margin: 0; margin-top: -10px;">(назва ДНК та ПІБ нотаріуса)</p>
             <p align="center" style="font-size: 11px; margin: 0; margin-top: 20px;">за _________________ 20 __ року</p>
             <p align="center" style="font-size: 10px; margin: 0; margin-left: -40px ">(місяць)</p>
+            <img src="../public/uploads/secure.png" alt="" style="position: absolute; top:0;right: 5%; transform: rotate(35deg)" width="350" height="179">
         </div>
     </header>
 
@@ -132,6 +140,14 @@
                 <p style="font-size: 10px; margin: 0;"><b>{{$value['total']}}</b></p>
             </td>
             <td colspan="3"></td>
+        </tr>
+
+        <tr>
+            <td colspan="8" >
+                <p style="position:relative;">
+                <img src="../public/uploads/secure.png" alt="" style="position: absolute; top:-5%;right: 5%; transform: rotate(35deg)" width="350" height="179" />
+                </p>
+            </td>
         </tr>
 
         </tbody>

@@ -31,12 +31,24 @@
                                 @change="filterPeriod(selectedPeriod)">
                         </b-form-select>
                     </b-form-group>
-                    <b-link :href="`registry-pdf-create/${getUseId}?start=${startDate}&end=${endDate}`"
-                            size="sm"
-                            class="btn btn-primary"
-                            target="_blank"
-                            :disabled="!startDate || !endDate">Сформувати реєстр
-                    </b-link>
+                    <b-row>
+                        <b-col>
+                            <b-link :href="`registry-pdf-create/${getUseId}?start=${startDate}&end=${endDate}`"
+                                    size="sm"
+                                    class="btn btn-primary"
+                                    target="_blank"
+                                    :disabled="!startDate || !endDate">Реєстр нотаріуса
+                            </b-link>
+                        </b-col>
+                        <b-col v-if="role == 2">
+                            <b-link :href="`registry-group-pdf-create/${group}?start=${startDate}&end=${endDate}`"
+                                    size="sm"
+                                    class="btn btn-primary"
+                                    target="_blank"
+                                    :disabled="!startDate || !endDate">Реєстр контори
+                            </b-link>
+                        </b-col>
+                    </b-row>
                 </b-col>
                 <b-col md="12" lg="6" xl="4">
                     <b-form-group

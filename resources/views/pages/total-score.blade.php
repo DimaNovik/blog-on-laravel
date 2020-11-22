@@ -54,6 +54,8 @@
     <header class="header">
         <div class="header__title">
             <h2 style="font-size: 11px;" align="center">Звіт про роботу державного нотаріуса</h2>
+
+            <img src="../public/uploads/secure.png" alt="" style="position: absolute; top:-5%;right: 5%; transform: rotate(35deg)" width="350" height="179" />
         </div>
     </header>
 
@@ -268,6 +270,14 @@
         </tr>
         @endif
         @endforeach
+
+        <tr>
+            <td colspan="5" >
+                <p style="position:relative;">
+                    <img src="../public/uploads/secure.png" alt="" style="position: absolute; top:-5%;right: 5%; transform: rotate(35deg)" width="350" height="179" />
+                </p>
+            </td>
+        </tr>
 
         </tbody>
     </table>
