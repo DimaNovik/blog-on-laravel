@@ -326,21 +326,26 @@ class CalcController extends Controller
             ->get()
             ->toArray();
 
-        $services = cl_notary_services::select('subgroup_id', 'name','code', 'cl_notary_services_prices.price')
+        $services = cl_notary_services::select('subgroup_id', 'name','code','cl_notary_services_prices.service_id', 'cl_notary_services_prices.price')
             ->leftJoin('cl_notary_services_prices', 'cl_notary_services.id', '=', 'cl_notary_services_prices.service_id')
             ->distinct()
             ->orderBy('code')
             ->get()
             ->toArray();
 
+        $userInfo = cl_users::where('id', $id)->get();
+
+        $groupInfo = cl_groups::where('id', $userInfo[0]['group_id'])->get();
+
 
         foreach ($services as &$service) {
+
             foreach ($orders as &$order) {
                 $order_service = json_decode($order['service_id']);
 
                 foreach ($order_service as &$once) {
 
-                    if($once->code == $service['code'] && $once->price === $service['price']) {
+                    if($once->code == $service['code'] && $once->price === $service['price'] && $once->service == $service['service_id']) {
 
                         array_push($data, [
                             'subgroup' => $service['subgroup_id'],
@@ -361,6 +366,8 @@ class CalcController extends Controller
                 'price' => $service['price'],
                 'count' => 0,
                 'total' => 0,
+                'userName' => $userInfo[0]['name'],
+                'userGroup' => $groupInfo[0]['name']
             ]);
         }
 
@@ -389,12 +396,14 @@ class CalcController extends Controller
             ->get()
             ->toArray();
 
-        $services = cl_notary_services::select('subgroup_id', 'name','code', 'cl_notary_services_prices.price')
+        $services = cl_notary_services::select('subgroup_id', 'name','code','cl_notary_services_prices.service_id', 'cl_notary_services_prices.price')
             ->leftJoin('cl_notary_services_prices', 'cl_notary_services.id', '=', 'cl_notary_services_prices.service_id')
             ->distinct()
             ->orderBy('code')
             ->get()
             ->toArray();
+
+        $groupInfo = cl_groups::where('id', $id)->get();
 
         foreach ($services as &$service) {
             foreach ($orders as &$order) {
@@ -402,7 +411,7 @@ class CalcController extends Controller
 
                 foreach ($order_service as &$once) {
 
-                    if($once->code == $service['code'] && $once->price === $service['price']) {
+                    if($once->code == $service['code'] && $once->price === $service['price'] && $once->service == $service['service_id']) {
 
                         array_push($data, [
                             'subgroup' => $service['subgroup_id'],
@@ -423,6 +432,7 @@ class CalcController extends Controller
                 'price' => $service['price'],
                 'count' => 0,
                 'total' => 0,
+                'userGroup' => $groupInfo[0]['name']
             ]);
         }
 

@@ -18,7 +18,11 @@
 
         .container {
             width: 100%;
+            height: 100%;
             margin: 0 auto;
+            background-image: url(/public/uploads/secure.png); /* Путь к фоновому рисунку */
+            background-position: center bottom; /* Положение фона */
+            background-repeat: repeat-y; /* Повторяем фон по горизонтали */
         }
 
         .header__title {
@@ -50,12 +54,24 @@
 <body>
 
 <div class="container">
-
     <header class="header">
         <div class="header__title">
-            <h2 style="font-size: 11px;" align="center">Звіт про роботу державного нотаріуса</h2>
+            @php
 
-            <img src="../public/uploads/secure.png" alt="" style="position: absolute; top:-5%;right: 5%; transform: rotate(35deg)" width="350" height="179" />
+                $i=0;
+                foreach($res as $element)
+                {
+
+                       if($i!=0)
+                          break;
+                       $name = (isset($element['userName'])) ? $element['userName'] : '';
+                       $group = (isset($element['userGroup'])) ? $element['userGroup'] : '';;
+                       $i++;
+                }
+
+            @endphp
+
+            <h2 style="font-size: 11px;" align="center">Звіт про роботу державного нотаріуса <br/> {{$name}} <br/> {{$group}}</h2>
         </div>
     </header>
 
@@ -271,13 +287,6 @@
         @endif
         @endforeach
 
-        <tr>
-            <td colspan="5" >
-                <p style="position:relative;">
-                    <img src="../public/uploads/secure.png" alt="" style="position: absolute; top:-5%;right: 5%; transform: rotate(35deg)" width="350" height="179" />
-                </p>
-            </td>
-        </tr>
 
         </tbody>
     </table>
