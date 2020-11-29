@@ -50,6 +50,16 @@
                             type="password"
                             required></b-form-input>
                 </b-form-group>
+
+                <b-form-checkbox
+                        id="checkbox-2"
+                        v-model="formData.role"
+                        name="checkbox-2"
+                        value="2"
+                        unchecked-value="0"
+                >
+                    Завідуючий конторою
+                </b-form-checkbox>
             </b-col>
         </b-row>
 
@@ -90,6 +100,7 @@
                     login: null,
                     password: null,
                     selectedGroup: null,
+                    role: 0,
                 },
                 isReg: false,
                 hasRegError: false
@@ -112,6 +123,7 @@
                 formRegData.append('login', this.formData.login);
                 formRegData.append('password', this.formData.password);
                 formRegData.append('group_id', this.formData.selectedGroup);
+                formRegData.append('role', this.formData.role);
 
                 this.regUser(formRegData)
                     .then((res)=> {

@@ -149,6 +149,22 @@
 
         </tbody>
     </table>
+
+    <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top: 30px">
+        <tr>
+            <td width="50%">
+                @if (empty($data[0]['userName']))
+                    <p align="left" style="font-size: 10px;margin: 0;"><b>Нотаріальна контора:</b> <br/> {{$data[0]['userGroup']}}</p>
+                @else
+                    <p align="left" style="font-size: 10px;margin: 0;"><b>Державний нотаріус:</b> <br/> {{$data[0]['userName']}}</p>
+                @endif
+            </td>
+            <td width="50%">
+                <p align="center" style="font-size: 10px;margin: 0;">_______________________</p>
+                <p align="center" style="font-size: 10px;margin: 0;">(підпис)</p>
+            </td>
+        </tr>
+    </table>
 </div>
 </body>
 </html>

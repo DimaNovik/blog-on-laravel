@@ -71,7 +71,14 @@
 
             @endphp
 
-            <h2 style="font-size: 11px;" align="center">Звіт про роботу державного нотаріуса <br/> {{$name}} <br/> {{$group}}</h2>
+
+            @if (empty($name))
+                <h2 style="font-size: 11px;" align="center">Звіт про роботу контори: <br/> {{$group}}</h2>
+
+            @else
+                <h2 style="font-size: 11px;" align="center">Звіт про роботу державного нотаріуса <br/> {{$name}}
+                    <br/> {{$group}}</h2>
+            @endif
         </div>
     </header>
 
@@ -109,65 +116,68 @@
         @php $count3 = 0; @endphp;
         @php $count4 = 0; @endphp;
         @php $count5 = 0; @endphp;
+        @php $total = 0; @endphp;
 
         @foreach ($res as &$value):
 
+        @php $total += $value['count'] * $value['price']; @endphp;
+
         @if($value['subgroup'] == 1):
 
-            @php $count++; @endphp;
+        @php $count++; @endphp;
 
-            @if($count == 1):
-            <tr>
-                <td colspan="5" align="center" style="padding: 5px;">
-                    <p style="font-size: 12px;margin: 0;"><b>І. Послуги правового характеру, які непов'язані із вчинюваними
-                            нотаріальними діями, що
-                            надаються державними нотаріусами державних нотаріальних контор та державного нотаріального
-                            архіву:</b></p>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="5" align="center" style="padding: 5px;">
-                    <p style="font-size: 12px;margin: 0;"><b>1.Консультації правового характеру, які непов'язані із
-                            вчинюваними нотаріальними діями:</b></p>
-                </td>
-            </tr>
-            @endif
+        @if($count == 1):
+        <tr>
+            <td colspan="5" align="center" style="padding: 5px;">
+                <p style="font-size: 12px;margin: 0;"><b>І. Послуги правового характеру, які непов'язані із вчинюваними
+                        нотаріальними діями, що
+                        надаються державними нотаріусами державних нотаріальних контор та державного нотаріального
+                        архіву:</b></p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5" align="center" style="padding: 5px;">
+                <p style="font-size: 12px;margin: 0;"><b>1.Консультації правового характеру, які непов'язані із
+                        вчинюваними нотаріальними діями:</b></p>
+            </td>
+        </tr>
+        @endif
 
-            <tr>
-                <td align="center">
-                    <p style="font-size: 10px;margin: 0;">{{$value['code']}}</p>
-                </td>
-                <td align="center">
-                    <p style="font-size: 10px;margin: 0;">{{$value['name']}}</p>
-                </td>
-                <td align="center" width="40">
-                    <p style="font-size: 10px;margin: 0;">{{$value['price']}}</p>
-                </td>
-                <td align="center">
-                    <p style="font-size: 10px;margin: 0;">{{$value['count']}}</p>
-                </td>
-                <td align="center">
-                    <p style="font-size: 10px;margin: 0;">{{$value['count'] * $value['price']}}</p>
-                </td>
-            </tr>
+        <tr>
+            <td align="center">
+                <p style="font-size: 10px;margin: 0;">{{$value['code']}}</p>
+            </td>
+            <td align="center">
+                <p style="font-size: 10px;margin: 0;">{{$value['name']}}</p>
+            </td>
+            <td align="center" width="40">
+                <p style="font-size: 10px;margin: 0;">{{$value['price']}}</p>
+            </td>
+            <td align="center">
+                <p style="font-size: 10px;margin: 0;">{{$value['count']}}</p>
+            </td>
+            <td align="center">
+                <p style="font-size: 10px;margin: 0;">{{$value['count'] * $value['price']}}</p>
+            </td>
+        </tr>
 
         @elseif($value['subgroup'] == 2):
-            @php $count2++; @endphp;
+        @php $count2++; @endphp;
 
-            @if($count2 == 1):
-            <tr>
-                <td colspan="5" align="center" style="padding: 5px;">
-                    <p style="font-size: 12px;margin: 0;"><b>ІІ. Проведення правового аналізу юридичного змісту документів
-                            на їх відповідність чинному законодавству за зверненнями фізичних та юридичних осіб</b></p>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="5" align="center" style="padding: 5px;">
-                    <p style="font-size: 12px;margin: 0;"><b>1. Правовий аналіз документів на предмет відповідності чинному
-                            законодавству стосовн</b></p>
-                </td>
-            </tr>
-            @endif
+        @if($count2 == 1):
+        <tr>
+            <td colspan="5" align="center" style="padding: 5px;">
+                <p style="font-size: 12px;margin: 0;"><b>ІІ. Проведення правового аналізу юридичного змісту документів
+                        на їх відповідність чинному законодавству за зверненнями фізичних та юридичних осіб</b></p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5" align="center" style="padding: 5px;">
+                <p style="font-size: 12px;margin: 0;"><b>1. Правовий аналіз документів на предмет відповідності чинному
+                        законодавству стосовн</b></p>
+            </td>
+        </tr>
+        @endif
 
         <tr>
             <td align="center">
@@ -188,21 +198,21 @@
         </tr>
 
         @elseif($value['subgroup'] == 3):
-            @php $count3++; @endphp;
+        @php $count3++; @endphp;
 
-            @if($count3 == 1):
-            <tr>
-                <td colspan="5" align="center" style="padding: 5px;">
-                    <p style="font-size: 12px;margin: 0;"><b>IIІ. Послуги інформаційно-технічного характеру, які надаються
-                            державними нотаріусами державних нотаріальних контор та державного нотаріального архіву.</b></p>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="5" align="center" style="padding: 5px;">
-                    <p style="font-size: 12px;margin: 0;"><b>1. Послуга технічного характеру:</b></p>
-                </td>
-            </tr>
-            @endif
+        @if($count3 == 1):
+        <tr>
+            <td colspan="5" align="center" style="padding: 5px;">
+                <p style="font-size: 12px;margin: 0;"><b>IIІ. Послуги інформаційно-технічного характеру, які надаються
+                        державними нотаріусами державних нотаріальних контор та державного нотаріального архіву.</b></p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5" align="center" style="padding: 5px;">
+                <p style="font-size: 12px;margin: 0;"><b>1. Послуга технічного характеру:</b></p>
+            </td>
+        </tr>
+        @endif
 
         <tr>
             <td align="center">
@@ -223,21 +233,21 @@
         </tr>
 
         @elseif($value['subgroup'] == 4):
-            @php $count4++; @endphp;
+        @php $count4++; @endphp;
 
-            @if($count4 == 1):
-            <tr>
-                <td colspan="5" align="center" style="padding: 5px;">
-                    <p style="font-size: 12px;margin: 0;"><b>IIІ. Послуги інформаційно-технічного характеру, які надаються
-                            державними нотаріусами державних нотаріальних контор та державного нотаріального архіву.</b></p>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="5" align="center" style="padding: 5px;">
-                    <p style="font-size: 12px;margin: 0;"><b>1. Інщі послуги:</b></p>
-                </td>
-            </tr>
-            @endif
+        @if($count4 == 1):
+        <tr>
+            <td colspan="5" align="center" style="padding: 5px;">
+                <p style="font-size: 12px;margin: 0;"><b>IIІ. Послуги інформаційно-технічного характеру, які надаються
+                        державними нотаріусами державних нотаріальних контор та державного нотаріального архіву.</b></p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5" align="center" style="padding: 5px;">
+                <p style="font-size: 12px;margin: 0;"><b>1. Інщі послуги:</b></p>
+            </td>
+        </tr>
+        @endif
 
         <tr>
             <td align="center">
@@ -257,15 +267,16 @@
             </td>
         </tr>
         @elseif($value['subgroup'] == 5):
-            @php $count5++; @endphp;
+        @php $count5++; @endphp;
 
-            @if($count5 == 1):
-            <tr>
-                <td colspan="5" align="center" style="padding: 5px;">
-                    <p style="font-size: 12px;margin: 0;"><b>IV. Послуги, які надаються державним нотаріальним архівом як архівною установою:</b></p>
-                </td>
-            </tr>
-            @endif
+        @if($count5 == 1):
+        <tr>
+            <td colspan="5" align="center" style="padding: 5px;">
+                <p style="font-size: 12px;margin: 0;"><b>IV. Послуги, які надаються державним нотаріальним архівом як
+                        архівною установою:</b></p>
+            </td>
+        </tr>
+        @endif
 
         <tr>
             <td align="center">
@@ -287,8 +298,33 @@
         @endif
         @endforeach
 
+        <tr>
+            <td colspan="4">
+                <p align="right" style="font-size: 10px; margin: 0; padding-right: 10px;"><b>Всього:</b></p>
+            </td>
+            <td>
+                <p style="font-size: 10px; margin:0;" align="center"><b>{{$total}}</b></p>
+            </td>
+        </tr>
 
         </tbody>
+    </table>
+
+    <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top: 20px">
+        <tr>
+            <td width="50%">
+
+                @if (empty($name))
+                    <p align="left" style="font-size: 10px;margin: 0;"><b>Нотаріальна контора:</b> <br/> {{$group}}</p>
+                @else
+                    <p align="left" style="font-size: 10px;margin: 0;"><b>Державний нотаріус:</b> <br/> {{$name}}</p>
+                @endif
+            </td>
+            <td width="50%">
+                <p align="center" style="font-size: 10px;margin: 0;">_______________________</p>
+                <p align="center" style="font-size: 10px;margin: 0;">(підпис)</p>
+            </td>
+        </tr>
     </table>
 </div>
 </body>

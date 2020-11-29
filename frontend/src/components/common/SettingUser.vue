@@ -49,12 +49,23 @@
                                 id="password"
                                 v-model="password"
                                 type="text"
-                                required></b-form-input>
+                        ></b-form-input>
                     </b-form-group>
+                </p>
+                <p>
+                    <b-form-checkbox
+                            id="checkbox-1"
+                            v-model="role"
+                            name="checkbox-1"
+                            value="2"
+                            unchecked-value="0"
+                    >
+                       Завідуючий конторою
+                    </b-form-checkbox>
                 </p>
             </b-col>
         </b-row>
-        <b-row class="mt-5">
+        <b-row class="mt-3">
             <b-col>
                 <b-button type="submit"
                           variant="primary">
@@ -74,7 +85,8 @@
                 selectedUser: null,
                 name: null,
                 login: null,
-                password: null
+                password: null,
+                role: 0,
             }
         },
         computed: {
@@ -89,7 +101,8 @@
             chooseUser(id) {
                 this.onceUser(id).then((response)=> {
                     this.name = response.name;
-                    this.login = response.login
+                    this.login = response.login;
+                    this.role = response.role
                 });
             },
             updateUser(id) {
@@ -99,6 +112,7 @@
                 formData.append('name', this.name);
                 formData.append('login', this.login);
                 formData.append('password', this.password);
+                formData.append('role', this.role);
 
                 this.onceUserUpdate({id: this.selectedUser, info: formData}).then(()=> {
                     this.getAllUsers();
