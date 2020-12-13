@@ -59,26 +59,19 @@
             </b-row>
         </template>
 
-
         <template v-if="notaryServices.length">
             <b-row
                    v-for="(value, j) in notaryServices"
                    :key="value.value">
                 <b-col>
-                    <b-row  align-v="end">
+                    <b-row  align-v="center">
                         <b-col cols="12" md="6">
 
                             <b-form-group
                                     :id="`input-group-${j}`"
-                                    :label="value.text"
-                                    :label-for="`input-${j}`">
-
-                                <b-form-input
-                                v-model="name[value.value]"
-                                type="text"
-                                required
-                                class="mb-3" />
-
+                                    :label="`Редагувати дані для коду: ${code[value.value]}`"
+                                    :label-for="`input-${j}`"
+                                    >
                                 <b-form-input
                                         :id="`input-${j}`"
                                         v-model="code[value.value]"
@@ -86,16 +79,48 @@
                                         required
                                         placeholder="Код дії"
                                         class="mb-3"/>
-
+                                <hr/>
+                                <label :for="`input-${j}`">Одеська область:</label>
+                                 <b-form-textarea
+                                    v-model="name[value.value]"
+                                    type="text"
+                                    required
+                                    class="mb-3" />
                                 <b-form-input
                                         :id="`input-${j}`"
                                         v-model="price[value.value]"
+                                        type="text"
+                                        required
+                                        class="mb-1"/>
+                                        <hr/>
+                                <label :for="`input-${j*1.2}`">Миколаївська область:</label>
+                                <b-form-textarea
+                                    v-model="nameMik[value.value]"
+                                    type="text"
+                                    required
+                                    class="mb-3" />
+                                <b-form-input
+                                        :id="`input-${j*1.2}`"
+                                        v-model="priceMik[value.value]"
+                                        type="text"
+                                        required
+                                        class="mb-1"/>
+                                        <hr/>
+                                <label :for="`input-${j*1.3}`">Херсонська область:</label>
+                                <b-form-textarea
+                                    v-model="nameKher[value.value]"
+                                    type="text"
+                                    required
+                                    class="mb-3" />
+                                <b-form-input
+                                        :id="`input-${j*1.3}`"
+                                        v-model="priceKher[value.value]"
                                         type="text"
                                         required />
                             </b-form-group>
                         </b-col>
                         <b-col cols="12" md="6">
-                            <p>
+                            <p class="mb-3">
                                 <b-button type="button"
                                           variant="primary"
                                           @click="handleServiceUpdate(value.value)">
@@ -103,7 +128,7 @@
                                 </b-button>
 
                             </p>
-                            <p>
+                            <p class="mb-3">
                                 <b-button type="button"
                                           variant="primary"
                                           @click="handleUpdateCode(value.value)">
@@ -111,7 +136,7 @@
                                 </b-button>
 
                             </p>
-                            <p>
+                            <p class="mb-3">
                                 <b-button type="button"
                                           variant="primary"
                                           @click="handleUpdate(value.value)">
@@ -144,7 +169,11 @@
                 selected0: null,
                 selected1: null,
                 price: [],
+                priceMik: [],
+                priceKher: [],
                 name: [],
+                nameMik: [],
+                nameKher: [],
                 code: [],
                 startRequest: false,
                 showPrices: false,
@@ -216,6 +245,8 @@
                 for(let i=0, length = this.allPrices.length; i<length; i++) {
                     if(this.allPrices[i].service_id == id) {
                         this.price[id] = this.allPrices[i].price;
+                        this.priceMik[id] = this.allPrices[i].price_mik;
+                        this.priceKher[id] = this.allPrices[i].price_kher;
                     }
                 }
             },
@@ -227,18 +258,23 @@
                 let formData = new FormData();
 
                 formData.append('price', this.price[id]);
+                formData.append('price_mik', this.priceMik[id] || 0);
+                formData.append('price_kher', this.priceKher[id] || 0);
 
                 this.showSpinner = true;
                 this.updatedId = id;
 
                 this.priceUpdate({id: id, data: formData}).then(() => {
                     this.showSpinner = false;
+                    this.getAllPrice();
                 })
             },
             handleServiceUpdate(id) {
                 let formData = new FormData();
 
                 formData.append('name', this.name[id]);
+                formData.append('name_mik', this.nameMik[id]);
+                formData.append('name_kher', this.nameKher[id]);
 
                 this.showSpinner = true;
                 this.updatedId = id;
@@ -260,7 +296,10 @@
                 })
             },
             setNameModel(val) {
-                this.name[val.value] = val.text
+                this.name[val.value] = val.text_region_1;
+                this.nameMik[val.value] = val.text_region_2;
+                this.nameKher[val.value] = val.text_region_3;
+                
             },
             setCodeModel(val) {
                 this.code[val.value] = val.code

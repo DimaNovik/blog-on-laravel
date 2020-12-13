@@ -106,6 +106,7 @@
                         <template
                                 v-for="service in getNotaryServices.filter(val=>val.subgroup_id == item.id)"
                                 >
+                    
                             <b-row class="mt-3 mb-3" lg="auto"
                                    :key="service.value">
                                 <b-col cols="5" md="9" lg="9">
@@ -122,7 +123,7 @@
                                 </b-col>
                                 <b-col cols="2" md="1" lg="1">
                                     <p>
-                                        {{service.price}}
+                                        {{service[`price_region_${getRegionId}`]}}
                                     </p>
                                 </b-col>
                                 <b-col cols="5" md="2" lg="2">
@@ -131,7 +132,7 @@
                                             size="sm"
                                             min="1"
                                             :value="service.choosed"
-                                            :disabled="!checkDisabledSpin(service.value)"
+                                            :disabled="!checkDisabledSpin(service.value) || isLoading"
                                             ref="spin"
                                             :data-id="service.value"
                                             @change="setCount(service.value, $event)"
@@ -152,7 +153,8 @@
                             type="submit"
                             variant="primary"
                             size="lg"
-                            @click.prevent="onSubmit">
+                            @click.prevent="onSubmit"
+                            :disabled="isLoading">
                         Зберегти
                     </b-button>
                 </div>
@@ -206,18 +208,20 @@
                 count: 0,
                 selected0: null,
                 selected1: null,
-                error: ''
+                error: '',
+                isLoading: false
             }
         },
         watch: {
             'selectedService': {
                 immediate: false,
                 handler(newVal, oldVal) {
+    
                     if(newVal.length === 0) {
                         this.clearPrice();
                     } else if(newVal.length === this.selectedService.length && newVal.length > oldVal.length) {
-                        this.servicePrice(newVal.slice(-1))
-                        this.setCount(newVal.slice(-1), 1)
+                        this.servicePrice({id: newVal.slice(-1), region: this.getRegionId});
+                        this.setCount(newVal.slice(-1), 1);
                     } else {
                         let serviceId;
 
@@ -226,7 +230,6 @@
                                 serviceId = oldVal[i];
                             }
                         }
-
                         this.resetCount(serviceId);
                         this.decrementSelectedPrice(serviceId)
                     }
@@ -325,7 +328,10 @@
                 this.childActions.push(data)
             },
             servicePrice(id) {
+                this.isLoading = true;
+
                 this.getPrice(id).then(()=> {
+                    this.isLoading = false;
                     this.checkDisabledSpin(id)
                 });
             },
@@ -344,6 +350,8 @@
 
                 let formData = new FormData();
                 let convertedServices = [];
+
+                this.isLoading = true;
 
                 this.selectedPrices.map(item => {
                     convertedServices.push({
@@ -373,12 +381,14 @@
                     this.$router.push('/pages/calculator/main');
                     this.clearData();
                     this.error = '';
+                    this.isLoading = false;
                 });
             },
             getCheckboxOptions(val) {
                 let arr = [];
+            
                 arr.push({
-                    text: val.text,
+                    text: val[`text_region_${this.getRegionId}`],
                     value: val.value
                 })
 
