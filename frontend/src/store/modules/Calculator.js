@@ -32,14 +32,14 @@ const actions = {
         commit('setNotaryServices', data);
     },
 
-    async getPrice({commit}, params) {
-
+    async getPrice({commit}, id) {
+    
         let {data} = await rest({
             method: 'get',
-            url:`notary_service_price/${params.id[0]}`
+            url:`notary_service_price/${id}`
         });
 
-        commit('setNotaryPrice',{payload: data, region: params.region});
+        commit('setNotaryPrice', data);
 
         return data;
     },
@@ -132,17 +132,13 @@ const mutations = {
                 if(data[i].id === state.allPrices[j].id) {
                     convertData.push({
                         id: data[i].id,
-                        text_region_1: data[i].name,
-                        text_region_2: data[i].name_mik,
-                        text_region_3: data[i].name_kher,
+                        text: data[i].name,
                         value: data[i].id,
                         parent_id: data[i].parent_id,
                         subgroup_id: data[i].subgroup_id,
                         choosed: 0,
                         code: data[i].code,
-                        price_region_1: state.allPrices[j].price,
-                        price_region_2: state.allPrices[j].price_mik,
-                        price_region_3: state.allPrices[j].price_kher
+                        price: state.allPrices[j].price,
                     })
                 }
             }
@@ -153,29 +149,12 @@ const mutations = {
     },
 
     setNotaryPrice: (state, data) => {
-      
-        if(data.region === 1) {
-            state.price += Number(data.payload.price) || 0;
-            state.selectedPrices.push({
-                service: data.payload.service_id,
-                price: data.payload.price,
-                count: 1,
-            });
-        } else if(data.region === 2) {
-            state.price += Number(data.payload.price_mik) || 0;
-            state.selectedPrices.push({
-                service: data.payload.service_id,
-                price: data.payload.price_mik,
-                count: 1,
-            });
-        } else {
-            state.price += Number(data.payload.price_kher) || 0;
-            state.selectedPrices.push({
-                service:data.payload.service_id,
-                price: data.payload.price_kher,
-                count: 1,
-            });
-        }
+        state.price += Number(data.price) || 0;
+        state.selectedPrices.push({
+            service: data.service_id,
+            price: data.price,
+            count: 1,
+        });
     },
 
     incrementPrice: (state, price) => {

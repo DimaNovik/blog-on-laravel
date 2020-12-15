@@ -123,7 +123,8 @@
                                 </b-col>
                                 <b-col cols="2" md="1" lg="1">
                                     <p>
-                                        {{service[`price_region_${getRegionId}`]}}
+                                         {{service.price}}
+                                
                                     </p>
                                 </b-col>
                                 <b-col cols="5" md="2" lg="2">
@@ -132,7 +133,7 @@
                                             size="sm"
                                             min="1"
                                             :value="service.choosed"
-                                            :disabled="!checkDisabledSpin(service.value) || isLoading"
+                                            :disabled="!checkDisabledSpin(service.value)"
                                             ref="spin"
                                             :data-id="service.value"
                                             @change="setCount(service.value, $event)"
@@ -145,7 +146,7 @@
             </b-col>
         </b-row>
 
-        <div class="row mt-3 mb-5">
+        <div class="row mt-3 mb-5 pb-5">
             <div class="col-6 col-md-6">
                 <p class="error"><b>{{error}}</b></p>
                 <div class="col">
@@ -220,7 +221,7 @@
                     if(newVal.length === 0) {
                         this.clearPrice();
                     } else if(newVal.length === this.selectedService.length && newVal.length > oldVal.length) {
-                        this.servicePrice({id: newVal.slice(-1), region: this.getRegionId});
+                        this.servicePrice(newVal.slice(-1))
                         this.setCount(newVal.slice(-1), 1);
                     } else {
                         let serviceId;
@@ -328,6 +329,7 @@
                 this.childActions.push(data)
             },
             servicePrice(id) {
+        
                 this.isLoading = true;
 
                 this.getPrice(id).then(()=> {
@@ -388,7 +390,7 @@
                 let arr = [];
             
                 arr.push({
-                    text: val[`text_region_${this.getRegionId}`],
+                    text: val.text,
                     value: val.value
                 })
 
@@ -426,7 +428,8 @@
                 }
             },
             checkDisabledSpin(id) {
-                if(this.selectedService) {
+        
+                if(this.selectedService && !this.isLoading) {
                     return this.selectedService.includes(id)
                 }
 
