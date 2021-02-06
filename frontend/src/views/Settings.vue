@@ -16,20 +16,21 @@
                     <b-col>
                         <b-card no-body>
                             <b-tabs v-model="tabIndex" card >
-                                <b-tab title="Ціни" :title-link-class="linkClass(0)">
-                                    <p>Коригування вартості послуг</p>
-                                    <SettingPrice class="mt-5 mb-5"/>
+                                <b-tab title="Дії Одеса" :title-link-class="linkClass(0)">
+                                    <p>Коригування вартості та кодів послуг</p>
+                                    <SettingPrice class="mt-5 mb-5" v-if="tabIndex === 0"/>
                                 </b-tab>
-                                <b-tab title="Користувачі" :title-link-class="linkClass(1)">
+                                 <b-tab title="Дії Херсон" :title-link-class="linkClass(1)">
+                                    <p>Коригування вартості та кодів послуг</p>
+                                    <SettingPriceKherson class="mt-5 mb-5" v-if="tabIndex === 1"/>
+                                </b-tab>
+                                <b-tab title="Користувачі" :title-link-class="linkClass(2)">
                                     <p>Управління користувачами</p>
                                     <SettingUser class="mt-5 mb-5"/>
                                 </b-tab>
-                                <b-tab title="Додати користувача" :title-link-class="linkClass(2)">
+                                <b-tab title="Додати користувача" :title-link-class="linkClass(3)">
                                     <p>Додати нового користувача</p>
                                     <SettingNewUser class="mt-5 mb-5"/>
-                                </b-tab>
-                                <b-tab title="Статистика" :title-link-class="linkClass(3)">
-                                    <p>Реєстр</p>
                                 </b-tab>
                             </b-tabs>
                         </b-card>
@@ -43,6 +44,7 @@
 <script>
 
     import SettingPrice from '@/components/common/SettingPrice';
+    import SettingPriceKherson from '@/components/common/SettingPriceKherson';
     import SettingUser from '@/components/common/SettingUser';
     import SettingNewUser from '@/components/common/SettingNewUser';
 
@@ -56,7 +58,8 @@
         components: {
             SettingPrice,
             SettingUser,
-            SettingNewUser
+            SettingNewUser,
+            SettingPriceKherson
         },
         methods: {
             linkClass(idx) {

@@ -29,6 +29,7 @@ const actions = {
             method: 'get',
             url:`notary_services/${id}`
         });
+
         commit('setNotaryServices', data);
     },
 
@@ -133,12 +134,15 @@ const mutations = {
                     convertData.push({
                         id: data[i].id,
                         text: data[i].name,
+                        text_kher: data[i].name_kher,
                         value: data[i].id,
                         parent_id: data[i].parent_id,
                         subgroup_id: data[i].subgroup_id,
                         choosed: 0,
                         code: data[i].code,
+                        code_kher: data[i].code_kher,
                         price: state.allPrices[j].price,
+                        price_kher: state.allPrices[j].price_kher,
                     })
                 }
             }

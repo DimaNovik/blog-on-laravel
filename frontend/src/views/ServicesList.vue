@@ -14,7 +14,7 @@
                         :count="ordersData.length"
                         :role="getUserRole"
                         :userId="getUserId"
-                        :group="userGroup.group_code"
+                        :group="userGroup"
                         v-if="getUserRole == 0 ||  getUserRole == 2" />
 
                     <ServicesAdminTotal

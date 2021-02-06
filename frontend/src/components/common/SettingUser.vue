@@ -51,6 +51,12 @@
                                 type="text"
                         ></b-form-input>
                     </b-form-group>
+                    <b-form-input
+                                id="password"
+                                name="oldPassword"
+                                v-model="oldPassword"
+                                hidden
+                    ></b-form-input>
                 </p>
                 <p>
                     <b-form-checkbox
@@ -86,6 +92,7 @@
                 name: null,
                 login: null,
                 password: null,
+                oldPassword: null,
                 role: 0,
             }
         },
@@ -102,18 +109,19 @@
                 this.onceUser(id).then((response)=> {
                     this.name = response.name;
                     this.login = response.login;
-                    this.role = response.role
+                    this.role = response.role;
+                    this.oldPassword = response.password;
                 });
             },
             updateUser(id) {
                 let formData = new FormData();
-
-
+                
                 formData.append('name', this.name);
                 formData.append('login', this.login);
-                formData.append('password', this.password);
                 formData.append('role', this.role);
-
+                formData.append('password', this.password);
+                formData.append('old', this.oldPassword);
+                
                 this.onceUserUpdate({id: this.selectedUser, info: formData}).then(()=> {
                     this.getAllUsers();
                 });

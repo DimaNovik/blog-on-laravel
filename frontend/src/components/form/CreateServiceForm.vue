@@ -154,8 +154,7 @@
                             type="submit"
                             variant="primary"
                             size="lg"
-                            @click.prevent="onSubmit"
-                            :disabled="isLoading">
+                            @click.prevent="onSubmit">
                         Зберегти
                     </b-button>
                 </div>
@@ -210,19 +209,17 @@
                 selected0: null,
                 selected1: null,
                 error: '',
-                isLoading: false
             }
         },
         watch: {
             'selectedService': {
                 immediate: false,
-                handler(newVal, oldVal) {
-    
+                handler(newVal, oldVal) {    
                     if(newVal.length === 0) {
                         this.clearPrice();
-                    } else if(newVal.length === this.selectedService.length && newVal.length > oldVal.length) {
+                    } else if(newVal.length > oldVal.length) {
                         this.servicePrice(newVal.slice(-1))
-                        this.setCount(newVal.slice(-1), 1);
+                    
                     } else {
                         let serviceId;
 
@@ -329,12 +326,10 @@
                 this.childActions.push(data)
             },
             servicePrice(id) {
-        
-                this.isLoading = true;
 
                 this.getPrice(id).then(()=> {
-                    this.isLoading = false;
-                    this.checkDisabledSpin(id)
+                    this.checkDisabledSpin(id);
+                    this.setCount(id, 1);
                 });
             },
 
@@ -352,8 +347,6 @@
 
                 let formData = new FormData();
                 let convertedServices = [];
-
-                this.isLoading = true;
 
                 this.selectedPrices.map(item => {
                     convertedServices.push({
@@ -383,7 +376,6 @@
                     this.$router.push('/pages/calculator/main');
                     this.clearData();
                     this.error = '';
-                    this.isLoading = false;
                 });
             },
             getCheckboxOptions(val) {
@@ -429,7 +421,7 @@
             },
             checkDisabledSpin(id) {
         
-                if(this.selectedService && !this.isLoading) {
+                if(this.selectedService) {
                     return this.selectedService.includes(id)
                 }
 
