@@ -24,23 +24,23 @@ const actions = {
         commit('clearNotaryServices', []);
     },
 
-    async getServices({commit}, id) {
+    async getServices({commit}, params) {
         let {data} = await rest({
             method: 'get',
-            url:`notary_services/${id}`
+            url:`notary_services/${params.id}`
         });
 
-        commit('setNotaryServices', data);
+        commit('setNotaryServices', {data: data, region: params.region});
     },
 
-    async getPrice({commit}, id) {
+    async getPrice({commit}, params) {
     
         let {data} = await rest({
             method: 'get',
-            url:`notary_service_price/${id}`
+            url:`notary_service_price/${params.id}`
         });
 
-        commit('setNotaryPrice', data);
+        commit('setNotaryPrice', {data: data, region: params.region});
 
         return data;
     },
@@ -124,25 +124,22 @@ const mutations = {
         state.notaryActions = convertData;
     },
 
-    setNotaryServices: (state, data) => {
+    setNotaryServices: (state, params) => {
         let convertData = [];
-      
-        for(let i=0; i<data.length; i++) {
+        console.log(params);
+        for(let i=0; i< params.data.length; i++) {
             for(let j=0, length = state.allPrices.length; j<length; j++) {
 
-                if(data[i].id === state.allPrices[j].id) {
+                if(params.data[i].id === state.allPrices[j].id) {
                     convertData.push({
-                        id: data[i].id,
-                        text: data[i].name,
-                        text_kher: data[i].name_kher,
-                        value: data[i].id,
-                        parent_id: data[i].parent_id,
-                        subgroup_id: data[i].subgroup_id,
+                        id: params.data[i].id,
+                        text: params.region == 1 ? params.data[i].name : params.data[i].name_kher,
+                        value: params.data[i].id,
+                        parent_id: params.data[i].parent_id,
+                        subgroup_id: params.data[i].subgroup_id,
                         choosed: 0,
-                        code: data[i].code,
-                        code_kher: data[i].code_kher,
-                        price: state.allPrices[j].price,
-                        price_kher: state.allPrices[j].price_kher,
+                        code: params.region == 1 ? params.data[i].code : params.data[i].code_kher,
+                        price:  params.region == 1 ? +state.allPrices[j].price : +state.allPrices[j].price_kher,
                     })
                 }
             }
@@ -152,21 +149,21 @@ const mutations = {
         state.notaryServices = convertData;
     },
 
-    setNotaryPrice: (state, data) => {
-        state.price += Number(data.price) || 0;
+    setNotaryPrice: (state, params) => {
+        state.price += Number(params.region == 1 ? params.data.price : params.data.price_kher) || 0;
         state.selectedPrices.push({
-            service: data.service_id,
-            price: data.price,
+            service: params.data.service_id,
+            price: params.region == 1 ? +params.data.price : +params.data.price_kher,
             count: 1,
         });
     },
 
     incrementPrice: (state, price) => {
-        state.price = +state.price + Number(price);
+        state.price = state.price + price;
     },
 
     decrementPrice: (state, price) => {
-        state.price = +state.price - Number(price);
+        state.price = state.price - price;
     },
 
     clearNotaryServices: (state) => {
@@ -183,10 +180,10 @@ const mutations = {
 
     decrementSelectedPrice: (state, id) => {
         let deletedService = state.selectedPrices.find(item => item.service == id);
-        let newPrice = +deletedService.price * deletedService.count;
+        let newPrice = deletedService.price * deletedService.count;
         deletedService.count = 1;
         state.selectedPrices = state.selectedPrices.filter(item => item.service != id);
-        state.price = +state.price - Number(newPrice);
+        state.price = state.price - newPrice;
         state.notaryServices.find(item => item.value == id).choosed = 0;
     },
 

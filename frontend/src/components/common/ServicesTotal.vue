@@ -6,7 +6,6 @@
                     <p><b>Загальна кількість:</b> {{count}} </p>
                     <p>
                         <a href="#">
-
                             <download-excel
                                     :data="item"
                                     :fields="json_fields"
@@ -33,7 +32,7 @@
                     </b-form-group>
                     <b-row>
                         <b-col>
-                            <b-link :href="`registry-pdf-create/${getUseId}?start=${startDate}&end=${endDate}`"
+                            <b-link :href="`registry-pdf-create/${getUseId}?region=${group.region_id}&start=${startDate}&end=${endDate}`"
                                     size="sm"
                                     class="btn btn-primary"
                                     target="_blank"
@@ -65,14 +64,14 @@
                     </b-form-group>
                     <b-row>
                         <b-col>
-                            <b-link :href="`create_total_score_pdf/${getUseId}?start=${startZvitDate}&end=${endZvitDate}`"
+                            <b-link :href="`create_total_score_pdf/${getUseId}?region=${group.region_id}&start=${startZvitDate}&end=${endZvitDate}`"
                                     size="sm"
                                     class="btn btn-primary"
                                     target="_blank"
                                     :disabled="!startZvitDate || !endZvitDate">Звіт нотаріуса
                             </b-link>
                         </b-col>
-                       
+                    
                         <b-col v-if="role == 2">
                             <b-link :href="`create_total_group_score_pdf/${group.group_code}?region=${group.region_id}&start=${startZvitDate}&end=${endZvitDate}`"
                                     size="sm"
@@ -130,9 +129,9 @@
                 }
             },
             group: {
-                type: String,Number,
+                type: Object,
                 default() {
-                    return '00'
+                    return {}
                 }
             },
         },

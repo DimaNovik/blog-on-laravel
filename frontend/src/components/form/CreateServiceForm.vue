@@ -104,9 +104,8 @@
                                   v-for="item in servicesGroup"
                                   :key="item.text">
                         <template
-                                v-for="service in getNotaryServices.filter(val=>val.subgroup_id == item.id)"
+                                v-for="service in getNotaryServices.filter(val=>val.subgroup_id == item.id && val.text)"
                                 >
-                    
                             <b-row class="mt-3 mb-3" lg="auto"
                                    :key="service.value">
                                 <b-col cols="5" md="9" lg="9">
@@ -123,8 +122,7 @@
                                 </b-col>
                                 <b-col cols="2" md="1" lg="1">
                                     <p>
-                                         {{service.price}}
-                                
+                                         {{service.price }}
                                     </p>
                                 </b-col>
                                 <b-col cols="5" md="2" lg="2">
@@ -188,7 +186,7 @@
                     },
                     {
                         id: 2,
-                        text: 'Правовий аналіз документів на  предмет відповідності чинному законодавству стосовно'
+                        text: 'Правовий аналіз документів на предмет відповідності чинному законодавству стосовно'
                     },
                     {
                         id: 3,
@@ -214,7 +212,8 @@
         watch: {
             'selectedService': {
                 immediate: false,
-                handler(newVal, oldVal) {    
+                handler(newVal, oldVal) {   
+                
                     if(newVal.length === 0) {
                         this.clearPrice();
                     } else if(newVal.length > oldVal.length) {
@@ -286,7 +285,7 @@
             },
             getGroupId() {
                 return this.userGroup && this.userGroup.group_code || 0;
-            }
+            },
         },
         methods: {
             ...mapActions('Calculator', ['getServices', 'getPrice', 'setOrder']),
@@ -303,9 +302,9 @@
             filterMain(id) {
                 this.clearData();
                 let data = this.notaryActions.filter(item => item.parent_id == id);
-
+            
                 if (!data.length) {
-                    this.getServices(id);
+                    this.getServices({id: id, region: this.getRegionId || 1 });
                     return;
                 }
 
@@ -319,15 +318,17 @@
                 this.clearNotaryServices();
 
                 if (!data.length) {
-                    this.getServices(this.selectedChild[this.selectedChild.length - 1]);
+                    this.getServices({
+                        id:this.selectedChild[this.selectedChild.length - 1],
+                        region: this.getRegionId || 1
+                    });
                     return;
                 }
 
                 this.childActions.push(data)
             },
             servicePrice(id) {
-
-                this.getPrice(id).then(()=> {
+                this.getPrice({id: id, region: this.getRegionId || 1}).then(()=> {
                     this.checkDisabledSpin(id);
                     this.setCount(id, 1);
                 });
@@ -382,7 +383,7 @@
                 let arr = [];
             
                 arr.push({
-                    text: val.text,
+                    text:  val.text,
                     value: val.value
                 })
 
@@ -393,9 +394,8 @@
                 this.choosedCount({id: service, count: val});
 
                 for(let i=0; i< this.selectedPrices.length; i++) {
-
+        
                     if(this.selectedPrices[i].service == service) {
-
                         if(this.selectedPrices[i].count == 1 && val == 1) return;
                         if(this.selectedPrices[i].count < val) {
                             this.incrementPrice(this.selectedPrices[i].price);
