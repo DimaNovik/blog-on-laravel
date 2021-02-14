@@ -4,9 +4,11 @@ import router from './router'
 import {store} from './store';
 import { BootstrapVue} from 'bootstrap-vue';
 import JsonExcel from 'vue-json-excel'
-
+import VueLodash from 'vue-lodash'
+import lodash from 'lodash'
 
 Vue.config.productionTip = false;
+Vue.use(VueLodash, { name: 'custom' , lodash: lodash })
 
 
 // Install BootstrapVue

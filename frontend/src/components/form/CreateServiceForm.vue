@@ -125,13 +125,14 @@
                                          {{service.price }}
                                     </p>
                                 </b-col>
+                        
                                 <b-col cols="5" md="2" lg="2">
                                     <b-form-spinbutton
                                             :id="'service.value'"
                                             size="sm"
                                             min="1"
                                             :value="service.choosed"
-                                            :disabled="!checkDisabledSpin(service.value)"
+                                            :disabled="!checkDisabledSpin(service.value) || isLoading"
                                             ref="spin"
                                             :data-id="service.value"
                                             @change="setCount(service.value, $event)"
@@ -168,6 +169,7 @@
 <script>
 
     import {mapGetters, mapActions, mapMutations} from 'vuex';
+    import _ from 'lodash';
 
     export default {
         name: 'CreateServiceForm',
@@ -207,6 +209,7 @@
                 selected0: null,
                 selected1: null,
                 error: '',
+                isLoading: false,
             }
         },
         watch: {
@@ -328,9 +331,12 @@
                 this.childActions.push(data)
             },
             servicePrice(id) {
+               
+                this.isLoading = true;
                 this.getPrice({id: id, region: this.getRegionId || 1}).then(()=> {
                     this.checkDisabledSpin(id);
                     this.setCount(id, 1);
+                    this.isLoading= false;
                 });
             },
 
@@ -389,8 +395,7 @@
 
                 return arr;
             },
-            setCount(service, val) {
-
+            setCount: _.debounce( function (service, val) {
                 this.choosedCount({id: service, count: val});
 
                 for(let i=0; i< this.selectedPrices.length; i++) {
@@ -405,11 +410,8 @@
                             this.selectedPrices[i].count = val;
                         }
                     }
-
-
                 }
-
-            },
+            }),
             resetCount(id) {
                 let { spin } = this.$refs;
 
