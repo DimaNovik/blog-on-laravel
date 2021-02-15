@@ -148,6 +148,7 @@
                 this.$emit('update');
             },
             showDetails(record, index) {
+                if(this.isOpenMore) return;
                 let services = JSON.parse(record.service_id);
 
                 this.getOnceAction(record.action_id).then(()=> {

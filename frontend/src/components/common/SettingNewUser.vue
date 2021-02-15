@@ -74,7 +74,7 @@
             </b-col>
         </b-row>
 
-        <b-row v-if="hasError" class="mt-3">
+        <b-row v-if="hasRegError" class="mt-3">
             <b-col align="center">
                 <p class="error">Логін вже існує в базі</p>
             </b-col>

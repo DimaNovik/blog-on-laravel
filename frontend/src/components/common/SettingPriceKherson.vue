@@ -67,12 +67,12 @@
                     <b-row  align-v="center">
                         <b-col cols="12" md="6">
                             <b-form-group
-                                    :id="`input-group-${j}`"
+                                    :id="`input-group-${value.value + j}`"
                                     :label="`Редагувати дані для коду: ${code[value.value]}`"
-                                    :label-for="`input-${j}`"
+                                    :label-for="`input-${value.value + j}`"
                                     >
                                 <b-form-input
-                                        :id="`input-${j}`"
+                                        :id="`input-${value.value + j}`"
                                         v-model="code[value.value]"
                                         type="text"
                                         required
@@ -84,8 +84,8 @@
                                     required
                                     class="mb-3" />
                                 <b-form-input
-                                        :id="`input-${j}`"
-                                        v-model="price_kher[value.value]"
+                                        :id="`input-${value.value + j}`"
+                                        v-model="price[value.value]"
                                         type="text"
                                         required
                                         class="mb-1"/>
@@ -140,7 +140,7 @@
                 selectedChild: [],
                 selected0: null,
                 selected1: null,
-                price_kher: [],
+                price: [],
                 name: [],
                 code: [],
                 startRequest: false,
@@ -173,7 +173,7 @@
 
                     requests = [];
                     responses = 0;
-
+                
                     val.forEach(item => {
                         this.getServicePrice(item.value);
                         this.setNameModel(item);
@@ -190,7 +190,7 @@
                 let data = this.notaryActions.filter(item => item.parent_id == id);
 
                 if (!data.length) {
-                    this.getServices(id);
+                    this.getServices({id: id, region: 2});
                     return;
                 }
 
@@ -203,7 +203,10 @@
                 this.clearNotaryServices();
 
                 if (!data.length) {
-                    this.getServices(this.selectedChild[this.selectedChild.length - 1]);
+                    this.getServices({
+                        id: this.selectedChild[this.selectedChild.length - 1],
+                        region: 2
+                    });
                     return;
                 }
 
@@ -212,7 +215,7 @@
             getServicePrice(id) {
                 for(let i=0, length = this.allPrices.length; i<length; i++) {
                     if(this.allPrices[i].service_id == id) {
-                        this.price_kher[id] = this.allPrices[i].price_kher;
+                        this.price[id] = this.allPrices[i].price_kher;
                     }
                 }
             },
@@ -223,7 +226,7 @@
             handleUpdate(id) {
                 let formData = new FormData();
 
-                formData.append('price_kher', this.price_kher[id]);
+                formData.append('price_kher', this.price[id]);
 
                 this.showSpinner = true;
                 this.updatedId = id;
@@ -258,14 +261,14 @@
                 })
             },
             setNameModel(val) {
-                if(val.text_kher.length) {
-                  this.name[val.value] = val.text_kher;
+                if(val.text.length) {
+                  this.name[val.value] = val.text;
                 }
                 
             },
             setCodeModel(val) {
-                if(val.code_kher.length) {
-                  this.code[val.value] = val.code_kher
+                if(val.code.length) {
+                  this.code[val.value] = val.code
                 }
 
             },

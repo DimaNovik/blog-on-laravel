@@ -62,7 +62,7 @@
         <template v-if="notaryServices.length">
             <b-row
                    v-for="(value, j) in notaryServices"
-                   :key="value.value">
+                   :key="value.value*j">
                 <b-col>
                     <b-row  align-v="center">
                         <b-col cols="12" md="6">
@@ -191,7 +191,7 @@
                 let data = this.notaryActions.filter(item => item.parent_id == id);
 
                 if (!data.length) {
-                    this.getServices(id);
+                    this.getServices({id: id, region: 1});
                     return;
                 }
 
@@ -204,7 +204,7 @@
                 this.clearNotaryServices();
 
                 if (!data.length) {
-                    this.getServices(this.selectedChild[this.selectedChild.length - 1]);
+                    this.getServices({id:this.selectedChild[this.selectedChild.length - 1], region: 1 });
                     return;
                 }
 
