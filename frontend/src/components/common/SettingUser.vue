@@ -99,7 +99,7 @@
         computed: {
             ...mapGetters('Orders', ['allUsers']),
             getAllUsersInfo() {
-                return this.allUsers || {}
+                return this.allUsers || {};
             },
         },
         methods: {

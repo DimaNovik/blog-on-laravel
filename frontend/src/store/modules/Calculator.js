@@ -126,20 +126,20 @@ const mutations = {
 
     setNotaryServices: (state, params) => {
         let convertData = [];
-        console.log(params);
+    
         for(let i=0; i< params.data.length; i++) {
             for(let j=0, length = state.allPrices.length; j<length; j++) {
 
                 if(params.data[i].id === state.allPrices[j].id) {
                     convertData.push({
                         id: params.data[i].id,
-                        text: params.region == 1 ? params.data[i].name : params.data[i].name_kher,
+                        text: params.region == 1 ? params.data[i].name : params.region == 2 ? params.data[i].name_mik : params.data[i].name_kher,
                         value: params.data[i].id,
                         parent_id: params.data[i].parent_id,
                         subgroup_id: params.data[i].subgroup_id,
                         choosed: 0,
-                        code: params.region == 1 ? params.data[i].code : params.data[i].code_kher,
-                        price:  params.region == 1 ? +state.allPrices[j].price : +state.allPrices[j].price_kher,
+                        code: params.region == 1 ? params.data[i].code : params.region == 2 ? params.data[i].code_mik : params.data[i].code_kher,
+                        price:  params.region == 1 ? state.allPrices[j].price :  params.region == 2 ? state.allPrices[j].price_mik : state.allPrices[j].price_kher,
                     })
                 }
             }
@@ -150,20 +150,7 @@ const mutations = {
     },
 
     setNotaryPrice: (state, params) => {
-        state.price += Number(params.region == 1 ? params.data.price : params.data.price_kher) || 0;
-        state.selectedPrices.push({
-            service: params.data.service_id,
-            price: params.region == 1 ? +params.data.price : +params.data.price_kher,
-            count: 1,
-        });
-    },
-
-    incrementPrice: (state, price) => {
-        state.price = state.price + price;
-    },
-
-    decrementPrice: (state, price) => {
-        state.price = state.price - price;
+        state.price += Number(params.region == 1 ? params.data.price : params.region == 2 ? params.data.price_mik : params.data.price_kher);
     },
 
     clearNotaryServices: (state) => {
@@ -172,24 +159,8 @@ const mutations = {
         state.selectedPrices = [];
     },
 
-    clearPrice: (state) => {
-        state.price = null;
-        state.selectedPrices = [];
-        state.notaryServices.forEach(item => item.choosed = 0)
-    },
-
-    decrementSelectedPrice: (state, id) => {
-        let deletedService = state.selectedPrices.find(item => item.service == id);
-        let newPrice = deletedService.price * deletedService.count;
-        deletedService.count = 1;
-        state.selectedPrices = state.selectedPrices.filter(item => item.service != id);
-        state.price = state.price - newPrice;
-        state.notaryServices.find(item => item.value == id).choosed = 0;
-    },
-
     choosedCount: (state, data) => {
         state.notaryServices.find(item => item.value == data.id).choosed = data.count;
-
     },
 
     setMoreInfoName: (state, data) => {

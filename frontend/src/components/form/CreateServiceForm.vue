@@ -106,37 +106,38 @@
                         <template
                                 v-for="service in getNotaryServices.filter(val=>val.subgroup_id == item.id && val.text)"
                                 >
-                            <b-row class="mt-3 mb-3" lg="auto"
+                            <b-row class="mt-3 mb-3" 
+                                    lg="auto"
+                                    align-v="center"
                                    :key="service.value">
-                                <b-col cols="5" md="9" lg="9">
-                                    <label :for="service.value"
-                                    >
-                                        <b-form-checkbox-group
-                                                v-model="selectedService"
-                                                :options="getCheckboxOptions(service)"
-                                                :name="getNotaryServices.value"
-                                                :value-field="getNotaryServices.value"
-                                                stacked
-                                        ></b-form-checkbox-group>
-                                    </label>
+                                <b-col cols="12" md="8" lg="8" align-v="center">
+                                    <div class="check_area"
+                                    @click="selectService(service)">
+                                        <span class="check_icon" 
+                                                :class="{'check_icon--active': checkDisabled(service.id)}"
+                                            ></span>
+                                        <span class="check_text">{{service.text}}</span>
+                                    </div>
                                 </b-col>
-                                <b-col cols="2" md="1" lg="1">
+                                <b-col cols="12" md="1" lg="1" align="center">
                                     <p>
-                                         {{service.price }}
+                                        {{service.price }}
                                     </p>
                                 </b-col>
-                        
-                                <b-col cols="5" md="2" lg="2">
-                                    <b-form-spinbutton
-                                            :id="'service.value'"
-                                            size="sm"
-                                            min="1"
-                                            :value="service.choosed"
-                                            :disabled="!checkDisabledSpin(service.value) || isLoading"
-                                            ref="spin"
-                                            :data-id="service.value"
-                                            @change="setCount(service.value, $event)"
-                                          ></b-form-spinbutton>
+                                <b-col align="right">
+                                   <b-button 
+                                   variant="primary" 
+                                   @click="decrementPrice(service)"
+                                   :disabled="!checkDisabled(service.id)"> - </b-button>
+                                </b-col>
+                                <b-col align="center">
+                                   {{getSelectedCount(service.id)}}
+                                </b-col>
+                                <b-col align="left">
+                                   <b-button 
+                                   variant="primary" 
+                                   @click="incrementPrice(service)"
+                                   :disabled="!checkDisabled(service.id)"> + </b-button>
                                 </b-col>
                             </b-row>
                         </template>
@@ -159,7 +160,7 @@
                 </div>
             </div>
             <div class="col-12 col-md-6">
-                <p class="mt-5 mt-md-4" align="center">Загальна вартість: <strong>{{getNotaryPrice || 0}} грн.</strong>
+                <p class="mt-5 mt-md-4" align="center">Загальна вартість: <strong>{{getTotalPrice || 0}} грн.</strong>
                 </p>
             </div>
         </div>
@@ -180,6 +181,7 @@
                 services: [],
                 selectedParentAction: null,
                 selectedService: [],
+                selectedPrices: [],
                 selectedChild: [],
                 servicesGroup: [
                     {
@@ -205,36 +207,13 @@
                 ],
                 fio: '',
                 inn: '',
-                count: 0,
                 selected0: null,
                 selected1: null,
                 error: '',
-                isLoading: false,
+                options: []
             }
         },
         watch: {
-            'selectedService': {
-                immediate: false,
-                handler(newVal, oldVal) {   
-                
-                    if(newVal.length === 0) {
-                        this.clearPrice();
-                    } else if(newVal.length > oldVal.length) {
-                        this.servicePrice(newVal.slice(-1))
-                    
-                    } else {
-                        let serviceId;
-
-                        for (var i = 0; i < oldVal.length; i++) {
-                            if (newVal.indexOf(oldVal[i]) === -1) {
-                                serviceId = oldVal[i];
-                            }
-                        }
-                        this.resetCount(serviceId);
-                        this.decrementSelectedPrice(serviceId)
-                    }
-                }
-            },
             'selected0': {
                 immediate: false,
                 handler(newVal, oldVal) {
@@ -254,7 +233,7 @@
             }
         },
         computed: {
-            ...mapGetters('Calculator', ['notaryActions', 'notaryServices', 'notaryPrice', 'selectedPrices', 'notaryServices']),
+            ...mapGetters('Calculator', ['notaryActions', 'notaryServices', 'notaryPrice', 'notaryServices']),
             ...mapGetters('User', ['user','userGroup']),
             getParentActions() {
                 return this.notaryActions.filter(item => item.parent_id == 0);
@@ -268,18 +247,6 @@
             getRandomCode() {
                 return Math.floor(Math.random() * (999999 - 100000)) + 100000;
             },
-            getServicesCount() {
-                let arr = [];
-
-                this.notaryServices.forEach(item => {
-                    if(item.choosed > 0) {
-                        arr.push( item.choosed)
-                    }
-
-                })
-
-                return arr.reduce((a, b) => a+b, 0)
-            },
             getUserId() {
                 return (this.user) ? (this.user.id < 10) ? `0${this.user.id}` : this.user.id : 0;
             },
@@ -289,19 +256,30 @@
             getGroupId() {
                 return this.userGroup && this.userGroup.group_code || 0;
             },
+            getTotalCount() {
+                let total = 0;
+                this.selectedService.forEach((item, key) => {
+                    total += item.count;
+                })
+
+                return total;
+            },
+            getTotalPrice() {
+                let total = 0;
+                this.selectedService.forEach((item, key) => {
+                    total += item.price * item.count;
+                })
+
+                return total.toFixed(2);
+            }
         },
         methods: {
             ...mapActions('Calculator', ['getServices', 'getPrice', 'setOrder']),
             ...mapActions('Orders', ['setOrder']),
             ...mapMutations('Calculator', [
-                'incrementPrice',
-                'decrementPrice',
                 'clearNotaryServices',
                 'setNotaryPrice',
-                'changeSelectedPriceCount',
-                'clearPrice',
-                'decrementSelectedPrice',
-                'choosedCount']),
+                'clearPrice',]),
             filterMain(id) {
                 this.clearData();
                 let data = this.notaryActions.filter(item => item.parent_id == id);
@@ -319,6 +297,7 @@
                 let data = this.notaryActions.filter(item => item.parent_id == id);
                 this.selectedChild.push(id);
                 this.clearNotaryServices();
+                this.selectedService = [];
 
                 if (!data.length) {
                     this.getServices({
@@ -330,20 +309,35 @@
 
                 this.childActions.push(data)
             },
-            servicePrice(id) {
-               
-                this.isLoading = true;
-                this.getPrice({id: id, region: this.getRegionId || 1}).then(()=> {
-                    this.checkDisabledSpin(id);
-                    this.setCount(id, 1);
-                    this.isLoading= false;
-                });
-            },
-
             clearData() {
                 this.childActions = [];
                 this.clearNotaryServices();
                 this.selectedService = [];
+            },
+            checkDisabled(id) {
+                return !!this.selectedService.some(item => item.id === id);
+            },
+            incrementPrice(val) {
+                this.selectedService.map((item, key) => {
+                    if(item.id === val.id) {
+                        item.count = item.count + 1;
+                    }
+                })
+            },
+            decrementPrice(val) {
+                this.selectedService.map((item, key) => {
+                    if(item.id === val.id && item.count > 1) {
+                        item.count = item.count - 1;
+                    }
+                })
+            },
+            getSelectedCount(id) {
+                if(this.selectedService.length) {
+                    let data = this.selectedService.find(item => item.id === id);                
+                    return data ? data.count : 0; 
+                } else {
+                    return 0;
+                }
             },
             onSubmit() {
 
@@ -355,12 +349,12 @@
                 let formData = new FormData();
                 let convertedServices = [];
 
-                this.selectedPrices.map(item => {
+                this.selectedService.forEach(item => {
                     convertedServices.push({
-                        service: item.service,
+                        service: item.id,
                         count: item.count,
                         price: item.price,
-                        code: this.getNotaryServices.find(value => value.id == item.service).code
+                        code: this.getNotaryServices.find(value => value.id == item.id).code
                     })
                 });
 
@@ -372,8 +366,8 @@
                 formData.append('sub_action_2_id', +this.selectedChild[1] || '');
                 formData.append('service_id', JSON.stringify(convertedServices));
                 formData.append('code', `A${this.getRegionId}${this.getGroupId}${this.getUserId}-${this.getRandomCode}`);
-                formData.append('count', this.getServicesCount);
-                formData.append('price', this.notaryPrice);
+                formData.append('count', this.getTotalCount);
+                formData.append('price', this.getTotalPrice);
                 formData.append('pay_date', '');
                 formData.append('type', 0);
                 formData.append('fio', this.fio || 'Дані не задані');
@@ -385,49 +379,18 @@
                     this.error = '';
                 });
             },
-            getCheckboxOptions(val) {
-                let arr = [];
-            
-                arr.push({
-                    text:  val.text,
-                    value: val.value
-                })
-
-                return arr;
-            },
-            setCount: _.debounce( function (service, val) {
-                this.choosedCount({id: service, count: val});
-
-                for(let i=0; i< this.selectedPrices.length; i++) {
-        
-                    if(this.selectedPrices[i].service == service) {
-                        if(this.selectedPrices[i].count == 1 && val == 1) return;
-                        if(this.selectedPrices[i].count < val) {
-                            this.incrementPrice(this.selectedPrices[i].price);
-                            this.selectedPrices[i].count = val
-                        } else {
-                            this.decrementPrice(this.selectedPrices[i].price);
-                            this.selectedPrices[i].count = val;
-                        }
-                    }
+            selectService(val) {
+                if(this.selectedService && this.selectedService.some(item => item.id === val.id)) {
+                    let obj = this.selectedService.filter(item => item.id !== val.id);
+                    this.selectedService = obj;
+                } else {
+                    this.selectedService.push({
+                        id: val.id,
+                        price: +val.price,
+                        count: 1
+                    })
                 }
-            }),
-            resetCount(id) {
-                let { spin } = this.$refs;
-
-                for(let i=0; i< spin.length; i++) {
-                    if(spin[i].$attrs['data-id'] == id) {
-                        spin[i].$el.value= 1
-                    }
-                }
-            },
-            checkDisabledSpin(id) {
-        
-                if(this.selectedService) {
-                    return this.selectedService.includes(id)
-                }
-
-            },
+            }
         },
         beforeDestroy() {
             this.error = ''

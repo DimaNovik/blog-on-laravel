@@ -62,7 +62,7 @@
         <template v-if="notaryServices.length">
             <b-row
                    v-for="(value, j) in notaryServices"
-                   :key="value.value * j">
+                   :key="j">
                 <b-col  v-if="name[value.value] && name[value.value].length">
                     <b-row  align-v="center">
                         <b-col cols="12" md="6">
@@ -132,7 +132,7 @@
     let requests = [];
     let responses = 0;
     export default {
-        name: "SettingPriceKherson",
+        name: "SettingPriceMik",
         data() {
             return {
                 selectedParentAction: null,
@@ -190,7 +190,7 @@
                 let data = this.notaryActions.filter(item => item.parent_id == id);
 
                 if (!data.length) {
-                    this.getServices({id: id, region: 3});
+                    this.getServices({id: id, region: 2});
                     return;
                 }
 
@@ -205,7 +205,7 @@
                 if (!data.length) {
                     this.getServices({
                         id: this.selectedChild[this.selectedChild.length - 1],
-                        region: 3
+                        region: 2
                     });
                     return;
                 }
@@ -215,7 +215,7 @@
             getServicePrice(id) {
                 for(let i=0, length = this.allPrices.length; i<length; i++) {
                     if(this.allPrices[i].service_id == id) {
-                        this.price[id] = this.allPrices[i].price_kher;
+                        this.price[id] = this.allPrices[i].price_mik;
                     }
                 }
             },
@@ -226,7 +226,7 @@
             handleUpdate(id) {
                 let formData = new FormData();
 
-                formData.append('price_kher', this.price[id]);
+                formData.append('price_mik', this.price[id]);
 
                 this.showSpinner = true;
                 this.updatedId = id;
@@ -239,7 +239,7 @@
             handleServiceUpdate(id) {
                 let formData = new FormData();
 
-                formData.append('name_kher', this.name[id]);
+                formData.append('name_mik', this.name[id]);
 
                 this.showSpinner = true;
                 this.updatedId = id;
@@ -251,7 +251,7 @@
             handleUpdateCode(id) {
                 let formData = new FormData();
               
-                formData.append('code_kher', this.code[id]);
+                formData.append('code_mik', this.code[id]);
 
                 this.showSpinner = true;
                 this.updatedId = id;

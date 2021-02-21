@@ -55,7 +55,7 @@ const actions = {
             method: 'get',
             url:`all_users`
         });
-
+    
         commit('setUsers', data);
         commit('updateAllOrders', data);
     },
