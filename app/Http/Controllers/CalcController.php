@@ -153,25 +153,41 @@ class CalcController extends Controller
     {
         $order = cl_notary_order::where('id', $id)->get();
 
-        $services = json_decode($order[0]['service_id']);
 
+        $services = json_decode($order[0]['service_id']);
+        $region = $order[0]['region_id'];
+     
         $data = array();
         $total = 0;
+        $name;
+        $code;
 
-        foreach ($services as &$value) {
+        foreach ($services as $value) {
             $service = cl_notary_services::where('id', $value->service)->get();
             $total += $value->price * $value->count;
-
+            if($region == 1) {
+                $name = $service[0]['name'];
+                $code = $service[0]['code'];
+            } else if($region == 2) {
+                $name = $service[0]['name_mik'];
+                $code = $service[0]['code_mik'];
+            } else {
+                $name = $service[0]['name_kher'];
+                $code = $service[0]['code_kher'];
+            }
+            
             array_push($data, [
-                'name' => $service[0]['name'],
-                'code' => $service[0]['code'],
+                'name' => $name,
+                'code' => $code,
                 'price' => $value->price,
                 'count' => $value->count,
                 'all' => $value->price * $value->count,
-                'total' => $total
+                'total' => $total,
+                'region' => $region
             ]);
+            
         }
-
+    
         $pdf = PDF::loadView('pages.score', compact('data'));
 
         return $pdf->download($order[0]['code'] . "-рахунок.pdf");
@@ -186,27 +202,42 @@ class CalcController extends Controller
 
         $data = array();
         $total = 0;
+        $name;
+        $code;
 
         foreach ($actions as &$value) {
 
             $order = cl_notary_order::where('id', $value)->get();
 
             $services = json_decode($order[0]['service_id']);
+            $region = $order[0]['region_id'];
 
 
             foreach ($services as &$item) {
                 $service = cl_notary_services::where('id', $item->service)->get();
                 $total += $item->price * $item->count;
 
+                if($region == 1) {
+                    $name = $service[0]['name'];
+                    $code = $service[0]['code'];
+                } else if($region == 2) {
+                    $name = $service[0]['name_mik'];
+                    $code = $service[0]['code_mik'];
+                } else {
+                    $name = $service[0]['name_kher'];
+                    $code = $service[0]['code_kher'];
+                }
 
                 array_push($data, [
-                    'name' => $service[0]['name'],
-                    'code' => $service[0]['code'],
+                    'name' => $name,
+                    'code' => $code,
                     'price' => $item->price,
                     'count' => $item->count,
                     'all' => $item->price * $item->count,
-                    'total' => $total
+                    'total' => $total,
+                    'region' => $region
                 ]);
+
             }
 
         }
@@ -220,6 +251,7 @@ class CalcController extends Controller
     {
         $firstDay = $_GET['start'];
         $lastDay = $_GET['end'];
+        $region = $_GET['region'];
 
         $order = cl_notary_order::where('user_id', $id)
             ->where('action_date', '>=', $firstDay)
@@ -242,11 +274,22 @@ class CalcController extends Controller
 
             foreach ($services as &$item) {
                 $service = cl_notary_services::where('id', $item->service)->get();
-
+     
+                if(isset($service[0])) {
+                    if($region == 1) {
+                        $code = $service[0]['code'];
+                    } else if($region == 2) {
+                        $code = $service[0]['code_mik'];
+                    } else {
+                        $code = $service[0]['code_kher'];
+                    }
+                }
                 array_push($data_service, [
-                    'actions' => $service[0]['code'],
+                    'actions' => $code,
                 ]);
             }
+            
+         
 
             array_push($data, [
                 'action_date' => $value['action_date'],
@@ -261,6 +304,8 @@ class CalcController extends Controller
                 'userGroup' => $groupInfo[0]['name']
             ]);
         }
+
+        if(empty( $data)) return;
 
         $pdf = PDF::loadView('pages.registry', compact('data'));
 
@@ -271,16 +316,20 @@ class CalcController extends Controller
     {
         $firstDay = $_GET['start'];
         $lastDay = $_GET['end'];
+        $region = $_GET['region'];
 
         $order = cl_notary_order::where('office_id', $id)
             ->where('action_date', '>=', $firstDay)
             ->where('action_date', '<=', $lastDay)
+            ->where('region_id', $region)
             ->where('type', '=', 1)->get();
 
-        $groupInfo = cl_groups::where('group_code', $id)->get();
+        $groupInfo = cl_groups::where('group_code', $id)
+        ->where('region_id', '=', $region)->get();
 
         $data = array();
         $total = 0;
+        $code;
 
         foreach ($order as &$value) {
 
@@ -291,9 +340,18 @@ class CalcController extends Controller
 
             foreach ($services as &$item) {
                 $service = cl_notary_services::where('id', $item->service)->get();
+                if(isset($service[0])) {
+                    if($region == 1) {
+                        $code = $service[0]['code'];
+                    } else if($region == 2) {
+                        $code = $service[0]['code_mik'];
+                    } else {
+                        $code = $service[0]['code_kher'];
+                    }
+                }
 
                 array_push($data_service, [
-                    'actions' => $service[0]['code'],
+                    'actions' => $code,
                 ]);
             }
 
@@ -310,6 +368,8 @@ class CalcController extends Controller
             ]);
         }
 
+        if(empty( $data)) return;
+
         $pdf = PDF::loadView('pages.registry', compact('data'));
 
         return $pdf->download("Registry.pdf");
@@ -318,7 +378,7 @@ class CalcController extends Controller
     public function create_total_score_pdf(Request $request, $id) {
         $query = $request->all();
         $data = array();
-
+        $region = $query['region'];
         $orders = cl_notary_order::where('user_id', $id)
             ->where('action_date', '>=', $query['start'])
             ->where('action_date', '<=', $query['end'])
@@ -326,7 +386,8 @@ class CalcController extends Controller
             ->get()
             ->toArray();
 
-        $services = cl_notary_services::select('subgroup_id', 'name','code','cl_notary_services_prices.service_id', 'cl_notary_services_prices.price')
+        $services = cl_notary_services::select('subgroup_id', 'name', 'name_kher', 'name_mik', 'code', 'code_kher','code_mik',
+        'cl_notary_services_prices.service_id', 'cl_notary_services_prices.price', 'cl_notary_services_prices.price_kher', 'cl_notary_services_prices.price_mik')
             ->leftJoin('cl_notary_services_prices', 'cl_notary_services.id', '=', 'cl_notary_services_prices.service_id')
             ->distinct()
             ->orderBy('code')
@@ -334,43 +395,55 @@ class CalcController extends Controller
             ->toArray();
 
         $userInfo = cl_users::where('id', $id)->get();
-
         $groupInfo = cl_groups::where('id', $userInfo[0]['group_id'])->get();
 
-
         foreach ($services as &$service) {
+            if($region == 1) {
+                $name = $service['name'];
+                $code = $service['code'];
+                $price = $service['price'];
+            } else if($region == 2) {
+                $name = $service['name_mik'];
+                $code = $service['code_mik'];
+                $price = $service['price_mik'];
+            } else {
+                $name = $service['name_kher'];
+                $code = $service['code_kher'];
+                $price = $service['price_kher'];
+            }
 
             foreach ($orders as &$order) {
                 $order_service = json_decode($order['service_id']);
 
                 foreach ($order_service as &$once) {
 
-                    if($once->code == $service['code'] && $once->price === $service['price'] && $once->service == $service['service_id']) {
+                    if($once->code == $code && $once->price == $price && $once->service == $service['service_id'] && isset($name)) {
 
                         array_push($data, [
                             'subgroup' => $service['subgroup_id'],
-                            'code' => $service['code'],
-                            'name' => $service['name'],
-                            'price' => $service['price'],
+                            'code' => $code,
+                            'name' => $name,
+                            'price' =>  $price,
                             'count' => $once->count,
-                            'total' => $service['price'],
+                            'total' => $price,
                         ]);
+                     
                     }
                 }
             }
 
             array_push($data, [
                 'subgroup' => $service['subgroup_id'],
-                'code' => $service['code'],
-                'name' => $service['name'],
-                'price' => $service['price'],
+                'code' => $code,
+                'name' =>  $name,
+                'price' => $price,
                 'count' => 0,
                 'total' => 0,
                 'userName' => $userInfo[0]['name'],
                 'userGroup' => $groupInfo[0]['name']
             ]);
         }
-
+        
         $res  = array();
         foreach($data as $vals){
             if(array_key_exists($vals['code'],$res)){
@@ -392,34 +465,53 @@ class CalcController extends Controller
         $orders = cl_notary_order::where('office_id', $id)
             ->where('action_date', '>=', $query['start'])
             ->where('action_date', '<=', $query['end'])
+            ->where('region_id', '=', $query['region'])
             ->where('type', '=', 1)
             ->get()
             ->toArray();
 
-        $services = cl_notary_services::select('subgroup_id', 'name','code','cl_notary_services_prices.service_id', 'cl_notary_services_prices.price')
+        $services = cl_notary_services::select('subgroup_id', 'name', 'name_kher', 'name_mik', 'code', 'code_kher', 'code_mik', 
+        'cl_notary_services_prices.service_id', 'cl_notary_services_prices.price', 'cl_notary_services_prices.price_kher', 'cl_notary_services_prices.price_mik')
             ->leftJoin('cl_notary_services_prices', 'cl_notary_services.id', '=', 'cl_notary_services_prices.service_id')
             ->distinct()
             ->orderBy('code')
             ->get()
             ->toArray();
 
-        $groupInfo = cl_groups::where('id', $id)->get();
+        $groupInfo = cl_groups::where('group_code', $id)
+        ->where('region_id', '=', $query['region'])
+        ->get();
+
+        $region = $query['region'];
 
         foreach ($services as &$service) {
+                if($region == 1) {
+                    $name = $service['name'];
+                    $code = $service['code'];
+                    $price = $service['price'];
+                } else if($region == 2) {
+                    $name = $service['name_mik'];
+                    $code = $service['code_mik'];
+                     $price = $service['price_mik'];
+                } else {
+                    $name = $service['name_kher'];
+                    $code = $service['code_kher'];
+                    $price = $service['price_kher'];
+                }
             foreach ($orders as &$order) {
                 $order_service = json_decode($order['service_id']);
 
                 foreach ($order_service as &$once) {
 
-                    if($once->code == $service['code'] && $once->price === $service['price'] && $once->service == $service['service_id']) {
-
+                    if($once->code == $code && $once->price == $price && $once->service == $service['service_id'] && isset($name)) {
+                    
                         array_push($data, [
                             'subgroup' => $service['subgroup_id'],
-                            'code' => $service['code'],
-                            'name' => $service['name'],
-                            'price' => $service['price'],
+                            'code' => $code,
+                            'name' => $name,
+                            'price' =>  $price ,
                             'count' => $once->count,
-                            'total' => $service['price'],
+                            'total' => $price,
                         ]);
                     }
                 }
@@ -427,9 +519,9 @@ class CalcController extends Controller
 
             array_push($data, [
                 'subgroup' => $service['subgroup_id'],
-                'code' => $service['code'],
-                'name' => $service['name'],
-                'price' => $service['price'],
+                'code' => $code,
+                'name' =>  $name,
+                'price' => $price,
                 'count' => 0,
                 'total' => 0,
                 'userGroup' => $groupInfo[0]['name']

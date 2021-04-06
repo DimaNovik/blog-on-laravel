@@ -84,7 +84,7 @@
                             <p style="margin: 0; padding: 0;">Призначення платежу</p>
                         </td>
                         <td>
-                            <p style="margin: 0; padding: 0;" align="center">{{$code}} {{$fio}}</p>
+                            <p style="margin: 0; padding: 0;" align="center">{{$code}} {{$fio}} (за додаткові платні послуги)</p>
                         </td>
                     </tr>
                 </table>

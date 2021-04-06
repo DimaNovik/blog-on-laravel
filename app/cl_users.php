@@ -18,7 +18,7 @@ class cl_users extends Authenticatable implements JWTSubject
     ];
 
     protected $hidden = [
-        'password', 'remember_token',
+     'remember_token',
     ];
 
     public static function add($fields)
@@ -49,11 +49,19 @@ class cl_users extends Authenticatable implements JWTSubject
         return [];
     }
 
+
     public function edit($fields)
     {
-        $this->fill($fields);
-        $this->password = bcrypt($fields['password']);
-        $this->save();
+        if(isset($fields['old']) && $fields['old'] !== 'undefined') {
+            $this->fill($fields);
+            $this->password = $fields['old'];
+            $this->save();
+        } else {
+            $this->fill($fields);
+            $this->password = bcrypt($fields['password']);
+            $this->save();
+        }
+       
     }
 
 }
